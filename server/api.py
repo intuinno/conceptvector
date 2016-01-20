@@ -4,6 +4,7 @@ from flask_restful import Resource, Api, reqparse
 app = Flask(__name__)
 api = Api(app)
 
+# test
 
 class CreateUser(Resource):
 	def post(self):
