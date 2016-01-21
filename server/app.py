@@ -1,8 +1,17 @@
 from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse
+import os
 
 app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
+db = SQLAlchemy(app)
+
 api = Api(app)
+
+from models import User
+
+# from api import  models
 
 # test
 
@@ -19,7 +28,11 @@ class CreateUser(Resource):
 			_userEmail = args['email']
 			_userPassword = args['password']
 
-			return {'Email': args['email'], 'Password': args['password']}
+			user = User(email=_userEmail, password=_userPassword)
+			db.session.add(user)
+			db.session.commit()
+
+			return {'StatusCode':'200', 'Message':'User creation success'}
 
 		except Exception as e:
 			return {'error': str(e)}
@@ -27,5 +40,5 @@ class CreateUser(Resource):
 api.add_resource(CreateUser, '/CreateUser')
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
 
