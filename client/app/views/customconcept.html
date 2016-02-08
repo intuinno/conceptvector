@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <section id="getting_started">
+                <div class="page-header">
+                    <h1>Concept Designer</h1>
+                </div>
+                <h3>Concept Type: Unipolar vs Bipolar </h3>
+                <p>
+                    In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em> or <em>Democratic vs Republican</em> can be an bipolar type.
+                </p>
+                <div class="btn-group">
+                    <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
+                    <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
+                </div>
+                <div ng-show="concept_type = 'unipolar' || concept_type = 'bipolar' ">
+                    <h3>Positive Words Input  </h3>
+                    <p>
+                        Please type a few words for the concepts you are looking for.
+                    </p>
+                    <tags-input ng-model="tags">
+                        <auto-complete source="loadItems($query)"></auto-complete>
+                    </tags-input>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
