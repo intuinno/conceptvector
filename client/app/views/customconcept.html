@@ -13,14 +13,31 @@
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
                 </div>
-                <div ng-show="concept_type = 'unipolar' || concept_type = 'bipolar' ">
+                <div ng-show="concept_type == 'unipolar' || concept_type == 'bipolar' ">
                     <h3>Positive Words Input  </h3>
                     <p>
                         Please type a few words for the concepts you are looking for.
                     </p>
-                    <tags-input ng-model="tags">
-                        <auto-complete source="loadItems($query)"></auto-complete>
+                    <div class="input-group">
+                    <span class="input-group-addon">+</span>
+                    <tags-input ng-model="positiveTags">
+                        <auto-complete source="loadTags($query)"></auto-complete>
                     </tags-input>
+
+                    </div>
+                </div>
+                <div ng-show="concept_type == 'bipolar' ">
+                    <h3>Negative Words Input  </h3>
+                    <p>
+                        Please type a few words that should be antonyms for the concepts you are looking for.
+                    </p>
+                    <div class="input-group">
+                    <span class="input-group-addon">-</span>
+                    <tags-input ng-model="negativeTags">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                    
+                    </div>
                 </div>
             </section>
         </div>

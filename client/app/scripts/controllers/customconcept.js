@@ -8,7 +8,11 @@
  * Controller of the conceptvectorApp
  */
 angular.module('conceptvectorApp')
-  .controller('CustomconceptCtrl', ['$scope', function ($scope) {
-  	// $scope.concept_type = 'bipolar';
- 
-  }]);
+    .controller('CustomconceptCtrl', ['$scope', 'AutoComplete', function($scope, AutoComplete) {
+        // $scope.concept_type = 'bipolar';
+
+        $scope.loadTags = function(query) {
+           return AutoComplete.load(query);
+        };
+
+    }]);
