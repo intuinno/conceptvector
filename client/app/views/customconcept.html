@@ -19,11 +19,10 @@
                         Please type a few words for the concepts you are looking for.
                     </p>
                     <div class="input-group">
-                    <span class="input-group-addon">+</span>
-                    <tags-input ng-model="positiveTags">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
-
+                        <span class="input-group-addon">+</span>
+                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words">
+                            <auto-complete source="loadTags($query)"></auto-complete>
+                        </tags-input>
                     </div>
                 </div>
                 <div ng-show="concept_type == 'bipolar' ">
@@ -32,14 +31,21 @@
                         Please type a few words that should be antonyms for the concepts you are looking for.
                     </p>
                     <div class="input-group">
-                    <span class="input-group-addon">-</span>
-                    <tags-input ng-model="negativeTags">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
-                    
+                        <span class="input-group-addon">-</span>
+                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words">
+                            <auto-complete source="loadTags($query)"></auto-complete>
+                        </tags-input>
                     </div>
                 </div>
             </section>
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="positive-input-template">
+    <div class="tag-template">
+        <div>
+            <span>{{$getDisplayText()}}</span>
+            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+    </div>
+</script>
