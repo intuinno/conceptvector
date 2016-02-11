@@ -20,17 +20,56 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 from models import User
 import pickle
 
+headerNames = ['word'] + range(300)
 wordsFileName = './data/glove.6B.300d.txt'
-wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, skiprows=0)
-wordsModel = wordsModel.rename(columns={0:'word'})
+wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
+wordsLabel = wordsModel.index.tolist()
+wordsModelNumpy = wordsModel.as_matrix()
 
 # pkl_file = open('./data/glove.pkl','rb')
 # wordsModel = pickle.load(pkl_file)
 
+# print np.__config__.show()
 
-wordsLabel = wordsModel['word'].tolist()
+# wordsLabel = wordsModel['word'].tolist()
 
 # print wordsLabel
+
+class RecommendWords(Resource):
+	def post(self):
+		try:
+			parser = reqparse.RequestParser()
+			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
+			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
+
+			args = parser.parse_args()
+
+			positive_terms = args['positiveWords']
+			negative_terms = args['negativeWords']
+
+
+
+			positive_terms_models = wordsModel.loc[positive_terms,:].mean()
+
+			if negative_terms is None:
+			    negative_terms_models = np.zeros(300)
+			else:
+			    negative_terms_models = wordsModel.loc[negative_terms,:].mean()
+
+			concept_vector_group = positive_terms_models - negative_terms_models
+			concept_value = np.dot(wordsModelNumpy, concept_vector_group)
+
+			df = pd.DataFrame(concept_value, index=wordsModel.index)
+			df.drop(positive_terms, inplace=True)
+			df.drop(negative_terms, inplace=True)
+			df.sort_values(by=0, inplace=True, ascending=False)
+
+
+			return jsonify(positiveRecommend=df[:20].index.tolist(), negativeRecommend=df[-20:].index.tolist())
+
+		except Exception as e:
+			return {'error': str(e)}
+
 
 class QueryAutoComplete(Resource):
   def get(self, word):
@@ -88,6 +127,7 @@ class AuthenticateUser(Resource):
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(AuthenticateUser, '/AuthenticateUser')
 api.add_resource(QueryAutoComplete, '/QueryAutoComplete/<string:word>')
+api.add_resource(RecommendWords, '/RecommendWords')
 
 
 if __name__ == '__main__':

@@ -19,11 +19,15 @@
                         Please type a few words for the concepts you are looking for.
                     </p>
                     <div class="input-group">
-                        <span class="input-group-addon">+</span>
-                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words">
+                        <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
+                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()">
                             <auto-complete source="loadTags($query)"></auto-complete>
                         </tags-input>
                     </div>
+                    Click to add suggested words.
+                    <a ng-repeat="word in positiveRecommendation" class="btn btn-link " href="" ng-click="addPositive(word)">
+                    {{word}}
+                </a>
                 </div>
                 <div ng-show="concept_type == 'bipolar' ">
                     <h3>Negative Words Input  </h3>
@@ -31,11 +35,15 @@
                         Please type a few words that should be antonyms for the concepts you are looking for.
                     </p>
                     <div class="input-group">
-                        <span class="input-group-addon">-</span>
-                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words">
+                        <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
+                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()">
                             <auto-complete source="loadTags($query)"></auto-complete>
                         </tags-input>
                     </div>
+                    Click to add suggested words.
+                    <a ng-repeat="word in negativeRecommendation" class="btn btn-link " href="" ng-click="addNegative(word)">
+                    {{word}}
+                </a>
                 </div>
             </section>
         </div>

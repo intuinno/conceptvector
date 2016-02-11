@@ -8,14 +8,14 @@
  * Service in the conceptvectorApp.
  */
 angular.module('conceptvectorApp')
-    .service('AutoComplete', ['$resource', '$q', function($resource, $q) {
+    .service('AutoComplete', ['$resource', '$q', 'serverURL', function($resource, $q, serverURL) {
         //   // AngularJS will instantiate a singleton by calling "new" on this function
         //   return $resource('http://127.0.0.1:5000/QueryAutoComplete/:word', {word: '@_word'});
         // }
 
-        var serverURL = 'http://127.0.0.1:5000/QueryAutoComplete';
+        // var serverURL = 'http://127.0.0.1:5000/QueryAutoComplete';
 
-        var AutoComplete = $resource(serverURL + '/:word', {
+        var AutoComplete = $resource(serverURL + '/QueryAutoComplete/:word', {
             word: '@word'
         });
 
@@ -28,10 +28,10 @@ angular.module('conceptvectorApp')
                 },
                 function sucess(entry) {
 
-                    if (entry.success = true) {
+                    // if (entry.success == true) {
 
                         deferred.resolve(entry.word);
-                    }
+                    // }
                 },
                 function error() {
                     console.log('AutoComplete error');
