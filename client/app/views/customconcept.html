@@ -20,7 +20,7 @@
                     </p>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
-                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()">
+                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
                             <auto-complete source="loadTags($query)"></auto-complete>
                         </tags-input>
                     </div>
@@ -36,7 +36,7 @@
                     </p>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
-                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()">
+                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
                             <auto-complete source="loadTags($query)"></auto-complete>
                         </tags-input>
                     </div>
