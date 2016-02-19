@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from scipy.spatial.distance import cosine
 from flask.ext.cors import CORS
+import pdb
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -44,7 +45,11 @@ class RecommendWords(Resource):
 
 			args = parser.parse_args()
 
+			# pdb.set_trace()
+
 			positive_terms = args['positiveWords']
+
+			positive_terms = [w.encode('UTF-8') for w in positive_terms]
 			negative_terms = args['negativeWords']
 
 
@@ -54,6 +59,8 @@ class RecommendWords(Resource):
 			if negative_terms is None:
 			    negative_terms_models = np.zeros(300)
 			else:
+			    negative_terms = [w.encode('UTF-8') for w in negative_terms]
+
 			    negative_terms_models = wordsModel.loc[negative_terms,:].mean()
 
 			concept_vector_group = positive_terms_models - negative_terms_models
@@ -63,6 +70,8 @@ class RecommendWords(Resource):
 			df.drop(positive_terms, inplace=True)
 			df.drop(negative_terms, inplace=True)
 			df.sort_values(by=0, inplace=True, ascending=False)
+			df.head()
+			print df[:30]
 
 
 			return jsonify(positiveRecommend=df[:20].index.tolist(), negativeRecommend=df[-20:].index.tolist())
@@ -131,5 +140,5 @@ api.add_resource(RecommendWords, '/RecommendWords')
 
 
 if __name__ == '__main__':
-	app.run()
+	app.run(host='0.0.0.0', port='5000', debug=True)
 
