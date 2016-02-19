@@ -1,4 +1,5 @@
 client/node_modules
+*~
 /dist
 /.tmp
 client/.sass-cache
