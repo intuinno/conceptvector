@@ -133,10 +133,10 @@ class AuthenticateUser(Resource):
 			return {'error':str(e)}
 
 
-api.add_resource(CreateUser, '/CreateUser')
-api.add_resource(AuthenticateUser, '/AuthenticateUser')
-api.add_resource(QueryAutoComplete, '/QueryAutoComplete/<string:word>')
-api.add_resource(RecommendWords, '/RecommendWords')
+api.add_resource(CreateUser, '/api/CreateUser')
+api.add_resource(AuthenticateUser, '/api/AuthenticateUser')
+api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
+api.add_resource(RecommendWords, '/api/RecommendWords')
 
 
 if __name__ == '__main__':
