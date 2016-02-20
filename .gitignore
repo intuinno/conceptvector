@@ -7,3 +7,6 @@ client/bower_components
 server/data
 *.pkl
 experiment/data
+data/
+.idea/workspace.xml
+/.idea
