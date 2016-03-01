@@ -136,10 +136,11 @@ class RecommendWordsCluster(Resource):
 			positiveY = KMeans(n_clusters=5).fit_predict(top50.values)
 			bottom50 = wordsModel.loc[df[-50:].index,:]
 			negativeY = KMeans(n_clusters=5).fit_predict(bottom50.values)
-			top50.to_csv("data.csv")
+			# top50.to_csv("data.csv")
 			positiveSearchTermVectors = wordsModel.loc[positive_terms,:].values.tolist()
+			negativeSearchTermVectors = wordsModel.loc[negative_terms,:].values.tolist()
 
-			return jsonify(positiveRecommend=df[:50].index.tolist(), positiveCluster=positiveY.tolist(), negativeRecommend=df[-50:].index.tolist(), negativeCluster=negativeY.tolist(), positiveVectors=top50.values.tolist(), positiveSearchTermVectors = positiveSearchTermVectors )
+			return jsonify(positiveRecommend=df[:50].index.tolist(), positiveCluster=positiveY.tolist(), negativeRecommend=df[-50:].index.tolist(), negativeCluster=negativeY.tolist(), positiveVectors=top50.values.tolist(), positiveSearchTermVectors = positiveSearchTermVectors ,negativeVectors=bottom50.values.tolist(), negativeSearchTermVectors = negativeSearchTermVectors)
 
 		except Exception as e:
 			# pdb.set_trace()

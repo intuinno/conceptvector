@@ -66,6 +66,8 @@ angular.module('conceptvectorApp')
                 }
 
                 $scope.negativeRecommendation = negativeCluster;
+
+
                 var positiveTermsWithSearchTerms = entry.positiveVectors.concat(entry.positiveSearchTermVectors);
                 tsne.initDataRaw(positiveTermsWithSearchTerms);
 
@@ -109,6 +111,25 @@ angular.module('conceptvectorApp')
 
                 $scope.data = generateData(positiveTags, positiveTemp, Y);
                 $scope.apiObj.api.refresh();
+
+
+                var negativeTermsWithSearchTerms = entry.negativeVectors.concat(entry.negativeSearchTermVectors);
+                tsne.initDataRaw(negativeTermsWithSearchTerms);
+
+                var start = new Date().getTime();
+                console.log("Starting T-SNE calculation", start);
+
+                for (var k = 0; k < 500; k++) {
+                    tsne.step(); // every time you call this, solution gets better
+                }
+                var end = new Date().getTime();
+                console.log("T-SNE calculation ended ", end - start);
+
+                var Y = tsne.getSolution();
+
+
+                $scope.negative_data = generateData(negativeTags, negativeTemp, Y);
+                $scope.negative_apiObj.api.refresh();
 
             });
 
@@ -157,6 +178,98 @@ angular.module('conceptvectorApp')
 
                             } else {
                                     $scope.addPositive(e.point.word);
+                            }
+                            
+                        }
+                    }
+                },
+                showDistX: true,
+                showDistY: true,
+                pointSize: function(d) {
+                    return d.size || 1
+                }, //by default
+                pointRange: [10, 100],
+                pointDomain: [0, 1],
+                tooltip: {
+                    contentGenerator: function(e) {
+                        // console.log(e);
+                        var series = e.series[0];
+                        if (series.value === null) return;
+
+                        var rows =
+                            "<tr>" +
+                            "<td class='key'>" + '' + "</td>" +
+                            "<td class='x-value'>" + e.point.word + "</td>" +
+                            "</tr>";
+
+                        var header =
+                            "<thead>" +
+                            "<tr>" +
+                            "<td class='legend-color-guide'><div style='background-color: " + series.color + ";'></div></td>" +
+                            "<td class='key'><strong>" + series.key + "</strong></td>" +
+                            "</tr>" +
+                            "</thead>";
+
+                        return "<table>" +
+                            header +
+                            "<tbody>" +
+                            rows +
+                            "</tbody>" +
+                            "</table>";
+                    }
+                },
+                duration: 350,
+                xAxis: {
+                    axisLabel: 'X Axis',
+                    tickFormat: function(d) {
+                        return d3.format('.02f')(d);
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Y Axis',
+                    tickFormat: function(d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -5
+                },
+                zoom: {
+                    //NOTE: All attributes below are optional
+                    enabled: true,
+                    scaleExtent: [0.5, 10],
+                    useFixedDomain: false,
+                    useNiceScale: false,
+                    horizontalOff: false,
+                    verticalOff: false,
+                    unzoomEventType: 'dblclick.zoom'
+                }
+            }
+        };
+
+        $scope.negative_options = {
+            chart: {
+                type: 'scatterChart',
+                height: 450,
+                color: d3.scale.category10().range(),
+                scatter: {
+                    onlyCircles: false,
+                    dispatch: {
+                        elementClick: function(e) {
+                            console.log('click', e);
+                            if (e.point.cluster === "input") {
+
+                                var index = $scope.negativeTags.map(function(d){
+                                    return d.text;
+                                }).indexOf(e.point.word);
+
+                                if (index > -1) {
+                                    $scope.negativeTags.splice(index,1);
+                                }
+
+                                $scope.tagChanged();
+                                    
+
+                            } else {
+                                    $scope.addNegative(e.point.word);
                             }
                             
                         }

@@ -52,28 +52,40 @@
         </div>
     </div>
     <div ng-show="concept_type == 'bipolar' ">
-        <h3>Negative Words Input  </h3>
-        <p>
-            Please type a few words that should be antonyms for the concepts you are looking for.
-        </p>
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
-            <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                <auto-complete source="loadTags($query)"></auto-complete>
-            </tags-input>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Negative Words Input  </h3>
+                <p>
+                    Please type a few words that should be antonyms for the concepts you are looking for.
+                </p>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
+                    <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>
+            </div>
         </div>
-        Click to add suggested words.
-        <ul>
-            <li ng-repeat="cluster in negativeRecommendation">
-                <a ng-repeat="word in cluster" class="btn btn-link " href="" ng-click="addNegative(word)">
+        <div class="row">
+            <div class="col-md-4">
+                Click to add suggested words.
+                <table class="table table-condensed">
+                    <tr ng-repeat="cluster in negativeRecommendation">
+                        <td> Group{{$index}}
+                        </td>
+                        <td ng-repeat-end>
+                            <a ng-repeat="word in cluster" class=" btn-link " href="" ng-click="addNegative(word)">
                     {{word}}
                 </a>
-            </li>
-        </ul>
+                            <td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-8">
+                <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
+            </div>
+        </div>
     </div>
-    </section>
-</div>
-</div>
 </div>
 <script type="text/ng-template" id="positive-input-template">
     <div class="tag-template">
