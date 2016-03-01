@@ -17,7 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.bootstrap',
-    'ngTagsInput'
+    'ngTagsInput',
+    'nvd3'
   ])
   .config(function ($routeProvider) {
     $routeProvider

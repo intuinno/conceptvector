@@ -13,41 +13,67 @@
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
                 </div>
-                <div ng-show="concept_type == 'unipolar' || concept_type == 'bipolar' ">
-                    <h3>Positive Words Input  </h3>
-                    <p>
-                        Please type a few words for the concepts you are looking for.
-                    </p>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
-                        <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                            <auto-complete source="loadTags($query)"></auto-complete>
-                        </tags-input>
-                    </div>
-                    Click to add suggested words.
-                    <a ng-repeat="word in positiveRecommendation" class="btn btn-link " href="" ng-click="addPositive(word)">
-                    {{word}}
-                </a>
-                </div>
-                <div ng-show="concept_type == 'bipolar' ">
-                    <h3>Negative Words Input  </h3>
-                    <p>
-                        Please type a few words that should be antonyms for the concepts you are looking for.
-                    </p>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
-                        <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                            <auto-complete source="loadTags($query)"></auto-complete>
-                        </tags-input>
-                    </div>
-                    Click to add suggested words.
-                    <a ng-repeat="word in negativeRecommendation" class="btn btn-link " href="" ng-click="addNegative(word)">
-                    {{word}}
-                </a>
-                </div>
             </section>
         </div>
     </div>
+    <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Positive Words Input  </h3>
+                <p>
+                    Please type a few words for the concepts you are looking for.
+                </p>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
+                    <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                Click to add suggested words.
+                <table class="table table-condensed">
+                    <tr ng-repeat="cluster in positiveRecommendation">
+                        <td> Group{{$index}}
+                        </td>
+                        <td ng-repeat-end>
+                            <a ng-repeat="word in cluster" class=" btn-link " href="" ng-click="addPositive(word)">
+                    {{word}}
+                </a>
+                            <td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-8">
+                <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
+            </div>
+        </div>
+    </div>
+    <div ng-show="concept_type == 'bipolar' ">
+        <h3>Negative Words Input  </h3>
+        <p>
+            Please type a few words that should be antonyms for the concepts you are looking for.
+        </p>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
+            <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+                <auto-complete source="loadTags($query)"></auto-complete>
+            </tags-input>
+        </div>
+        Click to add suggested words.
+        <ul>
+            <li ng-repeat="cluster in negativeRecommendation">
+                <a ng-repeat="word in cluster" class="btn btn-link " href="" ng-click="addNegative(word)">
+                    {{word}}
+                </a>
+            </li>
+        </ul>
+    </div>
+    </section>
+</div>
+</div>
 </div>
 <script type="text/ng-template" id="positive-input-template">
     <div class="tag-template">
