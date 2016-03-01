@@ -350,6 +350,8 @@ angular.module('conceptvectorApp')
         $scope.data = [];
 
         $scope.apiObj = {};
+        $scope.negative_apiObj = {}
+        $scope.isSettingCollapsed = true;
 
 
 

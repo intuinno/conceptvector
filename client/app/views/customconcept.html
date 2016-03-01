@@ -13,6 +13,26 @@
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
                     <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
                 </div>
+                <a class="btn btn-link pull-right" href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
+                    Advanced Settings <i class="fa fa-cog"></i>
+                </a>
+                <div uib-collapse="isSettingCollapsed">
+                    <div class="well">
+                        <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
+                        <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
+                        <br>
+                        {{isSettingCollapsed}}
+                        <div ng-repeat="scoreModel in scoreModels">
+                            <h4> Criteria based on {{scoreModel}} score</h4>
+                            <ul>
+                                <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
+                                    <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
+                                    <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -51,7 +71,7 @@
             </div>
         </div>
     </div>
-    <div ng-show="concept_type == 'bipolar' ">
+    <div ng-if="concept_type == 'bipolar' ">
         <div class="row">
             <div class="col-md-12">
                 <h3>Negative Words Input  </h3>

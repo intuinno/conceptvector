@@ -5,7 +5,7 @@ from flask_restful import Resource, Api, reqparse
 import os
 import pandas as pd
 import numpy as np
-from scipy.spatial.distance import cosine
+from scipy.spatial.distance import cosine,cdist
 from sklearn.cluster import KMeans
 from flask.ext.cors import CORS
 import pdb
@@ -46,53 +46,7 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-class RecommendWords(Resource):
 
-	def post(self):
-		try:
-			# pdb.set_trace()
-			parser = reqparse.RequestParser()
-			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
-			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
-
-			args = parser.parse_args()
-
-			# pdb.set_trace()
-
-			positive_terms = args['positiveWords']
-
-			positive_terms = [w.encode('UTF-8') for w in positive_terms]
-			negative_terms = args['negativeWords']
-
-
-
-			positive_terms_models = wordsModel.loc[positive_terms,:].mean()
-
-			if negative_terms is None:
-			    negative_terms_models = np.zeros(300)
-			else:
-			    negative_terms = [w.encode('UTF-8') for w in negative_terms]
-
-			    negative_terms_models = wordsModel.loc[negative_terms,:].mean()
-
-			concept_vector_group = positive_terms_models - negative_terms_models
-			concept_value = np.dot(wordsModelNumpy, concept_vector_group)
-
-			df = pd.DataFrame(concept_value, index=wordsModel.index)
-			df.drop(positive_terms, inplace=True)
-			df.drop(negative_terms, inplace=True)
-			df.sort_values(by=0, inplace=True, ascending=False)
-			df.head()
-			print df[:30]
-			pdb.set_trace()
-			
-
-
-			return jsonify(positiveRecommend=df[:20].index.tolist(), negativeRecommend=df[-20:].index.tolist())
-
-		except Exception as e:
-			pdb.set_trace()
-			return {'error': str(e)}
 
 class RecommendWordsCluster(Resource):
 
@@ -125,6 +79,8 @@ class RecommendWordsCluster(Resource):
 			    negative_terms_models = wordsModel.loc[negative_terms,:].mean()
 
 			concept_vector_group = positive_terms_models - negative_terms_models
+
+			# pdb.set_trace()
 			concept_value = np.dot(wordsModelNumpy, concept_vector_group)
 
 			df = pd.DataFrame(concept_value, index=wordsModel.index)
@@ -202,7 +158,6 @@ class AuthenticateUser(Resource):
 api.add_resource(CreateUser, '/api/CreateUser')
 api.add_resource(AuthenticateUser, '/api/AuthenticateUser')
 api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
-api.add_resource(RecommendWords, '/api/RecommendWords')
 api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 
 if __name__ == '__main__':
