@@ -9,6 +9,7 @@ from scipy.spatial.distance import cosine,cdist
 from sklearn.cluster import KMeans
 from flask.ext.cors import CORS
 import pdb
+from sklearn.preprocessing import normalize
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -25,7 +26,12 @@ import pickle
 headerNames = ['word'] + range(300)
 wordsFileName = './data/glove.6B.300d.txt'
 wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
+print wordsModel.head()
+
 wordsLabel = wordsModel.index.tolist()
+wordsModel = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
+print wordsModel.head()
+
 wordsModelNumpy = wordsModel.as_matrix()
 
 
@@ -93,8 +99,15 @@ class RecommendWordsCluster(Resource):
 			bottom50 = wordsModel.loc[df[-50:].index,:]
 			negativeY = KMeans(n_clusters=5).fit_predict(bottom50.values)
 			# top50.to_csv("data.csv")
-			positiveSearchTermVectors = wordsModel.loc[positive_terms,:].values.tolist()
-			negativeSearchTermVectors = wordsModel.loc[negative_terms,:].values.tolist()
+			if positive_terms is None:
+				positiveSearchTermVectors = []
+			else:
+				positiveSearchTermVectors =  wordsModel.loc[positive_terms,:].values.tolist()
+			
+			if negative_terms is None:
+				negativeSearchTermVectors = []
+			else:
+				negativeSearchTermVectors = wordsModel.loc[negative_terms,:].values.tolist()
 
 			return jsonify(positiveRecommend=df[:50].index.tolist(), positiveCluster=positiveY.tolist(), negativeRecommend=df[-50:].index.tolist(), negativeCluster=negativeY.tolist(), positiveVectors=top50.values.tolist(), positiveSearchTermVectors = positiveSearchTermVectors ,negativeVectors=bottom50.values.tolist(), negativeSearchTermVectors = negativeSearchTermVectors)
 

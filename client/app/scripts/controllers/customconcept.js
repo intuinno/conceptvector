@@ -129,7 +129,7 @@ angular.module('conceptvectorApp')
 
 
                 $scope.negative_data = generateData(negativeTags, negativeTemp, Y);
-                $scope.negative_apiObj.api.refresh();
+                // $scope.negative_apiObj.api.refresh();
 
             });
 
@@ -165,26 +165,26 @@ angular.module('conceptvectorApp')
                             console.log('click', e);
                             if (e.point.cluster === "input") {
 
-                                var index = $scope.positiveTags.map(function(d){
+                                var index = $scope.positiveTags.map(function(d) {
                                     return d.text;
                                 }).indexOf(e.point.word);
 
                                 if (index > -1) {
-                                    $scope.positiveTags.splice(index,1);
+                                    $scope.positiveTags.splice(index, 1);
                                 }
 
                                 $scope.tagChanged();
-                                    
+
 
                             } else {
-                                    $scope.addPositive(e.point.word);
+                                $scope.addPositive(e.point.word);
                             }
-                            
+
                         }
                     }
                 },
-                showDistX: true,
-                showDistY: true,
+                showDistX: false,
+                showDistY: false,
                 pointSize: function(d) {
                     return d.size || 1
                 }, //by default
@@ -257,26 +257,26 @@ angular.module('conceptvectorApp')
                             console.log('click', e);
                             if (e.point.cluster === "input") {
 
-                                var index = $scope.negativeTags.map(function(d){
+                                var index = $scope.negativeTags.map(function(d) {
                                     return d.text;
                                 }).indexOf(e.point.word);
 
                                 if (index > -1) {
-                                    $scope.negativeTags.splice(index,1);
+                                    $scope.negativeTags.splice(index, 1);
                                 }
 
                                 $scope.tagChanged();
-                                    
+
 
                             } else {
-                                    $scope.addNegative(e.point.word);
+                                $scope.addNegative(e.point.word);
                             }
-                            
+
                         }
                     }
                 },
-                showDistX: true,
-                showDistY: true,
+                showDistX: false,
+                showDistY: false,
                 pointSize: function(d) {
                     return d.size || 1
                 }, //by default
@@ -337,6 +337,80 @@ angular.module('conceptvectorApp')
             }
         };
 
+
+
+        $scope.all_options = {
+            chart: {
+                type: 'scatterChart',
+                height: 450,
+                color: d3.scale.category10().range(),
+                scatter: {
+                    onlyCircles: false,
+                    dispatch: {}
+                },
+                showDistX: false,
+                showDistY: false,
+                pointSize: function(d) {
+                    return d.size || 1
+                }, //by default
+                pointRange: [10, 100],
+                pointDomain: [0, 1],
+                tooltip: {
+                    contentGenerator: function(e) {
+                        // console.log(e);
+                        var series = e.series[0];
+                        if (series.value === null) return;
+
+                        var rows =
+                            "<tr>" +
+                            "<td class='key'>" + '' + "</td>" +
+                            "<td class='x-value'>" + e.point.word + "</td>" +
+                            "</tr>";
+
+                        var header =
+                            "<thead>" +
+                            "<tr>" +
+                            "<td class='legend-color-guide'><div style='background-color: " + series.color + ";'></div></td>" +
+                            "<td class='key'><strong>" + series.key + "</strong></td>" +
+                            "</tr>" +
+                            "</thead>";
+
+                        return "<table>" +
+                            header +
+                            "<tbody>" +
+                            rows +
+                            "</tbody>" +
+                            "</table>";
+                    }
+                },
+                duration: 50,
+                xAxis: {
+                    axisLabel: 'X Axis',
+                    tickFormat: function(d) {
+                        return d3.format('.02f')(d);
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Y Axis',
+                    tickFormat: function(d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -5
+                },
+                zoom: {
+                    //NOTE: All attributes below are optional
+                    enabled: true,
+                    scaleExtent: [0.5, 10],
+                    useFixedDomain: false,
+                    useNiceScale: false,
+                    horizontalOff: false,
+                    verticalOff: false,
+                    unzoomEventType: 'dblclick.zoom'
+                }
+            }
+        };
+
+
         /* For TSNE.js */
         var opt = {}
         opt.epsilon = 10;
@@ -348,13 +422,36 @@ angular.module('conceptvectorApp')
 
 
         $scope.data = [];
+        $scope.negative_data = [];
+        $scope.all_data = [];
+
+        d3.text("data/glove.6B.300d.10k.txt", function(d) {
+
+            var coor_data = d3.csv.parseRows(d);
+
+            d3.text("data/glove.6B.300d.voc.txt", function(label) {
+
+                var data = label.trimRight().split('\n').map(function(a, i) {
+
+
+                    return { word: a, cluster: 'stars', x: +coor_data[i][0], y: +coor_data[i][1], size: 0.1, shape: 'circle' };
+
+                });
+
+                $scope.all_data = d3.nest()
+                    .key(function(d) {
+                        return d.cluster;
+                    })
+                    .entries(data);
+                // $scope.all_apiObj.api.refresh();
+
+            });
+        });
 
         $scope.apiObj = {};
-        $scope.negative_apiObj = {}
+        $scope.negative_apiObj = {};
+        $scope.all_apiObj = {};
         $scope.isSettingCollapsed = true;
-
-
-
 
 
     }]);
