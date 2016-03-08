@@ -29,10 +29,10 @@ wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header
 print wordsModel.head()
 
 wordsLabel = wordsModel.index.tolist()
-wordsModel = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
+wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
 print wordsModel.head()
 
-wordsModelNumpy = wordsModel.as_matrix()
+wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
 
 # pkl_file = open('./data/glove.pkl','rb')
@@ -87,7 +87,7 @@ class RecommendWordsCluster(Resource):
 			concept_vector_group = positive_terms_models - negative_terms_models
 
 			# pdb.set_trace()
-			concept_value = np.dot(wordsModelNumpy, concept_vector_group)
+			concept_value = np.dot(wordsModelNumpyNorm, concept_vector_group)
 
 			df = pd.DataFrame(concept_value, index=wordsModel.index)
 			df.drop(positive_terms, inplace=True)
