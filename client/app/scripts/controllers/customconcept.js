@@ -30,7 +30,8 @@ angular.module('conceptvectorApp')
 
             var negativeTags = $scope.negativeTags.map(function(d) {
                 return d['text'];
-            })
+            });
+            
             recommend.save({
                 'positiveWords': positiveTags,
                 'negativeWords': negativeTags
