@@ -1,3 +1,7 @@
+/*form .ng-invalid {
+    border: none;
+}
+*/
 body {
     opacity: 1;
     -webkit-transition: opacity 1s ease;
@@ -9,9 +13,9 @@ body {
     opacity: 0;
 }
 
-.ng-invalid {
+/*.ng-invalid {
     border: 1px solid red !important;
-}
+}*/
 
 section {
     padding-top: 30px;

@@ -19,6 +19,7 @@ api = Api(app)
 bcrypt = Bcrypt(app)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.secret_key = "I love Tankey!"
 
 from models import User
 import pickle
@@ -121,30 +122,36 @@ class QueryAutoComplete(Resource):
     new_list = [{'text':x} for x in wordsLabel if not isinstance(x, float) and x.startswith(wordUTF8)]
     return {'word': new_list}
 
-class CreateUser(Resource):
+class Register(Resource):
 	def post(self):
+	
+		# Parse the arguments
+		parser = reqparse.RequestParser()
+		# import pdb; pdb.set_trace()
+		parser.add_argument('name', type=str, help="User name to be called")
+		parser.add_argument('email', type=str, help='Email address to create user')
+		parser.add_argument('password', type=str, help='Password to create user')
+
+		args = parser.parse_args()
+
+		_userName = args['name']
+		_userEmail = args['email']
+		_userPassword = args['password']
+
+		user = User(name=_userName, email=_userEmail, password=_userPassword)
 		try:
-			# Parse the arguments
-			parser = reqparse.RequestParser()
-			parser.add_argument('email', type=str, help='Email address to create user')
-			parser.add_argument('password', type=str, help='Password to create user')
-
-			args = parser.parse_args()
-
-			_userEmail = args['email']
-			_userPassword = args['password']
-
-			user = User(email=_userEmail, password=_userPassword)
 			db.session.add(user)
 			db.session.commit()
-			db.session.close()
-
-			return {'StatusCode':'200', 'Message':'User creation success'}
+			status = 'success'
 
 		except Exception as e:
-			return {'error': str(e)}
+			pdb.set_trace()
+			status = 'This user is already registered'
+			db.session.close()
 
-class AuthenticateUser(Resource):
+		return {'result': status}
+
+class Login(Resource):
 	def post(self):
 		try:
 			# Parse the arguments
@@ -163,15 +170,37 @@ class AuthenticateUser(Resource):
 				status = True
 			else:
 				status = False
-			return jsonify({'result':status})
+
+			# pdb.set_trace()
+			return jsonify({'result':status, 'name': user.name})
+		except Exception as e:
+			# pdb.set_trace()
+			return {'error':str(e)}
+
+class Logout(Resource):
+	def get(self):
+		try:
+			# Parse the arguments
+			session.pop('logged_in', None)
+			return {'result':'success'}
 		except Exception as e:
 			return {'error':str(e)}
 
+class Status(Resource):
+	def get(self):
+		# pdb.set_trace()
+		if session.get('logged_in'):
+			if session['logged_in']:
+				return {'status':True}
+		else:
+			return {'status':False}
 
-api.add_resource(CreateUser, '/api/CreateUser')
-api.add_resource(AuthenticateUser, '/api/AuthenticateUser')
+api.add_resource(Register, '/api/register')
+api.add_resource(Login, '/api/login')
+api.add_resource(Logout, '/api/logout')
 api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
 api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
+api.add_resource(Status, '/api/status')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port='5000', debug=True)

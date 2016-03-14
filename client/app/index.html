@@ -15,10 +15,8 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-   
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/docs.min.css">
-
     <!-- endbuild -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
@@ -28,7 +26,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <div class="header">
+    <div class="header" ng-controller="NavbarCtrl">
         <div class="navbar navbar-default" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -46,6 +44,17 @@
                         <li><a ng-href="#/customConcept">New Concept</a></li>
                         <li><a ng-href="#/about">About</a></li>
                         <li><a ng-href="#/">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a ng-href="#/register" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li><a ng-href="#/login" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li class="dropdown" ng-if="isLoggedIn()">
+                            <a class="dropdown-toggle" data-toggle="dropdown"> Hello, {{getUserName()}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-href="#">Acount</a></li>
+                                <li><a ng-click="logout()">Logout</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -97,6 +106,10 @@
     <script src="scripts/services/recommend.js"></script>
     <script src="scripts/services/serverurl.js"></script>
     <script src="scripts/lib/tsne.js"></script>
+    <script src="scripts/services/authservice.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/navbar.js"></script>
+    <script src="scripts/controllers/register.js"></script>
     <!-- endbuild -->
 </body>
 
