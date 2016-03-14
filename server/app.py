@@ -23,26 +23,38 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 from models import User
 import pickle
 
+from ml import embedding
+from ml import kde
+
 headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
-print wordsModel.head()
+# wordsFileName = './data/glove.6B.300d.txt'
+wordsFileName = './data/glove.6B.50d.txt' # for testing
 
-wordsLabel = wordsModel.index.tolist()
-wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
-print wordsModel.head()
+# unified w2v queries with caching
+w2v_model = embedding.EmbeddingModel(wordsFileName)
+kde_model = kde.KdeModel(w2v_model)
 
-wordsModelNumpyNorm = wordsModelNorm.as_matrix()
-
+#################################################
+# BEGIN DEPRECATED: due to ml model refactoring
+################################################
+# wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
+# print wordsModel.head()
+#
+# wordsLabel = wordsModel.index.tolist()
+# wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
+# print wordsModel.head()
+#
+# wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
 # pkl_file = open('./data/glove.pkl','rb')
 # wordsModel = pickle.load(pkl_file)
-
 # print np.__config__.show()
-
 # wordsLabel = wordsModel['word'].tolist()
-
 # print wordsLabel
+
+#################################################
+# END DEPRECATED: due to ml model refactoring
+################################################
 
 @app.after_request
 def after_request(response):
@@ -71,45 +83,64 @@ class RecommendWordsCluster(Resource):
 
 			positive_terms = [w.encode('UTF-8') for w in positive_terms]
 			negative_terms = args['negativeWords']
-			print positive_terms
 
+			# Because pairwise distance computations are cached in the w2v_model,
+			# we do not need to worry about re-training the kde model
+			#
+			# Note: You can later put irr_words
+			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
+											neg_words=negative_terms)
 
+			positive_recommend = kde_model.recommend_pos_words(how_many=10)
+			negative_recommend = kde_model.recommend_neg_words(how_many=10)
 
-			positive_terms_models = wordsModel.loc[positive_terms,:].mean()
+			# currently i didn't put the clustering yet
+			return jsonify(positiveRecommend=positive_recommend,
+										 negativeRecommend=negative_recommend)
 
-			if negative_terms is None:
-			    negative_terms_models = np.zeros(300)
-			else:
-			    negative_terms = [w.encode('UTF-8') for w in negative_terms]
+			#################################################
+			# BEGIN DEPRECATED: due to ml model refactoring
+			################################################
 
-			    negative_terms_models = wordsModel.loc[negative_terms,:].mean()
+			# positive_terms_models = wordsModel.loc[positive_terms,:].mean()
+			#
+			# if negative_terms is None:
+			#     negative_terms_models = np.zeros(300)
+			# else:
+			#     negative_terms = [w.encode('UTF-8') for w in negative_terms]
+			#
+			#     negative_terms_models = wordsModel.loc[negative_terms,:].mean()
+			#
+			# concept_vector_group = positive_terms_models - negative_terms_models
+			#
+			# # pdb.set_trace()
+			# concept_value = np.dot(wordsModelNumpyNorm, concept_vector_group)
+			#
+			# df = pd.DataFrame(concept_value, index=wordsModel.index)
+			# df.drop(positive_terms, inplace=True)
+			# df.drop(negative_terms, inplace=True)
+			# df.sort_values(by=0, inplace=True, ascending=False)
+			# df.head()
+			# top50 = wordsModel.loc[df[:50].index,:]
+			# positiveY = KMeans(n_clusters=5).fit_predict(top50.values)
+			# bottom50 = wordsModel.loc[df[-50:].index,:]
+			# negativeY = KMeans(n_clusters=5).fit_predict(bottom50.values)
+			# # top50.to_csv("data.csv")
+			# if positive_terms is None:
+			# 	positiveSearchTermVectors = []
+			# else:
+			# 	positiveSearchTermVectors =  wordsModel.loc[positive_terms,:].values.tolist()
+			#
+			# if negative_terms is None:
+			# 	negativeSearchTermVectors = []
+			# else:
+			# 	negativeSearchTermVectors = wordsModel.loc[negative_terms,:].values.tolist()
 
-			concept_vector_group = positive_terms_models - negative_terms_models
+			#################################################
+			# END DEPRECATED: due to ml model refactoring
+			################################################
 
-			# pdb.set_trace()
-			concept_value = np.dot(wordsModelNumpyNorm, concept_vector_group)
-
-			df = pd.DataFrame(concept_value, index=wordsModel.index)
-			df.drop(positive_terms, inplace=True)
-			df.drop(negative_terms, inplace=True)
-			df.sort_values(by=0, inplace=True, ascending=False)
-			df.head()
-			top50 = wordsModel.loc[df[:50].index,:]
-			positiveY = KMeans(n_clusters=5).fit_predict(top50.values)
-			bottom50 = wordsModel.loc[df[-50:].index,:]
-			negativeY = KMeans(n_clusters=5).fit_predict(bottom50.values)
-			# top50.to_csv("data.csv")
-			if positive_terms is None:
-				positiveSearchTermVectors = []
-			else:
-				positiveSearchTermVectors =  wordsModel.loc[positive_terms,:].values.tolist()
-			
-			if negative_terms is None:
-				negativeSearchTermVectors = []
-			else:
-				negativeSearchTermVectors = wordsModel.loc[negative_terms,:].values.tolist()
-
-			return jsonify(positiveRecommend=df[:50].index.tolist(), positiveCluster=positiveY.tolist(), negativeRecommend=df[-50:].index.tolist(), negativeCluster=negativeY.tolist(), positiveVectors=top50.values.tolist(), positiveSearchTermVectors = positiveSearchTermVectors ,negativeVectors=bottom50.values.tolist(), negativeSearchTermVectors = negativeSearchTermVectors)
+			# return jsonify(positiveRecommend=df[:50].index.tolist(), positiveCluster=positiveY.tolist(), negativeRecommend=df[-50:].index.tolist(), negativeCluster=negativeY.tolist(), positiveVectors=top50.values.tolist(), positiveSearchTermVectors = positiveSearchTermVectors ,negativeVectors=bottom50.values.tolist(), negativeSearchTermVectors = negativeSearchTermVectors)
 
 		except Exception as e:
 			# pdb.set_trace()
@@ -175,4 +206,3 @@ api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port='5000', debug=True)
-
