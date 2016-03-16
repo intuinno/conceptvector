@@ -80,7 +80,13 @@ class Concepts(db.Model, CRUD):
 class ConceptsSchema(Schema):
 	
 	not_blank = validate.Length(min=1, error='Field cannot be blank')
-	id = fields.Integer(dump_only=True)
+	id = fields.Integer(dump_only=False)
+	name = fields.Str()
+	created_on = fields.DateTime()
+	creator_id = fields.Integer()
+	concept_type = fields.Str()
+	input_terms = fields.Raw()
+
 	
 	#self links
 	def get_top_level_links(self, data, many):

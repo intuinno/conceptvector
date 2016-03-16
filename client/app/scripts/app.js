@@ -57,7 +57,7 @@ angular
         // controllerAs: 'register'
         access: {restricted: false}
       })
-      .when('/conceptlist', {
+      .when('/concepts', {
         templateUrl: 'views/conceptlist.html',
         controller: 'ConceptlistCtrl',
         // controllerAs: 'conceptlist'

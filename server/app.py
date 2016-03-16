@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, make_response
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse
@@ -241,6 +241,51 @@ class ConceptList(Resource):
 			return resp
 
 
+class ConceptsUpdate(Resource):
+	def get(self,id):
+		concept_query = Concepts.query.get_or_404(id)
+		result = schema.dump(concept_query).data
+		import pdb;pdb.set_trace()
+		return result
+
+	def patch(self,id):
+		concept = Concepts.query.get_or_404(id)
+		raw_dict = request.get_json(force=True)
+
+		try:
+			schema.validate(raw_dict)
+			concept_dict = raw_dict['data']['attributes']
+
+			for key, value in concept_dict.items():
+				setattr(concept, key, value)
+
+			concept.update()
+			return self.get(id)
+
+		except ValidationError as err:
+			resp = jsonify({"error":err.messages})
+			resp.status_code = 401
+			return resp
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			resp = jsonify({"error": str(e)})
+			resp.status_code = 401
+			return resp
+		
+	def delete(self, id):
+		concept = Concepts.query.get_or_404(id)
+		try: 
+			delete = concept.delete(concept)
+			concepts_query = Concepts.query.all()
+			results =  schema.dump(concepts_query, many=True).data
+			return results
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			resp = jsonify({"error": str(e)})
+			resp.status_code = 401
+			return resp
+
 
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')
@@ -249,6 +294,7 @@ api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
 api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 api.add_resource(Status, '/api/status')
 api.add_resource(ConceptList, '/api/concepts')
+api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port='5000', debug=True)
