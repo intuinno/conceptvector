@@ -1,1 +1,63 @@
-<p>This is the conceptlist view.</p>
+<div class="container">
+    <h1>List of Concepts</h1>
+    <h1><small>You can add, update or delete custom concepts for text analysis</small></h1>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <!-- <h3>Concepts: {{ currentPage }}</h3> -->
+                            <a class="btn btn-default" ng-href="/#/customConcept">
+                                Create New Concept
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <label for="search">Search:</label>
+                            <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+                        </div>
+                        <div class="col-xs-4">
+                            <label for="search">items per page:</label>
+                            <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <!--                             <ul>
+                                <li dir-paginate="concept in concepts | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">{{ concept }}</li>
+
+                            </ul> -->
+                            <dl>
+                                <dt dir-paginate-start="concept in concepts | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
+                                    <h3>{{concept.attributes.name}}<small class="commentHeader"> {{concept.attributes.creator_name}} , {{concept.attributes.created_on}} </small> </h3>
+                                </dt>
+                                <dd>
+                                    <dl class="dl-horizontal">
+                                        <dt>Type</dt>
+                                        <dd>{{concept.attributes.concept_type}}</dd>
+                                        <dt>Positive Terms</dt>
+                                        <dd>{{concept.attributes.input_terms.positive}}</dd>
+                                        <dt>Negative Terms</dt>
+                                        <dd>{{concept.attributes.input_terms.negative}}</dd>
+                                    </dl>
+                                </dd>
+                                <div class="pull-right">
+                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">View</a>
+                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Update</a>
+                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Picked'" ng-hide="status=='Picked'">Fork</a>
+                                </div>
+                                <hr>
+                                <br dir-paginate-end>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="views/dirPagination.tpl.html" pagination-id="drinksPagination"></dir-pagination-controls> -->
+                        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" pagination-id="drinksPagination"></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

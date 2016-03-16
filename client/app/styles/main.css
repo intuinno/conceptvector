@@ -1,4 +1,11 @@
-
+.commentHeader {
+    display: inline;
+    color: gray;
+    position: relative;
+    margin-right: 50px;
+    font-size: 12px;
+    float:right;
+}
 
 tags-input {
   box-shadow: none;

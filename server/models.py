@@ -59,17 +59,19 @@ class Concepts(db.Model, CRUD):
 	created_on = db.Column(db.DateTime, nullable=False)
 	edited_on = db.Column(db.DateTime, nullable=False)
 	creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	creator_name = db.Column(db.String(255), nullable=False)
 	
 	concept_type=db.Column(db.String(20), default='bipolar', nullable=False)
 	input_terms=db.Column(JSON)
 
-	def __init__(self, name, creator_id, concept_type, input_terms ):
+	def __init__(self, name, creator_id, concept_type, input_terms, creator_name ):
 		self.name = name
 		self.creator_id = creator_id
 		self.concept_type = concept_type
 		self.input_terms = input_terms
 		self.created_on = datetime.datetime.now()
 		self.edited_on = datetime.datetime.now()
+		self.creator_name = creator_name
 
 	def get_id(self):
 		return self.id
@@ -86,6 +88,7 @@ class ConceptsSchema(Schema):
 	creator_id = fields.Integer()
 	concept_type = fields.Str()
 	input_terms = fields.Raw()
+	creator_name = fields.Str()
 
 	
 	#self links

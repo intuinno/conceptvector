@@ -8,12 +8,49 @@
  * Controller of the conceptvectorApp
  */
 angular.module('conceptvectorApp')
-    .controller('CustomconceptCtrl', ['$scope', 'AutoComplete', 'recommend', function($scope, AutoComplete, recommend) {
+    .controller('CustomconceptCtrl', ['$scope', '$http', 'serverURL', 'AutoComplete', 'recommend', function($scope, $http, serverURL, AutoComplete, recommend) {
         // $scope.concept_type = 'bipolar';
         $scope.positiveTags = [];
         $scope.negativeTags = [];
         $scope.positiveRecommendation = [];
         $scope.negativeRecommendation = [];
+
+        $scope.saveConcept = function() {
+
+            var newConcept = {};
+
+            newConcept.data = {};
+
+            newConcept.data.attributes = {
+
+                "concept_type": $scope.concept_type,
+                "input_terms": {
+                    "positive": $scope.positiveTags,
+                    "negative": $scope.negativeTags
+                }
+
+            };
+
+            newConcept.data.type = "concepts";
+
+
+            $http.post(serverURL + '/concepts', newConcept)
+                // handle success
+                .success(function(data) {
+                    console.log(data);
+
+                    $scope.concepts = data.data;
+                    // $scope.$apply();
+                })
+                // handle error
+                .error(function(data) {
+                    console.log(data);
+                });
+
+
+        };
+
+
 
         $scope.loadTags = function(query) {
             return AutoComplete.load(query);
@@ -31,7 +68,7 @@ angular.module('conceptvectorApp')
             var negativeTags = $scope.negativeTags.map(function(d) {
                 return d['text'];
             });
-            
+
             recommend.save({
                 'positiveWords': positiveTags,
                 'negativeWords': negativeTags

@@ -21,9 +21,9 @@ db = SQLAlchemy(app)
 
 api = Api(app)
 bcrypt = Bcrypt(app)
-CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-app.secret_key = "I love Tankey!"
+# CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 from models import User, Concepts, ConceptsSchema
 import pickle
@@ -43,22 +43,15 @@ schema = ConceptsSchema()
 # wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
 
-# pkl_file = open('./data/glove.pkl','rb')
-# wordsModel = pickle.load(pkl_file)
 
-# print np.__config__.show()
 
-# wordsLabel = wordsModel['word'].tolist()
-
-# print wordsLabel
-
-@app.after_request
-def after_request(response):
-	# pdb.set_trace()
-	response.headers.add('Access-Control-Allow-Origin', '*')
-	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-	return response
+# @app.after_request
+# def after_request(response):
+# 	# pdb.set_trace()
+# 	response.headers.add('Access-Control-Allow-Origin', '*')
+# 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+# 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+# 	return response
 
 
 
@@ -175,6 +168,7 @@ class Login(Resource):
 			if user and bcrypt.check_password_hash(user.password, _userPassword):
 				session['logged_in'] = True
 				session['user'] = user.id
+				session['userName'] = user.name
 				status = True
 			else:
 				status = False
@@ -190,6 +184,9 @@ class Logout(Resource):
 		try:
 			# Parse the arguments
 			session.pop('logged_in', None)
+			session.pop('user', None)
+			session.pop('userName', None)
+			
 			return {'result':'success'}
 		except Exception as e:
 			return {'error':str(e)}
@@ -215,13 +212,15 @@ class ConceptList(Resource):
 		try:
 			schema.validate(raw_dict)
 			concept_dict = raw_dict['data']['attributes']
+			import pdb;pdb.set_trace()
 
 			if session.get('logged_in'):
 				userID = session['user']
+				userName = session['userName']
 			else:
 				return {'status':"UnAuthorized Access for Post ConceptList"}
 
-			concept = Concepts(concept_dict['name'], userID, concept_dict['type'], concept_dict['input_terms'])
+			concept = Concepts(concept_dict['name'], userID, concept_dict['concept_type'], concept_dict['input_terms'], userName)
 			concept.add(concept)
 
 			query = Concepts.query.get(concept.id)
@@ -297,5 +296,6 @@ api.add_resource(ConceptList, '/api/concepts')
 api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port='5000', debug=True)
+	app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+	app.run(host='localhost', port='9000', debug=True)
 

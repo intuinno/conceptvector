@@ -19,7 +19,7 @@ angular
     'ui.bootstrap',
     'ngTagsInput',
     'nvd3',
-    'angularUtils.directive.dirPagination'
+    'angularUtils.directives.dirPagination'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -68,8 +68,8 @@ angular
       });
   }).run(function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    // AuthService.getUserStatus();
-    if (next.access.restricted && AuthService.isLoggedIn() === false) {
+    AuthService.getUserStatus();
+    if (next.access.restricted && (AuthService.isLoggedIn() === false)) {
       $location.path('/login');
       $route.reload();
     }
