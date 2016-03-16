@@ -11,6 +11,10 @@ from flask.ext.cors import CORS
 import pdb
 from sklearn.preprocessing import normalize
 
+from sqlalchemy.exc import SQLAlchemyError
+from marshmallow import ValidationError
+
+
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy(app)
@@ -21,19 +25,22 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.secret_key = "I love Tankey!"
 
-from models import User
+from models import User, Concepts, ConceptsSchema
 import pickle
 
-headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
-print wordsModel.head()
 
-wordsLabel = wordsModel.index.tolist()
-wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
-print wordsModel.head()
+schema = ConceptsSchema()
 
-wordsModelNumpyNorm = wordsModelNorm.as_matrix()
+# headerNames = ['word'] + range(300)
+# wordsFileName = './data/glove.6B.300d.txt'
+# wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
+# print wordsModel.head()
+
+# wordsLabel = wordsModel.index.tolist()
+# wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
+# print wordsModel.head()
+
+# wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
 
 # pkl_file = open('./data/glove.pkl','rb')
@@ -167,6 +174,7 @@ class Login(Resource):
 			user = User.query.filter_by(email=_userEmail).first()
 			if user and bcrypt.check_password_hash(user.password, _userPassword):
 				session['logged_in'] = True
+				session['user'] = user.id
 				status = True
 			else:
 				status = False
@@ -191,9 +199,48 @@ class Status(Resource):
 		# pdb.set_trace()
 		if session.get('logged_in'):
 			if session['logged_in']:
-				return {'status':True}
+				return {'status':True, 'user': session['user']}
 		else:
 			return {'status':False}
+
+class ConceptList(Resource):
+	def get(self):
+		concepts_query = Concepts.query.all()
+		results =  schema.dump(concepts_query, many=True).data
+		return results
+
+	def post(self):
+		raw_dict = request.get_json(force=True)
+		# import pdb; pdb.set_trace()
+		try:
+			schema.validate(raw_dict)
+			concept_dict = raw_dict['data']['attributes']
+
+			if session.get('logged_in'):
+				userID = session['user']
+			else:
+				return {'status':"UnAuthorized Access for Post ConceptList"}
+
+			concept = Concepts(concept_dict['name'], userID, concept_dict['type'], concept_dict['input_terms'])
+			concept.add(concept)
+
+			query = Concepts.query.get(concept.id)
+			results = schema.dump(query).data
+
+			return results, 201
+		
+		except ValidationError as err:
+			resp = jsonify({"error":err.messages})
+			resp.status_code = 403
+			return resp
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			resp = jsonify({"error": str(e)})
+			resp.status_code = 403
+			return resp
+
+
 
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')
@@ -201,6 +248,7 @@ api.add_resource(Logout, '/api/logout')
 api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
 api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 api.add_resource(Status, '/api/status')
+api.add_resource(ConceptList, '/api/concepts')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port='5000', debug=True)

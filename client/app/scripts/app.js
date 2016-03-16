@@ -18,7 +18,8 @@ angular
     'ngTouch',
     'ui.bootstrap',
     'ngTagsInput',
-    'nvd3'
+    'nvd3',
+    'angularUtils.directive.dirPagination'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -54,6 +55,12 @@ angular
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl',
         // controllerAs: 'register'
+        access: {restricted: false}
+      })
+      .when('/conceptlist', {
+        templateUrl: 'views/conceptlist.html',
+        controller: 'ConceptlistCtrl',
+        // controllerAs: 'conceptlist'
         access: {restricted: false}
       })
       .otherwise({
