@@ -31,16 +31,16 @@ import pickle
 
 schema = ConceptsSchema()
 
-# headerNames = ['word'] + range(300)
-# wordsFileName = './data/glove.6B.300d.txt'
-# wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
-# print wordsModel.head()
+headerNames = ['word'] + range(300)
+wordsFileName = './data/glove.6B.300d.txt'
+wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
+print wordsModel.head()
 
-# wordsLabel = wordsModel.index.tolist()
-# wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
-# print wordsModel.head()
+wordsLabel = wordsModel.index.tolist()
+wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
+print wordsModel.head()
 
-# wordsModelNumpyNorm = wordsModelNorm.as_matrix()
+wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
 
 
@@ -145,7 +145,7 @@ class Register(Resource):
 			status = 'success'
 
 		except Exception as e:
-			pdb.set_trace()
+			# pdb.set_trace()
 			status = 'This user is already registered'
 			db.session.close()
 
@@ -212,7 +212,7 @@ class ConceptList(Resource):
 		try:
 			schema.validate(raw_dict)
 			concept_dict = raw_dict['data']['attributes']
-			import pdb;pdb.set_trace()
+			# import pdb;pdb.set_trace()
 
 			if session.get('logged_in'):
 				userID = session['user']
@@ -244,7 +244,7 @@ class ConceptsUpdate(Resource):
 	def get(self,id):
 		concept_query = Concepts.query.get_or_404(id)
 		result = schema.dump(concept_query).data
-		import pdb;pdb.set_trace()
+		# import pdb;pdb.set_trace()
 		return result
 
 	def patch(self,id):

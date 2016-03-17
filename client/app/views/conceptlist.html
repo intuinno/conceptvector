@@ -37,9 +37,9 @@
                                         <dt>Type</dt>
                                         <dd>{{concept.attributes.concept_type}}</dd>
                                         <dt>Positive Terms</dt>
-                                        <dd>{{concept.attributes.input_terms.positive}}</dd>
+                                        <dd><small ng-repeat="term in concept.attributes.input_terms.positive ">{{term.text}} </small></dd>
                                         <dt>Negative Terms</dt>
-                                        <dd>{{concept.attributes.input_terms.negative}}</dd>
+                                        <dd><small ng-repeat="term in concept.attributes.input_terms.negative ">{{term.text}} </small></dd>
                                     </dl>
                                 </dd>
                                 <div class="pull-right">

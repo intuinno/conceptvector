@@ -22,7 +22,7 @@ angular.module('conceptvectorApp')
             newConcept.data = {};
 
             newConcept.data.attributes = {
-
+                "name": $scope.concept_name,
                 "concept_type": $scope.concept_type,
                 "input_terms": {
                     "positive": $scope.positiveTags,

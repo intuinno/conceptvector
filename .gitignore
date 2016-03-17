@@ -8,3 +8,5 @@ client/bower_components
 server/data
 *.pkl
 experiment/data
+server/migrations/*
+

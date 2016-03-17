@@ -8,4 +8,4 @@
  * Constant in the conceptvectorApp.
  */
 angular.module('conceptvectorApp')
-  .constant('serverURL', 'http://localhost:9000/api');
+  .constant('serverURL', 'http://conceptvector.org/api');
