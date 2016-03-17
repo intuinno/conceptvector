@@ -43,8 +43,8 @@
                                     </dl>
                                 </dd>
                                 <div class="pull-right">
-                                    <a href="#/concepts/{{concept.id}}" class="btn btn-link btn-default" ng-hide="status=='Accepted'">Edit</a>
-                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Copy</a>
+                                    <a href="#/concepts/{{concept.id}}" class="btn btn-link btn-default" ng-show="isOwner(concept)">Edit</a>
+                                    <a href="" class="btn btn-link btn-default" ng-click="clone(concept)">Copy</a>
                                     <a href="" class="btn btn-link btn-default" ng-click="delete(concept)" ng-show="isOwner(concept)">Delete</a>
                                 </div>
                                 <hr>
@@ -67,6 +67,19 @@
     </div>
     <div class="modal-body">
         <h3> {{conceptName}} </h3>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+<script type="text/ng-template" id="cloneModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Please enter the name for new concept</h3>
+    </div>
+    <div class="modal-body">
+        New name:
+        <input type="text" ng-model='conceptName' class="form-control" select-on-click placeholder={{conceptName}}>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>
