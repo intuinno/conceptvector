@@ -1,44 +1,39 @@
-
 <div class="container">
-<a ng-href="/#/concepts"> Back to concept list </a>  
+
     <div class="row">
         <div class="col-md-12">
-            <section id="getting_started">
-                <div class="page-header">
-                    <h1>Concept Designer</h1><a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()"><i class="fa fa-save"></i> Save </a>
-                </div>
-
-                <h3> Concept Name: {{concept_name}} </h3>
-                 <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
-                <h3>Concept Type: Unipolar vs Bipolar </h3>
-                <p>
-                    In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em> or <em>Democratic vs Republican</em> can be an bipolar type.
-                </p>
-                <div class="btn-group">
-                    <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
-                    <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
-                </div>
-                <a class="btn btn-link pull-right" href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
+            <!-- <h1>Concept Designer</h1> -->
+            <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
+            <a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()"><i class="fa fa-save"></i> Save </a>
+            <h3> Concept Name: {{concept_name}} </h3>
+            <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
+            <h3>Concept Type: Unipolar vs Bipolar </h3>
+            <p>
+                In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em> or <em>Democratic vs Republican</em> can be an bipolar type.
+            </p>
+            <div class="btn-group">
+                <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
+                <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
+            </div>
+            <a class="btn btn-link pull-right" href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
                     Advanced Settings <i class="fa fa-cog"></i>
                 </a>
-                <div uib-collapse="isSettingCollapsed">
-                    <div class="well">
-                        <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
-                        <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
-                        <br>
-                        {{isSettingCollapsed}}
-                        <div ng-repeat="scoreModel in scoreModels">
-                            <h4> Criteria based on {{scoreModel}} score</h4>
-                            <ul>
-                                <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
-                                    <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
-                                    <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
-                                </li>
-                            </ul>
-                        </div>
+            <div uib-collapse="isSettingCollapsed">
+                <div class="well">
+                    <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
+                    <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
+                    <br> {{isSettingCollapsed}}
+                    <div ng-repeat="scoreModel in scoreModels">
+                        <h4> Criteria based on {{scoreModel}} score</h4>
+                        <ul>
+                            <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
+                                <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
+                                <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
@@ -111,14 +106,13 @@
             </div>
         </div>
     </div>
-<!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+    <!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
         <div class="row">
             <div class="col-md-12">
                 <nvd3 options='all_options' data ='all_data' api='all_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>
     </div>    -->
-
 </div>
 <script type="text/ng-template" id="positive-input-template">
     <div class="tag-template">
