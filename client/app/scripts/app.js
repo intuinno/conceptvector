@@ -54,14 +54,16 @@ angular
       .when('/register', {
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl',
-        // controllerAs: 'register'
         access: {restricted: false}
       })
       .when('/concepts', {
         templateUrl: 'views/conceptlist.html',
         controller: 'ConceptlistCtrl',
-        // controllerAs: 'conceptlist'
         access: {restricted: false}
+      })
+      .when('/concepts/:conceptId', {
+        templateUrl: 'views/customconcept.html',
+        controller: 'ConceptdetailCtrl',
       })
       .otherwise({
         redirectTo: '/'
@@ -69,6 +71,10 @@ angular
   }).run(function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     AuthService.getUserStatus();
+
+    if (!next.access) {
+      return;
+    } 
     if (next.access.restricted && (AuthService.isLoggedIn() === false)) {
       $location.path('/login');
       $route.reload();

@@ -14,6 +14,7 @@ angular.module('conceptvectorApp')
 
         var user = null;
         var userName;
+        var userId;
 
         function isLoggedIn() {
             if (user) {
@@ -31,19 +32,32 @@ angular.module('conceptvectorApp')
             }
         }
 
+        function getUserId() {
+            if (user) {
+                return userId;
+            } else {
+                return '';
+            }
+        }
+
         function getUserStatus() {
             $http.get(serverURL + '/status')
                 // handle success
                 .success(function(data) {
                     if (data.status) {
                         user = true;
+                        userName = data.userName;
+                        userId = data.user;
                     } else {
                         user = false;
+                        userName = '';
+                        userId = '';
                     }
                 })
                 // handle error
                 .error(function(data) {
                     user = false;
+                    userName = '';
                 });
         }
 
@@ -110,7 +124,8 @@ angular.module('conceptvectorApp')
             login: login,
             logout: logout,
             register: register,
-            getUserStatus: getUserStatus
+            getUserStatus: getUserStatus,
+            getUserId: getUserId
         };
 
 

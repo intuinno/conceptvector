@@ -196,7 +196,7 @@ class Status(Resource):
 		# pdb.set_trace()
 		if session.get('logged_in'):
 			if session['logged_in']:
-				return {'status':True, 'user': session['user']}
+				return {'status':True, 'user': session['user'], 'userName':session['userName']}
 		else:
 			return {'status':False}
 

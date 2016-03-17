@@ -11,4 +11,4 @@ angular.module('conceptvectorApp')
 // When in Development
   .constant('serverURL', 'http://localhost:9000/api');
 // When in Deployment
-  // .constant('serverURL', 'http://localhost:9000/api');
+  // .constant('serverURL', 'http://conceptvector.org/api');

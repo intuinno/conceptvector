@@ -30,23 +30,22 @@
                             </ul> -->
                             <dl>
                                 <dt dir-paginate-start="concept in concepts | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
-                                    <h3>{{concept.attributes.name}}<small class="commentHeader"> {{concept.attributes.creator_name}} , {{concept.attributes.created_on}} </small> </h3>
+                                    <h3> <a href="#/concepts/{{concept.id}}"> {{concept.attributes.name}} </a><small class="commentHeader"> {{concept.attributes.creator_name}} , {{concept.attributes.created_on}} </small> </h3>
                                 </dt>
                                 <dd>
                                     <dl class="dl-horizontal">
                                         <dt>Type</dt>
                                         <dd>{{concept.attributes.concept_type}}</dd>
                                         <dt>Positive Terms</dt>
-                                        <dd>  <small ng-repeat="term in concept.attributes.input_terms.positive ">{{term.text}} </small></dd>
-
+                                        <dd> <small ng-repeat="term in concept.attributes.input_terms.positive ">{{term.text}} </small></dd>
                                         <dt>Negative Terms</dt>
                                         <dd><small ng-repeat="term in concept.attributes.input_terms.negative ">{{term.text}} </small></dd>
                                     </dl>
                                 </dd>
                                 <div class="pull-right">
-                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">View</a>
-                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Update</a>
-                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Picked'" ng-hide="status=='Picked'">Fork</a>
+                                    <a href="#/concepts/{{concept.id}}" class="btn btn-link btn-default" ng-hide="status=='Accepted'">Edit</a>
+                                    <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Copy</a>
+                                    <a href="" class="btn btn-link btn-default" ng-click="delete(concept)" ng-show="isOwner(concept)">Delete</a>
                                 </div>
                                 <hr>
                                 <br dir-paginate-end>
@@ -62,3 +61,15 @@
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="deleteModal.html">
+    <div class="modal-header">
+        <h4 class="modal-title">Are you sure to delete this concept? </h4>
+    </div>
+    <div class="modal-body">
+        <h3> {{conceptName}} </h3>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
