@@ -1,10 +1,10 @@
 <div class="container">
-
+<uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest.  Please go back to list and copy this concept to create a clone and edit.</uib-alert>
     <div class="row">
         <div class="col-md-12">
             <!-- <h1>Concept Designer</h1> -->
             <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
-            <a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()"><i class="fa fa-save"></i> Save </a>
+            <a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
             <h3> Concept Name: {{concept_name}} </h3>
             <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
             <h3>Concept Type: Unipolar vs Bipolar </h3>

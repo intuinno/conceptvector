@@ -8,7 +8,7 @@
  * Controller of the conceptvectorApp
  */
 angular.module('conceptvectorApp')
-    .controller('ConceptdetailCtrl', ['$scope', '$http', 'serverURL', '$routeParams', 'AutoComplete', 'recommend', function($scope, $http, serverURL, $routeParams, AutoComplete, recommend) {
+    .controller('ConceptdetailCtrl', ['$scope', '$http', 'serverURL', '$routeParams', 'AutoComplete', 'recommend', 'AuthService', function($scope, $http, serverURL, $routeParams, AutoComplete, recommend, AuthService) {
 
         $scope.conceptId = $routeParams.conceptId;
 
@@ -26,10 +26,25 @@ angular.module('conceptvectorApp')
 
         });
 
+
+
         $scope.isSettingCollapsed = true;
 
         $scope.positiveRecommendation = [];
         $scope.negativeRecommendation = [];
+
+        $scope.isOwner = function() {
+
+        	if (AuthService.isLoggedIn()) {
+
+        		if (AuthService.getUserId() === $scope.concept.creator_id) {
+        			return true;
+        		}
+        	}
+
+        	return false;
+
+        };
 
         $scope.saveConcept = function() {
 

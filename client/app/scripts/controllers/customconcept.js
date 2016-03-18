@@ -15,6 +15,10 @@ angular.module('conceptvectorApp')
         $scope.positiveRecommendation = [];
         $scope.negativeRecommendation = [];
 
+        $scope.isOwner = function() {
+            return true;
+        };
+
         $scope.saveConcept = function() {
 
             var newConcept = {};
