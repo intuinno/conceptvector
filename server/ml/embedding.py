@@ -26,6 +26,9 @@ class EmbeddingModel:
     self.embeddings = np.array(numbers, dtype=np.float32)
     self._cache = {}
 
+  def has_word(self, word):
+    return word in self.dictionary
+
   def find_word(self, word):
     if word in self.dictionary:
       return self.dictionary[word]
