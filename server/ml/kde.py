@@ -10,15 +10,16 @@ class KdeModel:
 
   def learn(self, h_sq=0.2, pos_words=[], neg_words=[], irr_words=[]):
     self.h_sq = h_sq
-    self.pos_words = pos_words
-    self.neg_words = neg_words
-    self.irr_words = irr_words
-    self.pos_words_indicies = [self.embedding_model.get_index(x)
-                               for x in pos_words]
-    self.neg_words_indicies = [self.embedding_model.get_index(x)
-                               for x in neg_words]
-    self.irr_words_indicies = [self.embedding_model.get_index(x)
-                               for x in irr_words]
+    # filter out words that does not in the dictionary
+    self.pos_words = [x for x in pos_words if self.embedding_model.has_word(x)]
+    self.neg_words = [x for x in neg_words if self.embedding_model.has_word(x)]
+    self.irr_words = [x for x in irr_words if self.embedding_model.has_word(x)]
+    self.pos_words_indicies = [self.embedding_model.find_word(x)
+                               for x in self.pos_words]
+    self.neg_words_indicies = [self.embedding_model.find_word(x)
+                               for x in self.neg_words]
+    self.irr_words_indicies = [self.embedding_model.find_word(x)
+                               for x in self.irr_words]
     self.num_all_seeds = len(pos_words) + len(neg_words) + len(irr_words)
 
     self.pos_score = self._compute_unnormalized_density(pos_words)
