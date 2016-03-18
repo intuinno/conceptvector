@@ -31,17 +31,12 @@ import pickle
 
 schema = ConceptsSchema()
 
-headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
-print wordsModel.head()
-
 from ml import embedding
 from ml import kde
 
 headerNames = ['word'] + range(300)
-# wordsFileName = './data/glove.6B.300d.txt'
-wordsFileName = './data/glove.6B.50d.txt' # for testing
+wordsFileName = './data/glove.6B.300d.txt'
+# wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
@@ -62,7 +57,7 @@ class RecommendWordsCluster(Resource):
 
 	def post(self):
 		try:
-			# pdb.set_trace()
+			pdb.set_trace()
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
@@ -83,8 +78,8 @@ class RecommendWordsCluster(Resource):
 			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
 											neg_words=negative_terms)
 
-			positive_recommend = kde_model.recommend_pos_words(how_many=10)
-			negative_recommend = kde_model.recommend_neg_words(how_many=10)
+			positive_recommend = kde_model.recommend_pos_words(how_many=50)
+			negative_recommend = kde_model.recommend_neg_words(how_many=50)
 
 			# currently i didn't put the clustering yet
 			return jsonify(positiveRecommend=positive_recommend,
@@ -98,7 +93,8 @@ class RecommendWordsCluster(Resource):
 class QueryAutoComplete(Resource):
   def get(self, word):
     wordUTF8 = word.encode('UTF-8')
-    new_list = [{'text':x} for x in wordsLabel if not isinstance(x, float) and x.startswith(wordUTF8)]
+    # import pdb; pdb.set_trace()
+    new_list = w2v_model.getAutoComplete(wordUTF8)
     return {'word': new_list}
 
 class Register(Resource):

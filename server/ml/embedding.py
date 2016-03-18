@@ -71,3 +71,6 @@ class EmbeddingModel:
 
     sort_indices = avg_dists.argsort()
     return [self.vocabulary[index] for index in sort_indices[:how_many]]
+
+  def getAutoComplete(self, word):
+    return [{'text':x} for x in self.vocabulary if not isinstance(x, float) and x.startswith(word)]
