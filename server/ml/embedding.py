@@ -1,10 +1,12 @@
 import numpy as np
+import cache
 from scipy.spatial import distance
 
 class EmbeddingModel:
   #TODO(seungyeon): release cache (memory will grow linearly!)
 
-  def __init__(self, filename, skip_head=True, dist_type='euclidean'):
+  def __init__(self, filename, skip_head=True, dist_type='euclidean',
+      cache_capacity=10000):
     self.vocabulary = []
     self.dictionary = {}
     self.embeddings = None
@@ -24,7 +26,7 @@ class EmbeddingModel:
           numbers.append([float(x) for x in split[1:]])
 
     self.embeddings = np.array(numbers, dtype=np.float32)
-    self._cache = {}
+    self._cache = cache.LRUCache(cache_capacity)
 
   def has_word(self, word):
     return word in self.dictionary
@@ -53,6 +55,7 @@ class EmbeddingModel:
     return embedding
 
   def compute_all_distances_from_a_word(self, word):
+    cache_value = self._cache[word]
     if word in self._cache:
       print 'cache hit:', word
       return self._cache[word]
