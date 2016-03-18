@@ -36,12 +36,6 @@ wordsFileName = './data/glove.6B.300d.txt'
 wordsModel = pd.read_csv(wordsFileName, delim_whitespace=True, quoting=3, header=None, names=headerNames, skiprows=0, index_col=0)
 print wordsModel.head()
 
-wordsLabel = wordsModel.index.tolist()
-wordsModelNorm = pd.DataFrame(normalize(wordsModel.as_matrix(), norm='l2'), index=wordsLabel)
-print wordsModel.head()
-
-wordsModelNumpyNorm = wordsModelNorm.as_matrix()
-
 from ml import embedding
 from ml import kde
 
@@ -65,26 +59,7 @@ kde_model = kde.KdeModel(w2v_model)
 #
 # wordsModelNumpyNorm = wordsModelNorm.as_matrix()
 
-<<<<<<< HEAD
 
-
-# @app.after_request
-# def after_request(response):
-# 	# pdb.set_trace()
-# 	response.headers.add('Access-Control-Allow-Origin', '*')
-# 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-# 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-# 	return response
-=======
-# pkl_file = open('./data/glove.pkl','rb')
-# wordsModel = pickle.load(pkl_file)
-# print np.__config__.show()
-# wordsLabel = wordsModel['word'].tolist()
-# print wordsLabel
-
-#################################################
-# END DEPRECATED: due to ml model refactoring
-################################################
 
 @app.after_request
 def after_request(response):
@@ -93,7 +68,6 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
->>>>>>> model-update
 
 
 
