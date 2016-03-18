@@ -35,6 +35,12 @@ class EmbeddingModel:
   def get_embedding_for_a_word(self, word):
     return self.get_embedding_for_words([word])
 
+  def get_index(self, word):
+    if word in self.dictionary:
+      return self.dictionary[word]
+    else:
+      return None
+  
   def get_word(self, index):
     if index < len(self.vocabulary):
       return self.vocabulary[index]

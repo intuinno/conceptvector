@@ -13,6 +13,12 @@ class KdeModel:
     self.pos_words = pos_words
     self.neg_words = neg_words
     self.irr_words = irr_words
+    self.pos_words_indicies = [self.embedding_model.get_index(x)
+                               for x in pos_words]
+    self.neg_words_indicies = [self.embedding_model.get_index(x)
+                               for x in neg_words]
+    self.irr_words_indicies = [self.embedding_model.get_index(x)
+                               for x in irr_words]
     self.num_all_seeds = len(pos_words) + len(neg_words) + len(irr_words)
 
     self.pos_score = self._compute_unnormalized_density(pos_words)
@@ -47,11 +53,16 @@ class KdeModel:
 
   def recommend_pos_words(self, how_many=100):
     top_indicies = np.argsort(-self.bipolar_score)  # reverse sort
-    return [self.embedding_model.get_word(x) for x in top_indicies[:how_many]]
+    candidates = top_indicies[:(how_many + len(self.pos_words))]
+    # filter the self.pos_words from the recommendation
+    candidates = [x for x in candidates if x not in self.pos_words_indicies]
+    return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
   def recommend_neg_words(self, how_many=100):
     top_indicies = np.argsort(self.bipolar_score)
-    return [self.embedding_model.get_word(x) for x in top_indicies[:how_many]]
+    candidates = top_indicies[:(how_many + len(self.neg_words))]
+    candidates = [x for x in candidates if x not in self.neg_words_indicies]
+    return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
   def _compute_unnormalized_density(self, target_words):
     result = np.zeros((len(self.embedding_model.vocabulary),))

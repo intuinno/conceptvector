@@ -74,9 +74,9 @@ class RecommendWordsCluster(Resource):
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
 			#
-			# Note: You can later put irr_words
+			# Note: You can later put irr_words (see the function)
 			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
-											neg_words=negative_terms)
+											neg_words=negative_terms, irr_words=[])
 
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
@@ -85,7 +85,7 @@ class RecommendWordsCluster(Resource):
 			return jsonify(positiveRecommend=positive_recommend,
 										 negativeRecommend=negative_recommend)
 
-	
+
 		except Exception as e:
 			# pdb.set_trace()
 			return {'error': str(e)}
@@ -99,7 +99,7 @@ class QueryAutoComplete(Resource):
 
 class Register(Resource):
 	def post(self):
-	
+
 		# Parse the arguments
 		parser = reqparse.RequestParser()
 		# import pdb; pdb.set_trace()
@@ -161,7 +161,7 @@ class Logout(Resource):
 			session.pop('logged_in', None)
 			session.pop('user', None)
 			session.pop('userName', None)
-			
+
 			return {'result':'success'}
 		except Exception as e:
 			return {'error':str(e)}
@@ -202,7 +202,7 @@ class ConceptList(Resource):
 			results = schema.dump(query).data
 
 			return results, 201
-		
+
 		except ValidationError as err:
 			resp = jsonify({"error":err.messages})
 			resp.status_code = 403
@@ -246,10 +246,10 @@ class ConceptsUpdate(Resource):
 			resp = jsonify({"error": str(e)})
 			resp.status_code = 401
 			return resp
-		
+
 	def delete(self, id):
 		concept = Concepts.query.get_or_404(id)
-		try: 
+		try:
 			delete = concept.delete(concept)
 			concepts_query = Concepts.query.all()
 			results =  schema.dump(concepts_query, many=True).data
@@ -273,4 +273,3 @@ api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 if __name__ == '__main__':
 	app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 	app.run(host='localhost', port='9000', debug=True)
-
