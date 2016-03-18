@@ -3,8 +3,7 @@ import cache
 from scipy.spatial import distance
 
 class EmbeddingModel:
-  #TODO(seungyeon): release cache (memory will grow linearly!)
-
+  
   def __init__(self, filename, skip_head=True, dist_type='euclidean',
       cache_capacity=10000):
     self.vocabulary = []
