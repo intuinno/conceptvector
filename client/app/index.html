@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
     <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
+    <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -40,10 +41,10 @@
                 </div>
                 <div class="collapse navbar-collapse" id="js-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#/">Home</a></li>
-                        <li><a ng-href="#/concepts">Concepts</a></li>
-                        <li><a ng-href="#/about">About</a></li>
-                        <li><a ng-href="#/">Contact</a></li>
+                        <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
+                        <li ng-class="{ active: isActive('/concepts')}"><a ng-href="#/concepts">Concepts</a></li>
+                        <li ng-class="{ active: isActive('/commentiq')}"><a ng-href="#/commentiq">CommentIQ</a></li>
+                        <li ng-class="{ active: isActive('/about')}"><a ng-href="#/about">About</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a ng-href="#/register" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -63,7 +64,7 @@
     <div ng-view=""></div>
     <div class="footer">
         <div class="container">
-            <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+            <p><span class="glyphicon glyphicon-heart"></span> from the Conceptvector Team</p>
         </div>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -96,6 +97,9 @@
     <script src="bower_components/nvd3/build/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+    <script src="bower_components/ui-select/dist/select.js"></script>
+    <script src="bower_components/d3-tip/index.js"></script>
+    <script src="bower_components/topojson/topojson.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -114,6 +118,17 @@
     <script src="scripts/controllers/conceptlist.js"></script>
     <script src="scripts/controllers/conceptdetail.js"></script>
     <script src="scripts/controllers/deletemodal.js"></script>
+    <script src="scripts/controllers/commentiq.js"></script>
+    <script src="scripts/controllers/commentdemo.js"></script>
+    <script src="scripts/directives/dd-text-collapse.js"></script>
+    <script src="scripts/directives/gatherplot.js"></script>
+    <script src="scripts/directives/gathermap.js"></script>
+    <script src="scripts/directives/stackedbar.js"></script>
+    <script src="scripts/directives/select-on-click.js"></script>
+    <script src="scripts/controllers/setting-name-modal.js"></script>
+    <script src="scripts/controllers/help-criteria-modal.js"></script>
+    <script src="scripts/controllers/pick-reason-modal.js"></script>
+    <script src="scripts/directives/tempo-line.js"></script>
     <!-- endbuild -->
 </body>
 

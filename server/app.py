@@ -57,7 +57,7 @@ class RecommendWordsCluster(Resource):
 
 	def post(self):
 		try:
-			pdb.set_trace()
+			# pdb.set_trace()
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')

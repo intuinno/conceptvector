@@ -28,7 +28,11 @@ angular.module('conceptvectorApp')
 
             $scope.getUserName = function() {
             	return AuthService.getUserName();
-            }
+            };
+
+            $scope.isActive = function(viewLocation) {
+                return viewLocation === $location.path();
+            };
 
         }
     ]);

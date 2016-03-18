@@ -19,7 +19,8 @@ angular
     'ui.bootstrap',
     'ngTagsInput',
     'nvd3',
-    'angularUtils.directives.dirPagination'
+    'angularUtils.directives.dirPagination',
+    'ui.select'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -64,6 +65,14 @@ angular
       .when('/concepts/:conceptId', {
         templateUrl: 'views/customconcept.html',
         controller: 'ConceptdetailCtrl',
+      })
+      .when('/commentiq', {
+        templateUrl: 'views/commentiq.html',
+        controller: 'CommentiqCtrl',
+      })
+      .when('/commentdemo', {
+        templateUrl: 'views/commentdemo.html',
+        controller: 'CommentdemoCtrl',
       })
       .otherwise({
         redirectTo: '/'

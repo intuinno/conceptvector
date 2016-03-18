@@ -38,6 +38,9 @@ module.exports = function(config) {
       'bower_components/nvd3/build/nv.d3.js',
       'bower_components/angular-nvd3/dist/angular-nvd3.js',
       'bower_components/angularUtils-pagination/dirPagination.js',
+      'bower_components/ui-select/dist/select.js',
+      'bower_components/d3-tip/index.js',
+      'bower_components/topojson/topojson.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
