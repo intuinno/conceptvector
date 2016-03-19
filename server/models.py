@@ -1,4 +1,4 @@
-from app import db, bcrypt
+from appModule import db, bcrypt
 from sqlalchemy.dialects.postgresql import JSON
 import datetime
 from marshmallow_jsonapi import Schema, fields 
