@@ -117,7 +117,7 @@ def getComments(url, offset=0):
 		print 'Retrying Download with next key', currentKey, comment_request.status_code, article_url
 		payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset}
     	comment_request = requests.get(api_url, params=payload)
-    sleep(0.1)
+	sleep(0.1)
 	return comment_request
     
     
