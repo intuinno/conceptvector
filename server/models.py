@@ -1,8 +1,9 @@
 from appModule import db, bcrypt
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import JSON, ARRAY, BIGINT
 import datetime
 from marshmallow_jsonapi import Schema, fields 
 from marshmallow import validate
+import json
 
 class CRUD():
 	def add(self, resource):
@@ -59,6 +60,7 @@ class Concepts(db.Model, CRUD):
 	created_on = db.Column(db.DateTime, nullable=False)
 	edited_on = db.Column(db.DateTime, nullable=False)
 	creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	creator = db.relationship("User", back_populates="concepts")
 	creator_name = db.Column(db.String(255), nullable=False)
 	
 	concept_type=db.Column(db.String(20), default='bipolar', nullable=False)
@@ -101,3 +103,77 @@ class ConceptsSchema(Schema):
 
 	class Meta:
 		type_ = 'concepts'
+
+class Article(db.Model):
+	__tablename__ = 'articles'
+
+	url = db.Column(db.String)
+	adx_keywords = db.Column(db.String)
+	column = db.Column(db.String)
+	section = db.Column(db.String)
+	byline = db.Column(db.String)
+	type= db.Column(db.String)
+	title = db.Column(db.String)
+	abstract = db.Column(db.String)
+	published_date = db.Column(db.DateTime)
+	source= db.Column(db.String)
+	id = db.Column(BIGINT, primary_key=True)
+	asset_id = db.Column(BIGINT)
+	views = db.Column(db.Integer)
+	des_facet = db.Column(ARRAY(db.String))
+	org_facet = db.Column(ARRAY(db.String))
+	per_facet = db.Column(ARRAY(db.String))
+	geo_facet = db.Column(ARRAY(db.String))
+	media = db.Column(ARRAY(db.String))
+	commments = db.relationship("Comment", backref="article")
+
+	def __init__(self, apiResult):
+		apiResult['media'] = [ json.dumps(i) for i in apiResult['media']]
+		for key, value in apiResult.iteritems():
+			setattr(self, key, value)
+
+	def __repr__(self):
+		return '<URL {}>'.format(self.url)
+
+class Comment(db.Model):
+	__tablename__ = 'comments'
+
+	approveDate = db.Column(db.String)
+	commentBody = db.Column(db.String)
+	commentID = db.Column(db.Integer, primary_key=True)
+	commentSequence = db.Column(db.Integer)
+	commentTitle = db.Column(db.String)
+	commentType = db.Column(db.String)
+	createDate = db.Column(db.String)
+	depth = db.Column(db.Integer)
+	editorsSelection = db.Column(db.Boolean)
+	parentID = db.Column(db.Integer, db.ForeignKey('comments.commentID'))
+	parentUserDisplayName = db.Column(db.String)
+	permID = db.Column(db.String)
+	picURL = db.Column(db.String)
+	recommendations = db.Column(db.Integer)
+	replies = db.relationship("Comment")
+	replyCount = db.Column(db.Integer)
+	reportAbuseFlag = db.Column(db.String)
+	status = db.Column(db.String)
+	trusted = db.Column(db.Integer)
+	updateDate = db.Column(db.String)
+	userID = db.Column(db.Integer)
+	userDisplayName = db.Column(db.String)
+	userTitle = db.Column(db.String)
+	userURL = db.Column(db.String)
+	userLocation = db.Column(db.String)
+	assetID = db.Column(db.Integer, db.ForeignKey('articles.id'))
+	
+
+	def __init__(self, apiResult):
+		del apiResult['replies'] 
+		for key, value in apiResult.iteritems():
+			setattr(self, key, value)
+
+	def __repr__(self):
+		return '<id {}>'.format(self.commentID)
+
+
+
+

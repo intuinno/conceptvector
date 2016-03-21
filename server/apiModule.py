@@ -20,8 +20,8 @@ wordsFileName = './data/glove.6B.300d.txt'
 # wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
-w2v_model = embedding.EmbeddingModel(wordsFileName)
-kde_model = kde.KdeModel(w2v_model)
+# w2v_model = embedding.EmbeddingModel(wordsFileName)
+# kde_model = kde.KdeModel(w2v_model)
 
 
 @app.after_request
