@@ -4,6 +4,7 @@ import datetime
 from marshmallow_jsonapi import Schema, fields 
 from marshmallow import validate
 import json
+from sqlalchemy.ext.hybrid import hybrid_property
 
 class CRUD():
 	def add(self, resource):
@@ -91,7 +92,6 @@ class ConceptsSchema(Schema):
 	concept_type = fields.Str()
 	input_terms = fields.Raw()
 	creator_name = fields.Str()
-
 	
 	#self links
 	def get_top_level_links(self, data, many):
@@ -125,7 +125,18 @@ class Article(db.Model):
 	per_facet = db.Column(ARRAY(db.String))
 	geo_facet = db.Column(ARRAY(db.String))
 	media = db.Column(ARRAY(db.String))
-	commments = db.relationship("Comment", backref="article")
+	comments = db.relationship("Comment", back_populates="article")
+
+	@hybrid_property
+	def comments_count(self):
+	    return len(self.comments)
+
+	@comments_count.expression
+	def comments_count(cls):
+		return select([func.count(Comment)]).\
+				where(Comment.asset_id==cls.id).\
+				label('num_comments')
+
 
 	def __init__(self, apiResult):
 		apiResult['media'] = [ json.dumps(i) for i in apiResult['media']]
@@ -134,6 +145,21 @@ class Article(db.Model):
 
 	def __repr__(self):
 		return '<URL {}>'.format(self.url)
+
+class ArticleSchema(Schema):
+	
+	#self links
+	def get_top_level_links(self, data, many):
+		if many:
+			self_link = "/articles/"
+		else:
+			self_link = "/articles/{}".format(data['id'])
+		return {'self': self_link}
+
+	class Meta:
+		type_ = 'articles'
+		fields = ('id','url','adx_keywords','section','type','title','abstract','published_date','comments_count')
+
 
 class Comment(db.Model):
 	__tablename__ = 'comments'
@@ -163,11 +189,13 @@ class Comment(db.Model):
 	userTitle = db.Column(db.String)
 	userURL = db.Column(db.String)
 	userLocation = db.Column(db.String)
-	assetID = db.Column(db.Integer, db.ForeignKey('articles.id'))
+	assetID = db.Column(BIGINT, db.ForeignKey('articles.id'))
+	article = db.relationship("Article", back_populates="comments")
 	
 
-	def __init__(self, apiResult):
+	def __init__(self, apiResult, assetID):
 		del apiResult['replies'] 
+		self.assetID = assetID
 		for key, value in apiResult.iteritems():
 			setattr(self, key, value)
 

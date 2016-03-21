@@ -39,6 +39,19 @@ Session = sessionmaker(bind=engine)
 session = Session()
 cache = False
 
+community_keys = ['0fcd74d364fe55ceb8f72450d4688018:1:71569920',
+					 '5a3d3ff964c9975c0f23d1ad3437dd45:0:70179423',
+					 'affcb9ccf4424a0a94d50af077c653f8:14:71569920',
+					 '5f933be26992203507b0963c96c653f1:4:66447706',
+					 '6adcef7a975045db61389446ca15283e:1:30173638',
+					 '189bb7e323526ce6151defc70519d845:6:70236004',
+					 '403a72d2dad6f7183feea341308946f3:1:72174006',
+					 '5c99af22e7609df06a7168b566699ae4:11:72174619',
+					 '0292ebefdcaf75b2fb0d7e7d1404cf09:10:71572358',
+					 '7cd803472503bc5e9fe6dad6ffe56c43:11:72178258',
+					 '0292ebefdcaf75b2fb0d7e7d1404cf09:10:71572358'	 ]
+
+currentKey = 0
 
 def download_articles():
 	offset = 0
@@ -92,50 +105,37 @@ def add_replies(all, node, stacklevel):
     
 	for n in node['replies']:
 		add_replies(all, n, stacklevel+1 )
+
+def getComments(url, offset=0):
+	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
+	comment_request = requests.get(api_url, params=payload)
+
+	if comment_request.status_code == 403:
+		global currentKey += 1
+		print 'Retrying Download with next key', currentKey, comment_request.status_code, article_url
+		payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset'=offset}
+    	comment_request = requests.get(api_url, params=payload)
+    sleep(0.1)
+	return comment_request
     
     
 def download_add_comments(a):
 	article_url = a['url']
-	apikey = '0292ebefdcaf75b2fb0d7e7d1404cf09:10:71572358'
 	payload = {'api-key': apikey, 'url': article_url, 'replyLimit': 10000}
-	url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 
 	try:
-
-		comment_request = requests.get(url, params=payload)
+		comment_request = getComments(article_url)
 		num_parent_results = comment_request.json()['results']['totalParentCommentsFound']
 		num_results = comment_request.json()['results']['totalCommentsFound']
 		comments = comment_request.json()['results']['comments']
-		output = file(comment_file_name,'rb')
-
-		if cache:
-			output = file(comment_file_name,'rb')
-			commments = pickle.load(output)
-
-		else:
-			for offset in range(25,num_parent_results,25):
-			    payload = {'api-key':apikey, 'offset': offset, 'url':article_url , 'replyLimit': 1000}
-			    comment_request = requests.get(url, params=payload)
-
-			    while (comment_request.status_code != requests.codes.ok):
-			    	print 'Retrying Download', comment_request.status_code, article_url
-			    	print comment_request.text
-			    	sleep(1)
-			    	comment_request = requests.get(url, params=payload)
-			    	 
-
-			    comments += comment_request.json()['results']['comments']
-			    sleep(0.1)
-
-			if len(comments) != num_parent_results:
-				# pdb.set_trace()
-				print "Error: Parent Comments number does not match",  a['url'], len(comments), num_parent_results
-
-			
-			output = file(comment_file_name,'wb')
-			pickle.dump(comments, output)
-			output.close()
 		
+		for offset in range(25,num_parent_results,25):
+		    comment_request = getComments(article_url, offset)
+		    comments += comment_request.json()['results']['comments']
+
+		if len(comments) != num_parent_results:
+			print "Error: Parent Comments number does not match",  a['url'], len(comments), num_parent_results
+	
 		all_comments = []
 		for c in comments:
 			add_replies(all_comments, c, 0)
@@ -145,26 +145,20 @@ def download_add_comments(a):
 			print "Error: All Comments number does not match", a['url'], len(all_comments), num_results
 
 	except Exception as e:
-		pdb.set_trace()
+		# pdb.set_trace()
 		print e
 
 	for c in all_comments:
-		cquery = Comment(c)
-		try:
-			
+		cquery = Comment(c, a['id'])
+		
+		try:			
 			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
 				session.add(cquery)
 		except Exception as e:
-			pdb.set_trace()
+			# pdb.set_trace()
 			session.rollback()
 			print a['commentID']
 			print e 
 
-
-
-
-
-
-
-
+download_articles()
 add_articles_database()

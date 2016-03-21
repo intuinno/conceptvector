@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
-from models import User, Concepts, ConceptsSchema
+from models import User, Concepts, ConceptsSchema, Article, ArticleSchema
 from ml import embedding
 from ml import kde
 from flask import request, jsonify, session
@@ -12,6 +12,8 @@ from flask import request, jsonify, session
 
 
 schema = ConceptsSchema()
+article_list_schema = ArticleSchema(only=('published_date','title','type','section','id','comments_count'), many=True)
+article_schema = ArticleSchema()
 
 
 
@@ -241,6 +243,20 @@ class ConceptsUpdate(Resource):
 			resp.status_code = 401
 			return resp
 
+class ArticleList(Resource):
+	def get(self):
+		articles_query = Article.query.all()
+		results =  article_list_schema.dump(articles_query).data
+		return results
+
+	
+class ArticleUpdate(Resource):
+	def get(self,id):
+		concept_query = Concepts.query.get_or_404(id)
+		result = article_schema.dump(concept_query).data
+		# import pdb;pdb.set_trace()
+		return result
+
 
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')
@@ -250,4 +266,6 @@ api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 api.add_resource(Status, '/api/status')
 api.add_resource(ConceptList, '/api/concepts')
 api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
+api.add_resource(ArticleList, '/api/articles')
+api.add_resource(ArticleUpdate, '/api/articles/<int:id>')
 

@@ -1,0 +1,78 @@
+<div class="container">
+    <h2>Comments of NY Times Articles</h2><h2><small>Analyze comments for NY Times Articles using custom concepts</small></h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label for="search">Search:</label>
+                            <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+                        </div>
+                        <div class="col-xs-4">
+                            <label for="search">items per page:</label>
+                            <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+                        </div>
+                       
+                    </div>
+                    <br>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                         
+                            <dl>
+                                <dt dir-paginate-start="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
+                                    <h4> <a href="#/articles/{{article.id}}"> {{article.attributes.title}} </a><small class="commentHeader">      ,                              </small> </h4>
+                                </dt>
+                                <dd dir-paginate-end>
+                                    <dl class="dl-horizontal">
+                                        <dt>Section</dt>
+                                        <dd>{{article.attributes.section}}</dd>
+                                        <dt>Type</dt>
+                                        <dd>{{article.attributes.type}}</dd>
+                                        <dt>Publish Date</dt>
+                                        <dd> {{article.attributes.published_date}} </dd>
+                                        <dt>Number of Comments</dt>
+                                        <dd></dd>
+                                    </dl>
+                                    <div>
+                                        <hr>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="views/dirPagination.tpl.html" pagination-id="drinksPagination"></dir-pagination-controls> -->
+                        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" pagination-id="drinksPagination"></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteModal.html">
+    <div class="modal-header">
+        <h4 class="modal-title">Are you sure to delete this concept? </h4>
+    </div>
+    <div class="modal-body">
+        <h3> {{conceptName}} </h3>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+<script type="text/ng-template" id="cloneModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Please enter the name for new concept</h3>
+    </div>
+    <div class="modal-body">
+        New name:
+        <input type="text" ng-model='conceptName' class="form-control" select-on-click placeholder={{conceptName}}>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
