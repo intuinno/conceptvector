@@ -145,7 +145,7 @@ def download_add_comments(a):
 			print "Error: All Comments number does not match", a['url'], len(all_comments), num_results
 
 	except Exception as e:
-		# pdb.set_trace()
+		pdb.set_trace()
 		print e
 
 	for c in all_comments:
@@ -155,7 +155,7 @@ def download_add_comments(a):
 			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
 				session.add(cquery)
 		except Exception as e:
-			# pdb.set_trace()
+			pdb.set_trace()
 			session.rollback()
 			print a['commentID']
 			print e 
