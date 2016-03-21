@@ -107,6 +107,7 @@ def add_replies(all, node, stacklevel):
 		add_replies(all, n, stacklevel+1 )
 
 def getComments(url, offset=0):
+	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000}
 	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 	comment_request = requests.get(api_url, params=payload)
 
@@ -114,7 +115,7 @@ def getComments(url, offset=0):
 		global currentKey 
 		currentKey += 1
 		print 'Retrying Download with next key', currentKey, comment_request.status_code, article_url
-		payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset'=offset}
+		payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset}
     	comment_request = requests.get(api_url, params=payload)
     sleep(0.1)
 	return comment_request
@@ -122,8 +123,7 @@ def getComments(url, offset=0):
     
 def download_add_comments(a):
 	article_url = a['url']
-	payload = {'api-key': apikey, 'url': article_url, 'replyLimit': 10000}
-
+	
 	try:
 		comment_request = getComments(article_url)
 		num_parent_results = comment_request.json()['results']['totalParentCommentsFound']
