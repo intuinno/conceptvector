@@ -34,7 +34,7 @@ import pdb
 
 article_file_name = 'data/most_popular_articles.pkl'
 comment_file_name = 'data/comments.pkl'
-engine = create_engine('postgresql://localhost/conceptvector_dev',echo=False)
+engine = create_engine('postgresql:///conceptvectorDB',echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 cache = False
@@ -107,17 +107,27 @@ def add_replies(all, node, stacklevel):
 		add_replies(all, n, stacklevel+1 )
 
 def getComments(url, offset=0):
-	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000}
+	global currentKey 
+	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'depthLimit':100}
 	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 	comment_request = requests.get(api_url, params=payload)
-
-	if comment_request.status_code == 403:
-		global currentKey 
-		currentKey += 1
-		print 'Retrying Download with next key', currentKey, comment_request.status_code, url
-		payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset}
-    	comment_request = requests.get(api_url, params=payload)
 	sleep(0.1)
+	
+	while comment_request.status_code != 200:
+		if comment_request.status_code == 403:
+			currentKey += 1
+			print 'Key inactive: Trying new key', currentKey, comment_request.status_code, url
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
+			comment_request = requests.get(api_url, params=payload)
+		elif comment_request.status_code == 504:
+			print 'Gateway Timeout', currentKey, comment_request.status_code, url
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
+			comment_request = requests.get(api_url, params=payload)
+		else: 
+			print 'Not sure why', comment_request.status_code, comment_request.text, url
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
+	    	comment_request = requests.get(api_url, params=payload)
+		sleep(0.1)
 	return comment_request
     
     
@@ -161,5 +171,5 @@ def download_add_comments(a):
 			print a['commentID']
 			print e 
 
-download_articles()
+# download_articles()
 add_articles_database()
