@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
-from models import User, Concepts, ConceptsSchema, Article, ArticleSchema
+from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, CommentSchema
 from ml import embedding
 from ml import kde
 from flask import request, jsonify, session
@@ -12,14 +12,14 @@ from flask import request, jsonify, session
 
 
 schema = ConceptsSchema()
-article_list_schema = ArticleSchema(only=('published_date','title','type','section','id','comments_count'), many=True)
+article_list_schema = ArticleSchema(only=('published_date','title','type','section','id'), many=True)
 article_schema = ArticleSchema()
-
+comment_schema = CommentSchema()
 
 
 headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-# wordsFileName = './data/glove.6B.50d.txt' # for testing
+# wordsFileName = './data/glove.6B.300d.txt'
+wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
@@ -185,11 +185,9 @@ class ConceptList(Resource):
 
 	def post(self):
 		raw_dict = request.get_json(force=True)
-		# import pdb; pdb.set_trace()
 		try:
 			schema.validate(raw_dict)
-			concept_dict = raw_dict['data']['attributes']
-			# import pdb;pdb.set_trace()
+			concept_dict = raw_dict
 
 			if session.get('logged_in'):
 				userID = session['user']
@@ -271,10 +269,17 @@ class ArticleList(Resource):
 
 class ArticleUpdate(Resource):
 	def get(self,id):
-		concept_query = Concepts.query.get_or_404(id)
-		result = article_schema.dump(concept_query).data
+		try:
+			import pdb;pdb.set_trace()
+			article_query = Article.query.get_or_404(id)
+			article_result = article_schema.dump(article_query)
+			comments_result = comment_schema.dump(article_query.comments, many=True)
+
+		except Exception as e:
+			import pdb;pdb.set_trace()
+			print e
 		# import pdb;pdb.set_trace()
-		return result
+		return jsonify({'article':article_result, 'comments':comments_result})
 
 
 api.add_resource(Register, '/api/register')

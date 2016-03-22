@@ -22,7 +22,7 @@ angular.module('conceptvectorApp')
                 .success(function(data) {
                     console.log(data);
 
-                    $scope.articles = data.data;
+                    $scope.articles = data;
                     // $scope.$apply();
                 })
                 // handle error

@@ -1,8 +1,8 @@
 from appModule import db, bcrypt
 from sqlalchemy.dialects.postgresql import JSON, ARRAY, BIGINT
 import datetime
-from marshmallow_jsonapi import Schema, fields 
-from marshmallow import validate
+# from marshmallow_jsonapi import  fields, Schema
+from marshmallow import validate, fields, Schema
 import json
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -158,7 +158,14 @@ class ArticleSchema(Schema):
 
 	class Meta:
 		type_ = 'articles'
-		fields = ('id','url','adx_keywords','section','type','title','abstract','published_date','comments_count')
+		comments = fields.Nested('CommentSchema',many=True)
+		# url = fields.Str()
+
+		fields = ('id','url','adx_keywords','section','type','title','abstract',
+			'published_date','comments_count','byline','media', 
+			'des_facet','org_facet','per_facet','geo_facet')
+
+
 
 
 class Comment(db.Model):
@@ -200,7 +207,14 @@ class Comment(db.Model):
 			setattr(self, key, value)
 
 	def __repr__(self):
-		return '<id {}>'.format(self.commentID)
+		return '<Commentid {}>'.format(self.commentID)
+
+class CommentSchema(Schema):
+		#self links
+	class Meta:
+		type_ = 'comments'
+		fields = ('commentBody','commentID','createDate', 'commentTitle',
+		  'editorsSelection', 'recommendations','userDisplayName', 'userLocation' )
 
 
 

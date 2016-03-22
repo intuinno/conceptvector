@@ -8,7 +8,7 @@
  * Controller of the commentiqApp
  */
 angular.module('conceptvectorApp')
-    .controller('CommentdemoCtrl', function($scope, $uibModal, $log) {
+    .controller('CommentdemoCtrl', ['$scope', '$uibModal', '$log', '$routeParams', function($scope, $uibModal, $log, $routeParams) {
 
         $scope.statusArray = ['New', 'Accepted', 'Rejected', 'Picked'];
 
@@ -22,6 +22,22 @@ angular.module('conceptvectorApp')
         }, {
             status: 'Picked'
         }];
+
+        $scope.articleId = $routeParams.articleId;
+
+        $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
+            console.log(data);
+            // $scope. = data.data.attributes;
+            $scope.concept_name = $scope.concept.name;
+            $scope.concept_type = $scope.concept.concept_type;
+            $scope.positiveTags = $scope.concept.input_terms.positive;
+            $scope.negativeTags = $scope.concept.input_terms.negative;
+
+            $scope.tagChanged();
+
+
+
+        });
 
         $scope.settingName = 'New Setting';
 
@@ -521,4 +537,4 @@ angular.module('conceptvectorApp')
 
 
 
-    });
+    }]);

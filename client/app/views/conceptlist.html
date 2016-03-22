@@ -35,20 +35,20 @@
                             </ul> -->
                             <dl>
                                 <dt dir-paginate-start="concept in concepts | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
-                                    <h3> <a href="#/concepts/{{concept.id}}"> {{concept.attributes.name}} </a><small class="commentHeader">                                     <a href="#/concepts/{{concept.id}}" class="btn btn-link btn-default" ng-show="isOwner(concept)">Edit</a>
+                                    <h3> <a href="#/concepts/{{concept.id}}"> {{concept.name}} </a><small class="commentHeader">                                     <a href="#/concepts/{{concept.id}}" class="btn btn-link btn-default" ng-show="isOwner(concept)">Edit</a>
                                     <a href="" class="btn btn-link btn-default" ng-click="clone(concept)">Copy</a>
                                     <a href="" class="btn btn-link btn-default" ng-click="delete(concept)" ng-show="isOwner(concept)">Delete</a> </small> </h3>
                                 </dt>
                                 <dd dir-paginate-end>
                                     <dl class="dl-horizontal">
                                         <dt>Author</dt>
-                                        <dd>{{concept.attributes.creator_name}}</dd>
+                                        <dd>{{concept.creator_name}}</dd>
                                         <dt>Type</dt>
-                                        <dd>{{concept.attributes.concept_type}}</dd>
+                                        <dd>{{concept.concept_type}}</dd>
                                         <dt>Positive Terms</dt>
-                                        <dd> <span ng-repeat="term in concept.attributes.input_terms.positive ">{{term.text}} </span></dd>
+                                        <dd> <span ng-repeat="term in concept.input_terms.positive ">{{term.text}} </span></dd>
                                         <dt>Negative Terms</dt>
-                                        <dd><span ng-repeat="term in concept.attributes.input_terms.negative ">{{term.text}} </span></dd>
+                                        <dd><span ng-repeat="term in concept.input_terms.negative ">{{term.text}} </span></dd>
                                     </dl>
                                     <div>
                                         <hr>

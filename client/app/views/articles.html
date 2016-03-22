@@ -22,18 +22,16 @@
                          
                             <dl>
                                 <dt dir-paginate-start="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
-                                    <h4> <a href="#/articles/{{article.id}}"> {{article.attributes.title}} </a><small class="commentHeader">      ,                              </small> </h4>
+                                    <h4> <a href="#/articles/{{article.id}}"> {{article.title}} </a><small class="commentHeader">      ,                              </small> </h4>
                                 </dt>
                                 <dd dir-paginate-end>
                                     <dl class="dl-horizontal">
                                         <dt>Section</dt>
-                                        <dd>{{article.attributes.section}}</dd>
+                                        <dd>{{article.section}}</dd>
                                         <dt>Type</dt>
-                                        <dd>{{article.attributes.type}}</dd>
+                                        <dd>{{article.type}}</dd>
                                         <dt>Publish Date</dt>
-                                        <dd> {{article.attributes.published_date}} </dd>
-                                        <dt>Number of Comments</dt>
-                                        <dd></dd>
+                                        <dd> {{article.published_date}} </dd>
                                     </dl>
                                     <div>
                                         <hr>
@@ -51,28 +49,4 @@
         </div>
     </div>
 </div>
-<script type="text/ng-template" id="deleteModal.html">
-    <div class="modal-header">
-        <h4 class="modal-title">Are you sure to delete this concept? </h4>
-    </div>
-    <div class="modal-body">
-        <h3> {{conceptName}} </h3>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
-</script>
-<script type="text/ng-template" id="cloneModal.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Please enter the name for new concept</h3>
-    </div>
-    <div class="modal-body">
-        New name:
-        <input type="text" ng-model='conceptName' class="form-control" select-on-click placeholder={{conceptName}}>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
-</script>
+

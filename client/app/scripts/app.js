@@ -66,11 +66,7 @@ angular
         templateUrl: 'views/customconcept.html',
         controller: 'ConceptdetailCtrl',
       })
-      .when('/commentiq', {
-        templateUrl: 'views/commentiq.html',
-        controller: 'CommentiqCtrl',
-      })
-      .when('/commentdemo', {
+      .when('/articles/:articleId', {
         templateUrl: 'views/commentdemo.html',
         controller: 'CommentdemoCtrl',
       })
