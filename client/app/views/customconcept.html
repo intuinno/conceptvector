@@ -3,6 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <!-- <h1>Concept Designer</h1> -->
+
             <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
             <a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
             <h3> Concept Name: {{concept_name}} </h3>
@@ -66,7 +67,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" cg-busy="loadingPromise">
                 <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>
@@ -101,7 +102,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" cg-busy="loadingPromise">
                 <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>

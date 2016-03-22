@@ -1,6 +1,6 @@
 from appModule import app, db, bcrypt,api
 from flask_restful import Resource, reqparse
-from sklearn.cluster import KMeans
+from sklearn  import  cluster
 from sklearn.preprocessing import normalize
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
@@ -8,6 +8,7 @@ from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, Comme
 from ml import embedding
 from ml import kde
 from flask import request, jsonify, session
+import pdb
 
 
 
@@ -18,8 +19,8 @@ comment_schema = CommentSchema()
 
 
 headerNames = ['word'] + range(300)
-# wordsFileName = './data/glove.6B.300d.txt'
-wordsFileName = './data/glove.6B.50d.txt' # for testing
+wordsFileName = './data/glove.6B.300d.txt'
+# wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
@@ -47,12 +48,19 @@ class RecommendWordsCluster(Resource):
 
 			args = parser.parse_args()
 
-			# pdb.set_trace()
-
 			positive_terms = args['positiveWords']
-
-			positive_terms = [w.encode('UTF-8') for w in positive_terms]
 			negative_terms = args['negativeWords']
+
+			if positive_terms == None:
+				positive_terms = []
+			else:
+				positive_terms = [w.encode('UTF-8') for w in positive_terms]
+			
+			if negative_terms == None:
+				negative_terms = []
+			else:
+				negative_terms = [w.encode('UTF-8') for w in negative_terms]
+			
 
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
@@ -64,10 +72,29 @@ class RecommendWordsCluster(Resource):
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
 
-			# currently i didn't put the clustering yet
-			return jsonify(positiveRecommend=positive_recommend,
-										 negativeRecommend=negative_recommend)
+			# get embeddings and cluster words
+			kmeans = cluster.KMeans(n_clusters=5)
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in positive_recommend]
+			positive_clusters = kmeans.fit_predict(positive_reco_embeddings)
+			kmeans = cluster.KMeans(n_clusters=5)  # should start from scratch
+			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in negative_recommend]
+			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
 
+			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in positive_terms]
+			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in negative_terms]
+
+			return jsonify(positiveRecommend=positive_recommend,
+			               positiveCluster=positive_clusters.tolist(),
+							 positiveVectors=[x.tolist() for x in positive_reco_embeddings],
+							 positiveSearchTermVectors=positive_term_embeddings,
+							 negativeRecommend=negative_recommend,
+							 negativeCluster=negative_clusters.tolist(),
+							 negativeVectors=[x.tolist() for x in negative_reco_embeddings],
+							 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
 			# pdb.set_trace()
@@ -209,7 +236,7 @@ class ConceptsUpdate(Resource):
 
 		try:
 			schema.validate(raw_dict)
-			concept_dict = raw_dict['data']['attributes']
+			concept_dict = raw_dict
 
 			for key, value in concept_dict.items():
 				setattr(concept, key, value)
@@ -247,7 +274,7 @@ class ArticleList(Resource):
 		results =  article_list_schema.dump(articles_query).data
 		return results
 
-	
+
 class ArticleUpdate(Resource):
 	def get(self,id):
 		try:
@@ -273,4 +300,3 @@ api.add_resource(ConceptList, '/api/concepts')
 api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 api.add_resource(ArticleList, '/api/articles')
 api.add_resource(ArticleUpdate, '/api/articles/<int:id>')
-

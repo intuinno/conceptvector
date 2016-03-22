@@ -41,6 +41,7 @@ module.exports = function(config) {
       'bower_components/ui-select/dist/select.js',
       'bower_components/d3-tip/index.js',
       'bower_components/topojson/topojson.js',
+      'bower_components/angular-busy/dist/angular-busy.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
