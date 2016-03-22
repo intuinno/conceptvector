@@ -64,10 +64,29 @@ class RecommendWordsCluster(Resource):
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
 
-			# currently i didn't put the clustering yet
-			return jsonify(positiveRecommend=positive_recommend,
-										 negativeRecommend=negative_recommend)
+			# get embeddings and cluster words
+			kmeans = cluster.KMeans(n_clusters=5)
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in positive_recommend]
+			positive_clusters = kmeans.fit_predict(positive_reco_embeddings)
+			kmeans = cluster.KMeans(n_clusters=5)  # should start from scratch
+			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in negative_recommend]
+			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
 
+			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in positive_terms]
+			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in negative_terms]
+
+			return jsonify(positiveRecommend=positive_recommend,
+			               positiveCluster=positive_clusters,
+										 positiveVectors=[x.tolist() for x in positive_reco_embeddings]
+										 positiveSearchTermVectors=positive_term_embeddings
+										 negativeRecommend=negative_recommend,
+										 negativeCluster=negative_clusters,
+										 negativeVectors=[x.tolist() for x in negative_reco_embeddings]
+										 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
 			# pdb.set_trace()
@@ -247,7 +266,7 @@ class ArticleList(Resource):
 		results =  article_list_schema.dump(articles_query).data
 		return results
 
-	
+
 class ArticleUpdate(Resource):
 	def get(self,id):
 		try:
@@ -273,4 +292,3 @@ api.add_resource(ConceptList, '/api/concepts')
 api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 api.add_resource(ArticleList, '/api/articles')
 api.add_resource(ArticleUpdate, '/api/articles/<int:id>')
-
