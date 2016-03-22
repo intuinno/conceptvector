@@ -26,6 +26,7 @@ wordsFileName = './data/glove.6B.300d.txt'
 w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
 
+parser = reqparse.RequestParser()
 
 @app.after_request
 def after_request(response):
@@ -37,12 +38,12 @@ def after_request(response):
 
 
 
-class RecommendWordsCluster(Resource):
+class RecommendWordsClusterKDE(Resource):
 
 	def post(self):
 		try:
 			# pdb.set_trace()
-			parser = reqparse.RequestParser()
+
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
 
@@ -100,6 +101,70 @@ class RecommendWordsCluster(Resource):
 			# pdb.set_trace()
 			return {'error': str(e)}
 
+class RecommendWordsClusterJurim(Resource):
+
+	def post(self):
+		try:
+			# pdb.set_trace()
+
+			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
+			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
+
+			args = parser.parse_args()
+
+			positive_terms = args['positiveWords']
+			negative_terms = args['negativeWords']
+
+			if positive_terms == None:
+				positive_terms = []
+			else:
+				positive_terms = [w.encode('UTF-8') for w in positive_terms]
+			
+			if negative_terms == None:
+				negative_terms = []
+			else:
+				negative_terms = [w.encode('UTF-8') for w in negative_terms]
+			
+
+			# Because pairwise distance computations are cached in the w2v_model,
+			# we do not need to worry about re-training the kde model
+			#
+			# Note: You can later put irr_words (see the function)
+			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
+											neg_words=negative_terms, irr_words=[])
+
+			positive_recommend = kde_model.recommend_pos_words(how_many=50)
+			negative_recommend = kde_model.recommend_neg_words(how_many=50)
+
+			# get embeddings and cluster words
+			kmeans = cluster.KMeans(n_clusters=5)
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in positive_recommend]
+			positive_clusters = kmeans.fit_predict(positive_reco_embeddings)
+			kmeans = cluster.KMeans(n_clusters=5)  # should start from scratch
+			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in negative_recommend]
+			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
+
+			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in positive_terms]
+			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in negative_terms]
+
+			return jsonify(positiveRecommend=positive_recommend,
+			               positiveCluster=positive_clusters.tolist(),
+							 positiveVectors=[x.tolist() for x in positive_reco_embeddings],
+							 positiveSearchTermVectors=positive_term_embeddings,
+							 negativeRecommend=negative_recommend,
+							 negativeCluster=negative_clusters.tolist(),
+							 negativeVectors=[x.tolist() for x in negative_reco_embeddings],
+							 negativeSearchTermVectors=negative_term_embeddings)
+
+		except Exception as e:
+			# pdb.set_trace()
+			return {'error': str(e)}
+
+
 class QueryAutoComplete(Resource):
   def get(self, word):
     wordUTF8 = word.encode('UTF-8')
@@ -111,7 +176,6 @@ class Register(Resource):
 	def post(self):
 
 		# Parse the arguments
-		parser = reqparse.RequestParser()
 		# import pdb; pdb.set_trace()
 		parser.add_argument('name', type=str, help="User name to be called")
 		parser.add_argument('email', type=str, help='Email address to create user')
@@ -140,8 +204,6 @@ class Login(Resource):
 	def post(self):
 		try:
 			# Parse the arguments
-
-			parser = reqparse.RequestParser()
 			parser.add_argument('email', type=str, help='Email address for Authentification')
 			parser.add_argument('password', type=str, help='Password for Authentication')
 			args = parser.parse_args()
@@ -278,16 +340,33 @@ class ArticleList(Resource):
 class ArticleUpdate(Resource):
 	def get(self,id):
 		try:
-			import pdb;pdb.set_trace()
+			# import pdb;pdb.set_trace()
 			article_query = Article.query.get_or_404(id)
-			article_result = article_schema.dump(article_query)
-			comments_result = comment_schema.dump(article_query.comments, many=True)
+			article_result = article_schema.dump(article_query).data
+			comments_result = comment_schema.dump(article_query.comments, many=True).data
 
 		except Exception as e:
-			import pdb;pdb.set_trace()
+			# import pdb;pdb.set_trace()
 			print e
-		# import pdb;pdb.set_trace()
 		return jsonify({'article':article_result, 'comments':comments_result})
+
+class ConceptScore(Resource):
+	def get(self):
+		args = parser.parse_args()
+		articleID = args['articleID']
+		conceptID = args['conceptID']
+		try:
+			article_query = Article.query.get_or_404(articleID)
+			comments = article_query.comments 
+			concept_query = Concepts.query.get_or_404(conceptID)
+			commentsScore = getScore(concept_query, comments)
+			return jsonify({'scores':commentsScore})
+
+		except Exception as e:
+			print e
+
+	def getScore(concept, comments):
+		pdb.set_trace()
 
 
 api.add_resource(Register, '/api/register')

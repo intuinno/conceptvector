@@ -1,60 +1,70 @@
 <ol class="breadcrumb">
     <li><a href="#">Home</a>
     </li>
-    <li><a href="#/commentiq">Articles</a>
+    <li><a href="#/articles">Articles</a>
     </li>
-    <li class="active">F.B.I. Director Speaks About Race</li>
+    <li class="active">CommentIQ</li>
 </ol>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
             <h3> 
-          F.B.I. Director Speaks About Race
+          {{article.title}} <small><a href="{{article.url}}" target="blank"><i class="fa fa-external-link"></i></a></small>
           </h3>
-            <p dd-text-collapse dd-text-collapse-max-length="529" dd-text-collapse-text="{{article}}"></p>
-            <br> Select your overview visualization
-            <br>
-            <div class="overviewButton btn-group">
-                <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
-                <label class="btn btn-default" ng-model="overview" uib-btn-radio='"map"'> Map </label>
-                <label class="btn btn-default" ng-model="overview" uib-btn-radio='"temporal"'> Temporal </label>
-                <!-- <label class="btn btn-primary" ng-model="baseModel" btn-radio='"Thread"'> Thread </label> -->
-            </div>
-            <br>
-            <div ng-show="overview=='temporal'">
-                <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
-                <div class="chart-simple-interface">
-                    <h5>{{tempoDimExplanation.display_text}}
+            <p>{{article.abstract}}"</p>
+            <p>{{article.published_date}}</p>
+            <p>{{article.adx_keywords}}
+                <p>{{article.byline}}
+                    <p>{{article.section}}, {{article.type}}</p>
+                    <p> </p>
+                    <br> Select your overview visualization
+                    <br>
+
+                    <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ngChange="getScores(f)"></select>
+
+
+
+                    <div class="overviewButton btn-group">
+                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
+                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"map"'> Map </label>
+                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"temporal"'> Temporal </label>
+                        <!-- <label class="btn btn-primary" ng-model="baseModel" btn-radio='"Thread"'> Thread </label> -->
+                    </div>
+                    <br>
+                    <div ng-show="overview=='temporal'">
+                        <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
+                       <!--  <div class="chart-simple-interface">
+                            <h5>{{tempoDimExplanation.display_text}}
                 <small> {{tempoDimExplanation.help_text}}</small>
             </h5>
-                    <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.display_text for f in criterias">
-                        <option value="">Number of Comment</option>
-                    </select>
-                </div>
-            </div>
-            <div ng-show="overview=='map'">
-                <div class="gathermap" data="nomaData"> </div>
-            </div>
-            <div ng-show="overview=='gatherplot'">
-                <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
-                </div>
-                <h5>{{xAxisExplanation.display_text}}
+                            <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.display_text for f in criterias">
+                                <option value="">Number of Comment</option>
+                            </select>
+                        </div> -->
+                    </div>
+                    <!-- <div ng-show="overview=='map'">
+                        <div class="gathermap" data="nomaData"> </div>
+                    </div> -->
+                    <div ng-show="overview=='gatherplot'">
+                        <!-- <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
+                        </div> -->
+                        <h5>{{xAxisExplanation.display_text}}
                 <small> {{xAxisExplanation.help_text}}</small>
             </h5>
-                <h5>{{yAxisExplanation.display_text}}:
+                        <h5>{{yAxisExplanation.display_text}}:
                 <small>{{yAxisExplanation.help_text}}</small>
             </h5>
-                <br>
-                <div class="chart-simple-interface">
-                    <h5>Show me
+                        <br>
+                        <div class="chart-simple-interface">
+                            <h5>Show me
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name as f.display_text for f in criterias">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name for f in criterias" ngChange="getScores(f)">
 
                         <option value="">-- undefined --</option>
 
                     </select>&nbsp;vs&nbsp;.
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name as f.display_text for f in criterias">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name for f in criterias">
 
                         <option value="">-- undefined --</option>
 
@@ -97,7 +107,7 @@ This bar shows the weights for this ranking.
 
             <div class="criteriaBarContainer">
 
-                <div class="criteriaBar" stacked-bar help="criterias" data="currentCategory"></div>
+ <!--                <div class="criteriaBar" stacked-bar help="criterias" data="currentCategory"></div> -->
 
 
             </div>
@@ -204,7 +214,7 @@ This bar shows the weights for this ranking.
                     <div class="commentList">
                         <dl>
                             <dt dir-paginate-start='comment in filteredComment=(nomaData |filter: {selected:"true"} | filter:{status: tab.status } |orderBy:"score":true | filter: searchText) | itemsPerPage: 5' pagination-id="tab.status">
-                                {{comment.DisplayName}}    <div class="commentHeader"> {{comment.Location}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
+                               {{comment.commentTitle}} <small>{{comment.userDisplayName}}   </small> <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
                             </dt>
 
 
@@ -213,10 +223,6 @@ This bar shows the weights for this ranking.
 
 
                                 <div ng-bind-html="comment.commentBody"></div>
-
-                                <br> score = {{comment.score}}
-                                <br> brush = {{comment.selected}}
-                                <br> &nbsp;
                             </dd>
 
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>

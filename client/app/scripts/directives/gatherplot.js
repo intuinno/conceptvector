@@ -4561,6 +4561,10 @@
 
 
                         var findDisplayName = function(dimName) {
+
+                            if (scope.criterias === undefined) {
+                                return "undefined";
+                            }
                             var filtered = scope.criterias.filter(function(d) {
                                 return d.name === dimName ? true : false;
                             });
@@ -4570,7 +4574,7 @@
                                 return 'undefined';
                             } else {
 
-                                return filtered[0].display_text;
+                                return filtered[0].name;
                                 
                             }
                         };
