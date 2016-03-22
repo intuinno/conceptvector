@@ -8,7 +8,7 @@ from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, Comme
 from ml import embedding
 from ml import kde
 from flask import request, jsonify, session
-import pdb
+import ipdb
 
 
 
@@ -19,14 +19,16 @@ comment_schema = CommentSchema()
 
 
 headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-# wordsFileName = './data/glove.6B.50d.txt' # for testing
+# wordsFileName = './data/glove.6B.300d.txt'
+wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
 
 parser = reqparse.RequestParser()
+
+print 'I am ready'
 
 @app.after_request
 def after_request(response):
@@ -35,8 +37,6 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
-
-
 
 class RecommendWordsClusterKDE(Resource):
 
@@ -101,7 +101,7 @@ class RecommendWordsClusterKDE(Resource):
 			# pdb.set_trace()
 			return {'error': str(e)}
 
-class RecommendWordsClusterJurim(Resource):
+class RecommendWordsClusterMinMax(Resource):
 
 	def post(self):
 		try:
@@ -132,9 +132,74 @@ class RecommendWordsClusterJurim(Resource):
 			# Note: You can later put irr_words (see the function)
 			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
 											neg_words=negative_terms, irr_words=[])
-
+			# Jurim : instead of kde model, we use inner product for recommendation
+			
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
+
+			# get embeddings and cluster words
+			kmeans = cluster.KMeans(n_clusters=5)
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in positive_recommend]
+			positive_clusters = kmeans.fit_predict(positive_reco_embeddings)
+			kmeans = cluster.KMeans(n_clusters=5)  # should start from scratch
+			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in negative_recommend]
+			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
+
+			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in positive_terms]
+			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
+							          		      for x in negative_terms]
+
+			return jsonify(positiveRecommend=positive_recommend,
+			               positiveCluster=positive_clusters.tolist(),
+							 positiveVectors=[x.tolist() for x in positive_reco_embeddings],
+							 positiveSearchTermVectors=positive_term_embeddings,
+							 negativeRecommend=negative_recommend,
+							 negativeCluster=negative_clusters.tolist(),
+							 negativeVectors=[x.tolist() for x in negative_reco_embeddings],
+							 negativeSearchTermVectors=negative_term_embeddings)
+
+		except Exception as e:
+			# pdb.set_trace()
+			return {'error': str(e)}
+
+
+class RecommendWordsClusterDot(Resource):
+
+	def post(self):
+		try:
+			# pdb.set_trace()
+
+			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
+			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
+
+			args = parser.parse_args()
+
+			positive_terms = args['positiveWords']
+			negative_terms = args['negativeWords']
+
+			if positive_terms == None:
+				positive_terms = []
+			else:
+				positive_terms = [w.encode('UTF-8') for w in positive_terms]
+			
+			if negative_terms == None:
+				negative_terms = []
+			else:
+				negative_terms = [w.encode('UTF-8') for w in negative_terms]
+			
+
+			# Because pairwise distance computations are cached in the w2v_model,
+			# we do not need to worry about re-training the kde model
+			#
+			# Note: You can later put irr_words (see the function)
+			dot_model.learn(pos_words=positive_terms,
+											neg_words=negative_terms, irr_words=[])
+
+			positive_recommend = dot_model.recommend_pos_words(how_many=50)
+			negative_recommend = dot_model.recommend_neg_words(how_many=50)
 
 			# get embeddings and cluster words
 			kmeans = cluster.KMeans(n_clusters=5)
@@ -352,6 +417,10 @@ class ArticleUpdate(Resource):
 
 class ConceptScore(Resource):
 	def get(self):
+		# ipdb.set_trace()
+		parser.add_argument('articleID', type=int, help="articleID")
+		parser.add_argument('conceptID', type=int, help='conceptID')
+		
 		args = parser.parse_args()
 		articleID = args['articleID']
 		conceptID = args['conceptID']
@@ -359,23 +428,47 @@ class ConceptScore(Resource):
 			article_query = Article.query.get_or_404(articleID)
 			comments = article_query.comments 
 			concept_query = Concepts.query.get_or_404(conceptID)
-			commentsScore = getScore(concept_query, comments)
+			commentsScore = self.getScore(concept_query, comments)
 			return jsonify({'scores':commentsScore})
 
 		except Exception as e:
+			ipdb.set_trace()
 			print e
 
-	def getScore(concept, comments):
-		pdb.set_trace()
+	def getScore(self, concept, comments):
+		# ipdb.set_trace()
+		positive_terms = [w['text'] for w in concept.input_terms['positive']]
+		negative_terms = [w['text'] for w in concept.input_terms['negative']]
 
+		kde_model.learn(h_sq=0.2, pos_words=positive_terms, neg_words=negative_terms)
+		
+		scores = {}
+
+		for comment in comments:
+			score_pairs = [kde_model.get_conditional(word.lower()) for word in comment.commentBody]
+			pos_score = 0
+			neg_score = 0
+
+			for pair in score_pairs:
+				pos_score += pair[0]
+				neg_score += pair[1]
+
+			pos_score = pos_score / len(comment.commentBody)
+			neg_score = pos_score / len(comment.commentBody)
+			scores[comment.commentID] = pos_score - neg_score
+		return scores
 
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 api.add_resource(QueryAutoComplete, '/api/QueryAutoComplete/<string:word>')
-api.add_resource(RecommendWordsCluster, '/api/RecommendWordsCluster')
 api.add_resource(Status, '/api/status')
 api.add_resource(ConceptList, '/api/concepts')
 api.add_resource(ConceptsUpdate, '/api/concepts/<int:id>')
 api.add_resource(ArticleList, '/api/articles')
 api.add_resource(ArticleUpdate, '/api/articles/<int:id>')
+api.add_resource(RecommendWordsClusterKDE, '/api/RecommendWordsClusterKDE')
+api.add_resource(RecommendWordsClusterDot, '/api/RecommendWordsClusterDot')
+api.add_resource(RecommendWordsClusterMinMax, '/api/RecommendWordsClusterMinMax')
+api.add_resource(ConceptScore, '/api/ConceptScore')
+
