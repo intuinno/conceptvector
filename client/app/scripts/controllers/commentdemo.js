@@ -27,7 +27,7 @@ angular.module('conceptvectorApp')
 
         $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
             console.log(data);
-            $scope. = data.data.attributes;
+            // $scope. = data.data.attributes;
             $scope.concept_name = $scope.concept.name;
             $scope.concept_type = $scope.concept.concept_type;
             $scope.positiveTags = $scope.concept.input_terms.positive;

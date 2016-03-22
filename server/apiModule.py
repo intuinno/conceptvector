@@ -18,12 +18,12 @@ comment_schema = CommentSchema()
 
 
 headerNames = ['word'] + range(300)
-wordsFileName = './data/glove.6B.300d.txt'
-# wordsFileName = './data/glove.6B.50d.txt' # for testing
+# wordsFileName = './data/glove.6B.300d.txt'
+wordsFileName = './data/glove.6B.50d.txt' # for testing
 
 # unified w2v queries with caching
-# w2v_model = embedding.EmbeddingModel(wordsFileName)
-# kde_model = kde.KdeModel(w2v_model)
+w2v_model = embedding.EmbeddingModel(wordsFileName)
+kde_model = kde.KdeModel(w2v_model)
 
 
 @app.after_request
@@ -166,11 +166,9 @@ class ConceptList(Resource):
 
 	def post(self):
 		raw_dict = request.get_json(force=True)
-		# import pdb; pdb.set_trace()
 		try:
 			schema.validate(raw_dict)
-			concept_dict = raw_dict['data']['attributes']
-			# import pdb;pdb.set_trace()
+			concept_dict = raw_dict
 
 			if session.get('logged_in'):
 				userID = session['user']

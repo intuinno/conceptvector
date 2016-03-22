@@ -22,7 +22,7 @@ angular.module('conceptvectorApp')
                 .success(function(data) {
                     console.log(data);
 
-                    $scope.concepts = data.data;
+                    $scope.concepts = data;
                     // $scope.$apply();
                 })
                 // handle error
@@ -37,7 +37,7 @@ angular.module('conceptvectorApp')
 
             if (AuthService.isLoggedIn()) {
 
-                if (AuthService.getUserId() === concept.attributes.creator_id) {
+                if (AuthService.getUserId() === concept.creator_id) {
                     return true;
                 }
             }
@@ -54,7 +54,7 @@ angular.module('conceptvectorApp')
                 size: 'sm',
                 resolve: {
                     conceptName: function() {
-                        return concept.attributes.name;
+                        return concept.name;
                     }
                 }
             });
@@ -65,7 +65,7 @@ angular.module('conceptvectorApp')
                     // handle success
                     .success(function(data) {
 
-                        $scope.concepts = data.data;
+                        $scope.concepts = data;
                         // $scope.$apply();
                     })
                     // handle error
@@ -87,7 +87,7 @@ angular.module('conceptvectorApp')
                 size: 'sm',
                 resolve: {
                     conceptName: function() {
-                        return concept.attributes.name;
+                        return concept.name;
                     }
                 }
             });
@@ -96,14 +96,9 @@ angular.module('conceptvectorApp')
 
                 var newConcept = {};
 
-                newConcept.data = {};
+                newConcept = angular.copy(concept);
 
-                newConcept.data.attributes = angular.copy(concept.attributes);
-
-                newConcept.data.attributes.name = newConceptName;
-
-                newConcept.data.type = "concepts";
-
+                newConcept.name = newConceptName;
 
                 $http.post(serverURL + '/concepts', newConcept)
                     // handle success

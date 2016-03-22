@@ -14,7 +14,7 @@ angular.module('conceptvectorApp')
 
         $http.get(serverURL + '/concepts/' + $routeParams.conceptId).success(function(data) {
             console.log(data);
-            $scope.concept = data.data.attributes;
+            $scope.concept = data;
             $scope.concept_name = $scope.concept.name;
             $scope.concept_type = $scope.concept.concept_type;
             $scope.positiveTags = $scope.concept.input_terms.positive;
@@ -22,11 +22,7 @@ angular.module('conceptvectorApp')
 
             $scope.tagChanged();
 
-
-
         });
-
-
 
         $scope.isSettingCollapsed = true;
 
@@ -37,7 +33,7 @@ angular.module('conceptvectorApp')
 
         	if (AuthService.isLoggedIn()) {
 
-        		if (AuthService.getUserId() === $scope.concept.creator_id) {
+        		if ("concept" in $scope && AuthService.getUserId() === $scope.concept.creator_id) {
         			return true;
         		}
         	}

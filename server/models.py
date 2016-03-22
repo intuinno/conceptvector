@@ -2,7 +2,7 @@ from appModule import db, bcrypt
 from sqlalchemy.dialects.postgresql import JSON, ARRAY, BIGINT
 import datetime
 # from marshmallow_jsonapi import  fields, Schema
-from marshmallow import validate, Schema, fields
+from marshmallow import validate, fields, Schema
 import json
 from sqlalchemy.ext.hybrid import hybrid_property
 
