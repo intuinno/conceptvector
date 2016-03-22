@@ -44,11 +44,7 @@ angular.module('conceptvectorApp')
 
         $scope.saveConcept = function() {
 
-            var newConcept = {};
-
-            newConcept.data = {};
-
-            newConcept.data.attributes = {
+            var newConcept =  {
                 "name": $scope.concept_name,
                 "concept_type": $scope.concept_type,
                 "input_terms": {
@@ -58,15 +54,12 @@ angular.module('conceptvectorApp')
 
             };
 
-            newConcept.data.type = "concepts";
-
-
             $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept)
                 // handle success
                 .success(function(data) {
                     console.log(data);
 
-                    $scope.concepts = data.data;
+                    $scope.concepts = data;
                     // $scope.$apply();
                 })
                 // handle error
@@ -94,7 +87,7 @@ angular.module('conceptvectorApp')
                 return d['text'];
             });
 
-            recommend.save({
+            $scope.loadingPromise = recommend.save({
                 'positiveWords': positiveTags,
                 'negativeWords': negativeTags
             }, function(entry) {
@@ -488,28 +481,28 @@ angular.module('conceptvectorApp')
         $scope.negative_data = [];
         $scope.all_data = [];
 
-        d3.text("data/glove.6B.300d.10k.txt", function(d) {
+        // d3.text("data/glove.6B.300d.10k.txt", function(d) {
 
-            var coor_data = d3.csv.parseRows(d);
+        //     var coor_data = d3.csv.parseRows(d);
 
-            d3.text("data/glove.6B.300d.voc.txt", function(label) {
+        //     d3.text("data/glove.6B.300d.voc.txt", function(label) {
 
-                var data = label.trimRight().split('\n').map(function(a, i) {
+        //         var data = label.trimRight().split('\n').map(function(a, i) {
 
 
-                    return { word: a, cluster: 'stars', x: +coor_data[i][0], y: +coor_data[i][1], size: 0.1, shape: 'circle' };
+        //             return { word: a, cluster: 'stars', x: +coor_data[i][0], y: +coor_data[i][1], size: 0.1, shape: 'circle' };
 
-                });
+        //         });
 
-                $scope.all_data = d3.nest()
-                    .key(function(d) {
-                        return d.cluster;
-                    })
-                    .entries(data);
-                // $scope.all_apiObj.api.refresh();
+        //         $scope.all_data = d3.nest()
+        //             .key(function(d) {
+        //                 return d.cluster;
+        //             })
+        //             .entries(data);
+        //         // $scope.all_apiObj.api.refresh();
 
-            });
-        });
+        //     });
+        // });
 
         $scope.apiObj = {};
         $scope.negative_apiObj = {};

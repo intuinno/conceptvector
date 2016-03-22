@@ -20,7 +20,8 @@ angular
     'ngTagsInput',
     'nvd3',
     'angularUtils.directives.dirPagination',
-    'ui.select'
+    'ui.select',
+    'cgBusy'
   ])
   .config(function ($routeProvider) {
     $routeProvider
