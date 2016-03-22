@@ -66,13 +66,13 @@ class RecommendWordsCluster(Resource):
 
 			# get embeddings and cluster words
 			kmeans = cluster.KMeans(n_clusters=5)
-			positive_embeddings = [w2v_model.get_embedding_for_a_word(x)
-							          		 for x in positive_recommend]
-			positive_clusters = kmeans.fit_predict(positive_embeddings)
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in positive_recommend]
+			positive_clusters = kmeans.fit_predict(positive_reco_embeddings)
 			kmeans = cluster.KMeans(n_clusters=5)  # should start from scratch
-			negative_embeddings = [w2v_model.get_embedding_for_a_word(x)
-							          		 for x in negative_recommend]
-			negative_clusters = kmeans.fit_predict(negative_embeddings)
+			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+							          		      for x in negative_recommend]
+			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
 
 			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in positive_terms]
@@ -81,11 +81,11 @@ class RecommendWordsCluster(Resource):
 
 			return jsonify(positiveRecommend=positive_recommend,
 			               positiveCluster=positive_clusters,
-										 positiveVectors=[x.tolist() for x in positive_embeddings]
+										 positiveVectors=[x.tolist() for x in positive_reco_embeddings]
 										 positiveSearchTermVectors=positive_term_embeddings
 										 negativeRecommend=negative_recommend,
 										 negativeCluster=negative_clusters,
-										 negativeVectors=[x.tolist() for x in negative_embeddings]
+										 negativeVectors=[x.tolist() for x in negative_reco_embeddings]
 										 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
