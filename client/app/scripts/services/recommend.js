@@ -12,7 +12,7 @@ angular.module('conceptvectorApp')
         // Service logic
         // ...
 
-        var apiURL = serverURL + '/RecommendWordsCluster';
+        var apiURL = serverURL + '/RecommendWordsClusterKDE';
 
         // Public API here
         return $resource(apiURL);

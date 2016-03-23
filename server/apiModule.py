@@ -437,9 +437,20 @@ class ConceptScore(Resource):
 
 	def getScore(self, concept, comments):
 		# ipdb.set_trace()
-		positive_terms = [w['text'] for w in concept.input_terms['positive']]
-		negative_terms = [w['text'] for w in concept.input_terms['negative']]
 
+		positive_terms_concept = concept.input_terms['positive']
+		negative_terms_concept = concept.input_terms['negative']
+
+		if positive_terms_concept == None:
+			positive_terms = []
+		else:
+			positive_terms = [w['text'] for w in positive_terms_concept]
+		
+		if negative_terms_concept == None:
+			negative_terms = []
+		else:
+			negative_terms = [w['text'] for w in negative_terms_concept]
+	
 		kde_model.learn(h_sq=0.2, pos_words=positive_terms, neg_words=negative_terms)
 		
 		scores = {}
@@ -455,7 +466,7 @@ class ConceptScore(Resource):
 			
 
 			pos_score = pos_score / len(comment.commentBody)
-			neg_score = pos_score / len(comment.commentBody)
+			neg_score = neg_score / len(comment.commentBody)
 			scores[comment.commentID] = pos_score - neg_score
 		return scores
 

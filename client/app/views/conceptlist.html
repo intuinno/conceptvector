@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <br>
-<!--                     <div class="checkbox">
+                    <!--                     <div class="checkbox">
                         <label>
                             <input type="checkbox" ng-model=""> Show only my concepts 
                         </label>
@@ -39,6 +39,7 @@
                                     <a href="" class="btn btn-link btn-default" ng-click="clone(concept)">Copy</a>
                                     <a href="" class="btn btn-link btn-default" ng-click="delete(concept)" ng-show="isOwner(concept)">Delete</a> </small> </h3>
                                 </dt>
+                                {{concept}}
                                 <dd dir-paginate-end>
                                     <dl class="dl-horizontal">
                                         <dt>Author</dt>
@@ -47,8 +48,10 @@
                                         <dd>{{concept.concept_type}}</dd>
                                         <dt>Positive Terms</dt>
                                         <dd> <span ng-repeat="term in concept.input_terms.positive ">{{term.text}} </span></dd>
-                                        <dt>Negative Terms</dt>
-                                        <dd><span ng-repeat="term in concept.input_terms.negative ">{{term.text}} </span></dd>
+                                        <div ng-if="concept.concept_type == 'bipolar'">
+                                            <dt>Negative Terms</dt>
+                                            <dd><span ng-repeat="term in concept.input_terms.negative ">{{term.text}} </span></dd>
+                                        </div>
                                     </dl>
                                     <div>
                                         <hr>
