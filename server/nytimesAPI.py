@@ -26,7 +26,7 @@ import pickle
 from sqlalchemy import create_engine
 from models import Article, Comment
 from sqlalchemy.orm import sessionmaker
-import pdb
+import ipdb as pdb
 
 
 # Most popular API
@@ -34,7 +34,7 @@ import pdb
 
 article_file_name = 'data/most_popular_articles.pkl'
 comment_file_name = 'data/comments.pkl'
-engine = create_engine('postgresql:///conceptvectorDB',echo=False)
+engine = create_engine('postgresql:///conceptvector_dev',echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 cache = False
@@ -78,6 +78,20 @@ def download_articles():
 
 # Now Add these articles into Database
 
+def getNumComments(a):
+
+	article_url = a.url
+	
+	try:
+		comment_request = getComments(article_url)
+		num_results = comment_request.json()['results']['totalCommentsFound']
+		return num_results
+	except Exception as e:
+		pdb.set_trace()
+		print e	
+
+
+
 def add_articles_database():
 
 	input = file(article_file_name,'rb')
@@ -89,9 +103,10 @@ def add_articles_database():
 				print a['url']
 				aquery = Article(a)
 				try:
-					session.add(aquery)
-					download_add_comments(a)
-					session.commit()
+					if getNumComments(aquery) > 1000:
+						session.add(aquery)
+						download_add_comments(a)
+						session.commit()
 				except Exception as e:
 					pdb.set_trace()
 					session.rollback()
@@ -108,7 +123,7 @@ def add_replies(all, node, stacklevel):
 
 def getComments(url, offset=0):
 	global currentKey 
-	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'depthLimit':100}
+	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'depthLimit':100, 'offset':offset}
 	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 	comment_request = requests.get(api_url, params=payload)
 	sleep(0.1)
@@ -152,7 +167,6 @@ def download_add_comments(a):
 			add_replies(all_comments, c, 0)
 
 		if len(all_comments) != num_results:
-			# pdb.set_trace()
 			print "Error: All Comments number does not match", a['url'], len(all_comments), num_results
 
 	except Exception as e:
@@ -165,9 +179,11 @@ def download_add_comments(a):
 		try:			
 			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
 				session.add(cquery)
+			else:
+				print 'Why Duplicates happend?'
 		except Exception as e:
 			pdb.set_trace()
-			session.rollback()
+			# session.rollback()
 			print a['commentID']
 			print e 
 
