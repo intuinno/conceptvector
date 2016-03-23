@@ -19,11 +19,6 @@
                     <p> </p>
                     <br> Select your overview visualization
                     <br>
-
-                    <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ngChange="getScores(f)"></select>
-
-
-
                     <div class="overviewButton btn-group">
                         <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
                         <label class="btn btn-default" ng-model="overview" uib-btn-radio='"map"'> Map </label>
@@ -33,7 +28,7 @@
                     <br>
                     <div ng-show="overview=='temporal'">
                         <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
-                       <!--  <div class="chart-simple-interface">
+                        <!--  <div class="chart-simple-interface">
                             <h5>{{tempoDimExplanation.display_text}}
                 <small> {{tempoDimExplanation.help_text}}</small>
             </h5>
@@ -200,6 +195,16 @@ This bar shows the weights for this ranking.
             </div>
             <br>
 
+            <h4>
+            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ng-change="getScores(concept)"></select>    
+             <div class="btn-group">
+        <label class="btn btn-default" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
+        <label class="btn btn-default" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>
+    </div>
+     </h4>
+
+
+
             <input type="text" ng-model='searchText' class="form-control" placeholder="Search for...">
 
 
@@ -211,9 +216,9 @@ This bar shows the weights for this ranking.
                     <uib-tab-heading>
                         <span>{{tab.status}}</span> ({{filteredComment.length}})
                     </uib-tab-heading>
-                    <div class="commentList">
+                    <div class="commentList" cg-busy="loadingPromise">
                         <dl>
-                            <dt dir-paginate-start='comment in filteredComment=(nomaData |filter: {selected:"true"} | filter:{status: tab.status } |orderBy:"score":true | filter: searchText) | itemsPerPage: 5' pagination-id="tab.status">
+                            <dt dir-paginate-start='comment in filteredComment=(nomaData |filter: {selected:"true"} | filter:{status: tab.status } |orderBy:"score":rankOrder | filter: searchText) | itemsPerPage: 5' pagination-id="tab.status">
                                {{comment.commentTitle}} <small>{{comment.userDisplayName}}   </small> <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
                             </dt>
 
@@ -223,6 +228,8 @@ This bar shows the weights for this ranking.
 
 
                                 <div ng-bind-html="comment.commentBody"></div>
+                                <br> score = {{comment.score}}
+                                <br> &nbsp;
                             </dd>
 
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>

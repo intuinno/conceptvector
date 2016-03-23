@@ -10,6 +10,23 @@
 angular.module('conceptvectorApp')
     .controller('CommentdemoCtrl', ['$scope', '$uibModal', '$log', '$routeParams', '$http', 'serverURL', function($scope, $uibModal, $log, $routeParams, $http, serverURL) {
 
+        $scope.rankOrder = true;
+
+        $scope.getScores = function(concept) {
+
+            console.log(concept);
+
+            var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
+
+            $scope.loadingPromise = $http.get(serverURL + '/ConceptScores', { 'params': params }).success(function(data) {
+
+                $scope.nomaData.forEach(function(d) { 
+                    d.score = data.scores[d.commentID]; 
+                });
+
+            });
+        };
+
         $scope.statusArray = ['New', 'Accepted', 'Rejected', 'Picked'];
 
         $scope.tabArray = [{
@@ -327,7 +344,7 @@ angular.module('conceptvectorApp')
             $scope.articleId = $routeParams.articleId;
 
 
-            $http.get(serverURL + '/articles/' + $routeParams.articleId).success( function(data) {
+            $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
                 var count = 0;
                 // console.log(data);
 
@@ -342,7 +359,7 @@ angular.module('conceptvectorApp')
                     d.status = 'New';
                     d.selected = true;
 
-                    d.ApproveDateConverted = new Date(parseInt(d.createDate)*1000);
+                    d.ApproveDateConverted = new Date(parseInt(d.createDate) * 1000);
 
                     d.commentTitle = d.commentTitle.replace(/<br\/>/g, "");
                     d.commentBody = d.commentBody.replace(/�/g, "");
@@ -376,7 +393,7 @@ angular.module('conceptvectorApp')
             });
 
 
-            $http.get(serverURL + '/concepts').success(function(data){
+            $http.get(serverURL + '/concepts').success(function(data) {
 
                 console.log(data);
                 $scope.criterias = data;
@@ -387,7 +404,7 @@ angular.module('conceptvectorApp')
 
         $scope.loadData();
 
-    
+
         $scope.itemlist = [{
             "name": "Average Comment Count",
             "value": "CommentCount"

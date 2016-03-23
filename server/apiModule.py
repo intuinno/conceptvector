@@ -452,6 +452,7 @@ class ConceptScore(Resource):
 			for pair in score_pairs:
 				pos_score += pair[0]
 				neg_score += pair[1]
+			
 
 			pos_score = pos_score / len(comment.commentBody)
 			neg_score = pos_score / len(comment.commentBody)
@@ -470,5 +471,5 @@ api.add_resource(ArticleUpdate, '/api/articles/<int:id>')
 api.add_resource(RecommendWordsClusterKDE, '/api/RecommendWordsClusterKDE')
 api.add_resource(RecommendWordsClusterDot, '/api/RecommendWordsClusterDot')
 api.add_resource(RecommendWordsClusterMinMax, '/api/RecommendWordsClusterMinMax')
-api.add_resource(ConceptScore, '/api/ConceptScore')
+api.add_resource(ConceptScore, '/api/ConceptScores')
 
