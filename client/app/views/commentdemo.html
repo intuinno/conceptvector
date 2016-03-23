@@ -198,17 +198,12 @@ This bar shows the weights for this ranking.
             <h4>
             Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ng-change="getScores(concept)"></select>    
              <div class="btn-group">
-        <label class="btn btn-default" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
-        <label class="btn btn-default" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>
+        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
+        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>
     </div>
      </h4>
 
-
-
             <input type="text" ng-model='searchText' class="form-control" placeholder="Search for...">
-
-
-
 
             <uib-tabset>
                 <uib-tab ng-repeat='tab in tabArray' active=tab.active>
@@ -221,12 +216,7 @@ This bar shows the weights for this ranking.
                             <dt dir-paginate-start='comment in filteredComment=(nomaData |filter: {selected:"true"} | filter:{status: tab.status } |orderBy:"score":rankOrder | filter: searchText) | itemsPerPage: 5' pagination-id="tab.status">
                                {{comment.commentTitle}} <small>{{comment.userDisplayName}}   </small> <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
                             </dt>
-
-
-
                             <dd>
-
-
                                 <div ng-bind-html="comment.commentBody"></div>
                                 <br> score = {{comment.score}}
                                 <br> &nbsp;
