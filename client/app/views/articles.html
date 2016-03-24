@@ -1,5 +1,6 @@
 <div class="container">
-    <h2>Comments of NY Times Articles</h2><h2><small>Analyze comments for NY Times Articles using custom concepts</small></h2>
+    <h2>Comments of NY Times Articles</h2>
+    <h2><small>Analyze comments for NY Times Articles using custom concepts</small></h2>
     <div class="row">
         <div class="col-sm-12">
             <div class="row">
@@ -13,14 +14,28 @@
                             <label for="search">items per page:</label>
                             <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
                         </div>
-                       
                     </div>
                     <br>
-
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" cg-busy="loadingPromise">
                         <div class="panel-body">
-                         
-                            <dl>
+                            <uib-accordion close-others="true">
+                                <uib-accordion-group is-open="article.open" dir-paginate="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
+                                    <uib-accordion-heading>
+                                        {{article.title}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': article.open, 'glyphicon-chevron-right': !article.open}"></i>
+                                    </uib-accordion-heading>
+                                    <dl class="dl-horizontal">
+                                        <dt>Section</dt>
+                                        <dd>{{article.section}}</dd>
+                                        <dt>Type</dt>
+                                        <dd>{{article.type}}</dd>
+                                        <dt>Publish Date</dt>
+                                        <dd> {{article.published_date}} </dd>
+                                    </dl>
+                                    <a class="btn btn-default btn pull-right" href="#/articles/{{article.id}}"> Analyze comments of this article </a>
+                                </uib-accordion-group>
+                            </uib-accordion>
+                            
+                            <!--                             <dl>
                                 <dt dir-paginate-start="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
                                     <h4> <a href="#/articles/{{article.id}}"> {{article.title}} </a><small class="commentHeader">      ,                              </small> </h4>
                                 </dt>
@@ -37,7 +52,7 @@
                                         <hr>
                                     </div>
                                 </dd>
-                            </dl>
+                            </dl> -->
                         </div>
                     </div>
                     <div class="text-center">
@@ -49,4 +64,3 @@
         </div>
     </div>
 </div>
-

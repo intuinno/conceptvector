@@ -17,7 +17,7 @@ angular.module('conceptvectorApp')
         $scope.concepts = [];
 
         var loadArticles = function() {
-            $http.get(serverURL + '/articles')
+            $scope.loadingPromise = $http.get(serverURL + '/articles')
                 // handle success
                 .success(function(data) {
                     console.log(data);

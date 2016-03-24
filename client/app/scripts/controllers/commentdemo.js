@@ -344,7 +344,7 @@ angular.module('conceptvectorApp')
             $scope.articleId = $routeParams.articleId;
 
 
-            $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
+            $scope.loadingPromise = $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
                 var count = 0;
                 // console.log(data);
 

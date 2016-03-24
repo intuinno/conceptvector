@@ -26,7 +26,6 @@ wordsFileName = './data/glove.6B.50d.txt' # for testing
 w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
 
-parser = reqparse.RequestParser()
 
 print 'I am ready'
 
@@ -44,6 +43,7 @@ class RecommendWordsClusterKDE(Resource):
 		try:
 			# pdb.set_trace()
 
+			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
 
@@ -107,6 +107,7 @@ class RecommendWordsClusterMinMax(Resource):
 		try:
 			# pdb.set_trace()
 
+			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
 
@@ -172,6 +173,7 @@ class RecommendWordsClusterDot(Resource):
 		try:
 			# pdb.set_trace()
 
+			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
 
@@ -242,6 +244,8 @@ class Register(Resource):
 
 		# Parse the arguments
 		# import pdb; pdb.set_trace()
+
+		parser = reqparse.RequestParser()
 		parser.add_argument('name', type=str, help="User name to be called")
 		parser.add_argument('email', type=str, help='Email address to create user')
 		parser.add_argument('password', type=str, help='Password to create user')
@@ -269,6 +273,7 @@ class Login(Resource):
 	def post(self):
 		try:
 			# Parse the arguments
+			parser = reqparse.RequestParser()
 			parser.add_argument('email', type=str, help='Email address for Authentification')
 			parser.add_argument('password', type=str, help='Password for Authentication')
 			args = parser.parse_args()
@@ -417,7 +422,9 @@ class ArticleUpdate(Resource):
 
 class ConceptScore(Resource):
 	def get(self):
-		# ipdb.set_trace()
+		ipdb.set_trace()
+
+		parser = reqparse.RequestParser()
 		parser.add_argument('articleID', type=int, help="articleID")
 		parser.add_argument('conceptID', type=int, help='conceptID')
 		
