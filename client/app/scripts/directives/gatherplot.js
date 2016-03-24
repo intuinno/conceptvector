@@ -633,9 +633,30 @@
                                 return;
                             }
 
+                            if (!checkIfDimExists(data, config)) {
+                                return;
+                            }
+
                             renderConfigChange(data, config);
 
                             handleLensChange(config);
+
+                        };
+
+                        var checkIfDimExists = function(data, config) {
+
+                            console.log(data);
+                            console.log(config);
+
+                            if (config.xDim !== '' && data[0][config.xDim] === undefined ) {
+                                return false;
+                            }
+
+                            if (config.yDim !== '' && data[0][config.yDim] === undefined) {
+                                return false;
+                            }
+
+                            return true;
 
                         };
 
@@ -1923,8 +1944,6 @@
 
 
                             } else {
-
-                                if ()
 
                                 return dimSetting[dim].dimType;
                             }

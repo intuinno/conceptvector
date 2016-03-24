@@ -41,7 +41,7 @@
             <!-- <div ng-show="overview=='map'">
                         <div class="gathermap" data="nomaData"> </div>
                     </div> -->
-            <div ng-show="overview=='gatherplot'">
+            <div ng-show="overview=='gatherplot'" cg-busy="loadingPromise">
                 <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
                 </div>
                 <h5>{{xAxisExplanation.display_text}}
@@ -54,13 +54,13 @@
                 <div class="chart-simple-interface">
                     <h5>Show me
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name as f.name for f in criterias" ngChange="getScores(f)">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name as f.name for f in criterias" ng-change="getScoresByConceptName(nomaConfig.xDim)">
 
                         <option value="">-- undefined --</option>
 
                     </select>&nbsp;vs&nbsp;.
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name as f.name for f in criterias">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name as f.name for f in criterias" ng-change="getScoresByConceptName(nomaConfig.yDim)">
 
                         <option value="">-- undefined --</option>
 
