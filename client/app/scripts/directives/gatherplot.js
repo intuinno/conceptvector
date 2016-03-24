@@ -1924,6 +1924,8 @@
 
                             } else {
 
+                                if ()
+
                                 return dimSetting[dim].dimType;
                             }
                         };

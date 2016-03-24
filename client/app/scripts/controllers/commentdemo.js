@@ -43,17 +43,17 @@ angular.module('conceptvectorApp')
                 downloadScores(concept);
             }
 
-           
+
         };
 
         var downloadScores = function(concept) {
 
-             var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
+            var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
 
             $scope.loadingPromise = $http.get(serverURL + '/ConceptScores', { 'params': params }).success(function(data) {
 
-                $scope.nomaData.forEach(function(d) { 
-                    d[concept.name] = data.scores[d.commentID]; 
+                $scope.nomaData.forEach(function(d) {
+                    d[concept.name] = data.scores[d.commentID];
                 });
 
                 updateScore();
@@ -131,7 +131,7 @@ angular.module('conceptvectorApp')
 
         $scope.nomaConfig.SVGAspectRatio = 1.4;
 
-        $scope.overview = "map";
+        $scope.overview = "temporal";
 
         var computeScoreComment = function(criteria, comment) {
 
@@ -353,25 +353,33 @@ angular.module('conceptvectorApp')
                 $scope.nomaConfig.yDim = '';
                 $scope.nomaConfig.colorDim = '';
 
-                $scope.nomaConfig.isGather = '';
+                $scope.nomaConfig.isGather = 'gather';
                 $scope.nomaConfig.relativeMode = 'absolute';
+
+                $http.get(serverURL + '/concepts').success(function(data) {
+
+                    console.log(data);
+                    var conceptNames = data.map(function(d) {
+                        return d.name;
+                    });
+                    $scope.nomaConfig.dims = $scope.nomaConfig.dims.concat(conceptNames);
+                    $scope.criterias = data;
+                    loadPresetCategory();
+
+                });
 
                 // $scope.$apply();
 
             });
 
 
-            $http.get(serverURL + '/concepts').success(function(data) {
 
-                console.log(data);
-                $scope.criterias = data;
-                loadPresetCategory();
-
-            });
 
         };
 
         $scope.loadData();
+
+        $scope.overview == "temporal";
 
 
         $scope.itemlist = [{

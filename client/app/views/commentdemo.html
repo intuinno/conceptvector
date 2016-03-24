@@ -13,52 +13,54 @@
           </h3>
             <p>{{article.abstract}}"</p>
             <p>{{article.published_date}}</p>
-            <p>{{article.adx_keywords}}
-                <p>{{article.byline}}
-                    <p>{{article.section}}, {{article.type}}</p>
-                    <p> </p>
-                    <br> Select your overview visualization
-                    <br>
-                    <div class="overviewButton btn-group">
-                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
-                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"temporal"'> Temporal </label>
-                        <!-- <label class="btn btn-primary" ng-model="baseModel" btn-radio='"Thread"'> Thread </label> -->
-                    </div>
-                    <br>
-                    <div ng-show="overview=='temporal'" cg-busy="loadingPromise">
-                        <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
-                        <div class="chart-simple-interface">
-                            <h5>{{tempoDimExplanation.display_text}}
+            <p>{{article.adx_keywords}}</p>
+            <p>{{article.byline}}</p>
+            <p>{{article.section}}, {{article.type}}</p>
+            <p> </p>
+
+            <br>
+            <div class="text-center">
+                <div class="overviewButton btn-group">
+                    <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
+                    <label class="btn btn-default" ng-model="overview" uib-btn-radio='"temporal"'> Temporal </label>
+                    <!-- <label class="btn btn-primary" ng-model="baseModel" btn-radio='"Thread"'> Thread </label> -->
+                </div>
+            </div>
+            <br>
+            <div ng-show="overview=='temporal'" cg-busy="loadingPromise">
+                <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
+                <div class="chart-simple-interface">
+                    <h5>{{tempoDimExplanation.display_text}}
                 <small> {{tempoDimExplanation.help_text}}</small>
             </h5>
-                            <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.name for f in criterias" ng-change="getScoresByConceptName(tempoDim)">
-                             <option value="">Number of Comment</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- <div ng-show="overview=='map'">
+                    <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.name for f in criterias" ng-change="getScoresByConceptName(tempoDim)">
+                        <option value="">Number of Comment</option>
+                    </select>
+                </div>
+            </div>
+            <!-- <div ng-show="overview=='map'">
                         <div class="gathermap" data="nomaData"> </div>
                     </div> -->
-                    <div ng-show="overview=='gatherplot'">
-                        <!-- <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
-                        </div> -->
-                        <h5>{{xAxisExplanation.display_text}}
+            <div ng-show="overview=='gatherplot'">
+                <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
+                </div>
+                <h5>{{xAxisExplanation.display_text}}
                 <small> {{xAxisExplanation.help_text}}</small>
             </h5>
-                        <h5>{{yAxisExplanation.display_text}}:
+                <h5>{{yAxisExplanation.display_text}}:
                 <small>{{yAxisExplanation.help_text}}</small>
             </h5>
-                        <br>
-                        <div class="chart-simple-interface">
-                            <h5>Show me
+                <br>
+                <div class="chart-simple-interface">
+                    <h5>Show me
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name for f in criterias" ngChange="getScores(f)">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.xDim" ng-options="f.name as f.name for f in criterias" ngChange="getScores(f)">
 
                         <option value="">-- undefined --</option>
 
                     </select>&nbsp;vs&nbsp;.
 
-                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name for f in criterias">
+                    <select class="btn btn-default dropdown-toggle" ng-model="nomaConfig.yDim" ng-options="f.name as f.name for f in criterias">
 
                         <option value="">-- undefined --</option>
 
