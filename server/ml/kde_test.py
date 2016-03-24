@@ -1,20 +1,29 @@
 import embedding
 import kde
+import reader
 
-datafile = '../../data/glove.6B.50d.txt'
-embedding_model = embedding.EmbeddingModel(datafile, cache_capacity=2)
+embedding_file = '../../data/glove.6B.50d.txt'
+comment_file = '../../data/comment_dump.csv'
+embedding_model = embedding.EmbeddingModel(embedding_file, cache_capacity=2)
 kde_model = kde.KdeModel(embedding_model)
+comments = reader.read_comment_bodys(comment_file, 100000004235555)
 
-kde_model.learn(h_sq=0.2, pos_words=['happy'], neg_words=['sad'])
-print kde_model.recommend_pos_words(how_many=10)
-print kde_model.recommend_neg_words(how_many=10)
+# kde_model.learn(h_sq=0.2, pos_words=['happy', 'excited'], neg_words=['sad'])
+kde_model.learn(h_sq=0.2, pos_words=['immigration', 'citizenship', 'naturalization', 'asylum', 'nationality', 'deportation', 'visa', 'visas', 'extradition', 'custody', 'immigrants', 'undocumented', 'migrants'])
 
-# should match caching
-kde_model.learn(h_sq=0.2, pos_words=['happy', 'excited'], neg_words=['sad'])
-print kde_model.recommend_pos_words(how_many=10)
-print kde_model.recommend_neg_words(how_many=10)
+# print kde_model.recommend_pos_words(how_many=10)
+# print kde_model.recommend_neg_words(how_many=10)
 
-# should match caching
-kde_model.learn(h_sq=0.2, pos_words=['happy', 'excited'], neg_words=['sad'])
-print kde_model.recommend_pos_words(how_many=10)
-print kde_model.recommend_neg_words(how_many=10)
+comment_score_pairs = []
+for comment in comments:
+  score = kde_model.get_comment_score(comment)
+  comment_score_pairs.append((score, comment))
+
+sorted_list = sorted(comment_score_pairs, key=lambda x: x[0], reverse=True)
+
+print '\npos list'
+for item in sorted_list[:5]:
+  print item[0], ' '.join(item[1])
+
+for item in sorted_list[-5:]:
+  print item[0], ' '.join(item[1])

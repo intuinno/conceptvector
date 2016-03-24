@@ -50,7 +50,10 @@ class KdeModel:
   def get_conditional(self, word):
     pos, neg, irr = self.get_joint(word)
     s = pos + neg + irr
-    return (pos/s, neg/s, irr/s)
+    if s > 0:
+      return (pos/s, neg/s, irr/s)
+    else:
+      return (0.0, 0.0, 0.0)
 
   def recommend_pos_words(self, how_many=100):
     top_indicies = np.argsort(-self.bipolar_score)  # reverse sort
@@ -64,6 +67,11 @@ class KdeModel:
     candidates = top_indicies[:(how_many + len(self.neg_words))]
     candidates = [x for x in candidates if x not in self.neg_words_indicies]
     return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
+
+  def get_comment_score(self, words):
+    bipolar_scores = [self.get_bipolar(word.lower()) for word in words]
+    bipolar_avg = sum(bipolar_scores)/len(bipolar_scores)
+    return bipolar_avg
 
   def _compute_unnormalized_density(self, target_words):
     result = np.zeros((len(self.embedding_model.vocabulary),))
