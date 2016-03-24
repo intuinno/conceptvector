@@ -156,10 +156,12 @@
                             <li ng-repeat="criteria in criterias">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" ng-model="criteria.checked" ng-change="getScores(criteria)">
+                                        <input type="checkbox" ng-model="criteria.checked" ng-change="checkConcepts(criteria)">
                                         <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.name}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
-                                <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
+                                
+                               <!--  <rzslider rz-slider-model="currentCategory.weights[criteria.name]" rz-slider-options="sliderOptions"></rzslider> -->
                                     </label>
+                                    <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="2" step="0.1" required>
                                 </div>
                                 
                             </li>

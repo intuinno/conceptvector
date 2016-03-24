@@ -21,7 +21,7 @@ angular
     'nvd3',
     'angularUtils.directives.dirPagination',
     'ui.select',
-    'cgBusy'
+    'cgBusy',
   ])
   .config(function ($routeProvider) {
     $routeProvider

@@ -12,9 +12,30 @@ angular.module('conceptvectorApp')
 
         $scope.rankOrder = true;
 
+        $scope.sliderOptions = {
+            floor:0,
+            ceil: 2, 
+            step: 0.1
+        };
+
+        $scope.checkConcepts = function(concept) {
+            $scope.getScores(concept);
+            currentCategory.weights[concept.name] = 1;
+        };
+
         $scope.changeCategory = function(category) {
 
-            // console.log(category.keys());
+
+
+            var concept = $scope.criterias.filter(function(d) {
+                return d.name === category.name;
+            });
+            if (concept.length === 1) {
+                concept[0].checked=true;
+            } else {
+                console.log("Error: Concept Length does not match");
+            }
+
             Object.keys(category.weights).forEach(function(d) {
 
                 $scope.getScoresByConceptName(d);
@@ -29,11 +50,7 @@ angular.module('conceptvectorApp')
                 return d.name === name;
             });
 
-            if (concept.length === 1) {
-                $scope.getScores(concept[0]);
-            } else {
-                console.log("Error: Concept Length does not match");
-            }
+            
 
         };
 
