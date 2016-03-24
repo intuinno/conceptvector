@@ -12,19 +12,54 @@ angular.module('conceptvectorApp')
 
         $scope.rankOrder = true;
 
+        $scope.changeCategory = function(category) {
+
+            // console.log(category.keys());
+            Object.keys(category.weights).forEach(function(d) {
+
+                $scope.getScoresByConceptName(d);
+
+            });
+
+        };
+
+        $scope.getScoresByConceptName = function(name) {
+
+            var concept = $scope.criterias.filter(function(d) {
+                return d.name === name;
+            });
+
+            if (concept.length === 1) {
+                $scope.getScores(concept[0]);
+            } else {
+                console.log("Error: Concept Length does not match");
+            }
+
+        };
+
         $scope.getScores = function(concept) {
 
-            console.log(concept);
+            if (!(concept.name in $scope.nomaData[0])) {
+                downloadScores(concept);
+            }
 
-            var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
+           
+        };
+
+        var downloadScores = function(concept) {
+
+             var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
 
             $scope.loadingPromise = $http.get(serverURL + '/ConceptScores', { 'params': params }).success(function(data) {
 
                 $scope.nomaData.forEach(function(d) { 
-                    d.score = data.scores[d.commentID]; 
+                    d[concept.name] = data.scores[d.commentID]; 
                 });
 
+                updateScore();
+
             });
+
         };
 
         $scope.statusArray = ['New', 'Accepted', 'Rejected', 'Picked'];
@@ -41,102 +76,27 @@ angular.module('conceptvectorApp')
         }];
 
 
-
         $scope.settingName = 'New Setting';
 
         $scope.scoreModels = ['comment', 'user'];
 
         $scope.pickTags = ['well-written', 'informative', 'personal experience', 'critical', 'humorous'];
 
+        var loadPresetCategory = function() {
 
-        $scope.presetCategory = [{
-            name: 'Default',
-            weights: {
+            $scope.presetCategory = $scope.criterias.map(function(d) {
 
+                var category = {};
+                var name = d.name;
+                category.name = name;
+                category.weights = {};
+                category.weights[name] = 1;
 
-                ArticleRelevance: 41.7050691338,
-                AVGcommentspermonth: 11.3163696168,
-                AVGBrevity: -8.44420731416,
-                AVGPersonalXP: 10.6800123967,
-                AVGPicks: 38.7413080958,
-                AVGReadability: 69.9140232479,
-                AVGRecommendationScore: 16.9226104916,
-                Brevity: -65.7550166251,
-                ConversationalRelevance: -56.8332353888,
-                PersonalXP: 5.93998767753,
-                Readability: 100.0,
-                RecommendationScore: 100.0
-            }
-        }, {
-            name: 'Personal Story',
-            weights: {
-                ArticleRelevance: 0,
-                ConversationalRelevance: 0,
-                AVGcommentspermonth: 0,
-                AVGBrevity: 0,
-                AVGPersonalXP: 0,
-                AVGPicks: 0,
-                AVGReadability: 0,
-                AVGRecommendationScore: 0,
-                Brevity: 60,
-                PersonalXP: 50,
-                Readability: 0,
-                RecommendationScore: 0
-            }
-        }, {
-            name: 'Unexpected comment',
-            weights: {
-                ArticleRelevance: 0,
-                ConversationalRelevance: 0,
-                AVGcommentspermonth: 0,
-                AVGBrevity: 0,
-                AVGPersonalXP: 0,
-                AVGPicks: 40,
-                AVGReadability: 0,
-                AVGRecommendationScore: 40,
-                Brevity: -100,
-                PersonalXP: 0,
-                Readability: 0,
-                RecommendationScore: 40
-            },
-        }, {
-            name: 'Written by best user',
-            weights: {
-                ArticleRelevance: 0,
-                ConversationalRelevance: 0,
-                AVGcommentspermonth: 0,
-                AVGBrevity: 0,
-                AVGPersonalXP: 0,
-                AVGPicks: 90,
-                AVGReadability: 30,
-                AVGRecommendationScore: 90,
-                Brevity: 0,
-                PersonalXP: 0,
-                Readability: 0,
-                RecommendationScore: 0
-            }
-        }];
-
-        var emptyCategory = {
-            name: 'Temporary for Test',
-            weights: {
-                ArticleRelevance: 0,
-                ConversationalRelevance: 0,
-                AVGcommentspermonth: 0,
-                AVGBrevity: 0,
-                AVGPersonalXP: 0,
-                AVGPicks: 0,
-                AVGReadability: 0,
-                AVGRecommendationScore: 0,
-                Brevity: 0,
-                PersonalXP: 0,
-                Readability: 0,
-                RecommendationScore: 0
-            }
+                return category;
+            });
         };
 
-
-        $scope.currentCategory = $scope.presetCategory[0];
+        // $scope.currentCategory = $scope.presetCategory[0];
 
         $scope.nomaData = [];
         $scope.isSettingCollapsed = true;
@@ -189,6 +149,10 @@ angular.module('conceptvectorApp')
 
         var computeScore = function(currentCategory, comment) {
 
+            if (currentCategory === undefined) {
+                return;
+            }
+
             var criterias = d3.keys(currentCategory.weights);
 
             var score = d3.sum(criterias, function(criteria) {
@@ -202,6 +166,10 @@ angular.module('conceptvectorApp')
 
 
         function updateCriteriaWeightTypes() {
+
+            if (!("currentCategory" in $scope)) {
+                return;
+            }
 
             var p = $scope.currentCategory.weights;
 
@@ -397,6 +365,7 @@ angular.module('conceptvectorApp')
 
                 console.log(data);
                 $scope.criterias = data;
+                loadPresetCategory();
 
             });
 

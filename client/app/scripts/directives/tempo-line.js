@@ -24,15 +24,16 @@ angular.module('conceptvectorApp')
 
                 scope.$watch('data', function(newVals, oldVals) {
 
-                    if (newVals.length > 0 && newVals.length !== oldVals.length) {
+                    // if (newVals.length > 0 && newVals.length !== oldVals.length) {
 
-                        return scope.renderDataChange(scope.data);
+                    if (newVals.length > 0) {
 
-                    } else {
+                        if (newVals.length !== oldVals.length || Object.keys(oldVals[0]).length !== Object.keys(newVals[0]).length) {
+                            return scope.renderDataChange(scope.data);
 
-                        return
-                    }
+                        }
 
+                    } 
 
                 }, true);
 
@@ -119,12 +120,16 @@ angular.module('conceptvectorApp')
                         return;
                     }
 
-                    width = d3.select(element[0]).node().parentNode.parentNode.offsetWidth-50;
+                    if (scope.dim !== undefined && scope.dim !== null && !(scope.dim in data[0])) {
+                        return;
+                    }
+
+                    width = d3.select(element[0]).node().parentNode.parentNode.offsetWidth - 50;
                     height = width * 0.7;
 
                     data.forEach(function(d, i) {
 
-                        d.date = new Date(d.ApproveDateConverted * 1000);
+                        d.date = d.ApproveDateConverted;
 
 
                     });
@@ -214,7 +219,7 @@ function barChart() {
             height = y.range()[0];
 
         var maxValue = d3.max(group.all(), function(d) {
-        	return d.value.avg;
+            return d.value.avg;
         });
 
         y.domain([0, maxValue]);

@@ -422,7 +422,6 @@ class ArticleUpdate(Resource):
 
 class ConceptScore(Resource):
 	def get(self):
-		ipdb.set_trace()
 
 		parser = reqparse.RequestParser()
 		parser.add_argument('articleID', type=int, help="articleID")

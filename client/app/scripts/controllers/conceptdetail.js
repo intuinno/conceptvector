@@ -31,20 +31,20 @@ angular.module('conceptvectorApp')
 
         $scope.isOwner = function() {
 
-        	if (AuthService.isLoggedIn()) {
+            if (AuthService.isLoggedIn()) {
 
-        		if ("concept" in $scope && AuthService.getUserId() === $scope.concept.creator_id) {
-        			return true;
-        		}
-        	}
+                if ("concept" in $scope && AuthService.getUserId() === $scope.concept.creator_id) {
+                    return true;
+                }
+            }
 
-        	return false;
+            return false;
 
         };
 
         $scope.saveConcept = function() {
 
-            var newConcept =  {
+            var newConcept = {
                 "name": $scope.concept_name,
                 "concept_type": $scope.concept_type,
                 "input_terms": {
@@ -60,11 +60,15 @@ angular.module('conceptvectorApp')
                     console.log(data);
 
                     $scope.concepts = data;
+                    $scope.fileSuccess = true;
+                    $scope.fileError = false;
                     // $scope.$apply();
                 })
                 // handle error
                 .error(function(data) {
                     console.log(data);
+                    $scope.fileError = true;
+                    $scope.fileSuccess = false;
                 });
 
 

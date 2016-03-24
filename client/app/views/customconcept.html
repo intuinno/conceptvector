@@ -1,13 +1,16 @@
 <div class="container">
-<uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest.  Please login and copy this concept to create a clone and edit.</uib-alert>
+    <uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest. Please login and copy this concept to create a clone and edit.</uib-alert>
+    <uib-alert type="danger" ng-show="fileError">Duplicate name! The concept name is taken. Please use other concept name. </uib-alert>
+    <uib-alert type="success" ng-show="fileSuccess">Concept is saved successfully </uib-alert>
     <div class="row">
         <div class="col-md-12">
             <!-- <h1>Concept Designer</h1> -->
-
             <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
-            <a href="/#/concepts" class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
+            <a class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
             <h3> Concept Name: {{concept_name}} </h3>
             <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
+            <h3> Description: {{concept_help}} </h3>
+            <input class="form-control" type="text" ng-model="concept_help" placeholder="Please enter description for this concept">
             <h3>Concept Type: Unipolar vs Bipolar </h3>
             <p>
                 In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em> or <em>Democratic vs Republican</em> can be an bipolar type.

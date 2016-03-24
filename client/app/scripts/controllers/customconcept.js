@@ -14,6 +14,7 @@ angular.module('conceptvectorApp')
         $scope.negativeTags = [];
         $scope.positiveRecommendation = [];
         $scope.negativeRecommendation = [];
+        $scope.concept_help = '';
 
         $scope.isOwner = function() {
             return true;
@@ -23,6 +24,7 @@ angular.module('conceptvectorApp')
 
             var newConcept =  {
                 "name": $scope.concept_name,
+                "helpt_text":$scope.concept_help,
                 "concept_type": $scope.concept_type,
                 "input_terms": {
                     "positive": $scope.positiveTags,
@@ -38,11 +40,15 @@ angular.module('conceptvectorApp')
                     console.log(data);
 
                     $scope.concepts = data;
+                    $scope.fileSuccess = true;
+                    $scope.fileError = false;
                     // $scope.$apply();
                 })
                 // handle error
                 .error(function(data) {
                     console.log(data);
+                    $scope.fileError = true;
+                    $scope.fileSuccess = false;
                 });
 
 

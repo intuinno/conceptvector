@@ -21,21 +21,20 @@
                     <br>
                     <div class="overviewButton btn-group">
                         <label class="btn btn-default" ng-model="overview" uib-btn-radio='"gatherplot"'> CommentPlot </label>
-                        <label class="btn btn-default" ng-model="overview" uib-btn-radio='"map"'> Map </label>
                         <label class="btn btn-default" ng-model="overview" uib-btn-radio='"temporal"'> Temporal </label>
                         <!-- <label class="btn btn-primary" ng-model="baseModel" btn-radio='"Thread"'> Thread </label> -->
                     </div>
                     <br>
-                    <div ng-show="overview=='temporal'">
+                    <div ng-show="overview=='temporal'" cg-busy="loadingPromise">
                         <div tempo-line class="overview" data="nomaData" dim="tempoDim"></div>
-                        <!--  <div class="chart-simple-interface">
+                        <div class="chart-simple-interface">
                             <h5>{{tempoDimExplanation.display_text}}
                 <small> {{tempoDimExplanation.help_text}}</small>
             </h5>
-                            <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.display_text for f in criterias">
-                                <option value="">Number of Comment</option>
+                            <select class="btn btn-default dropdown-toggle" ng-model="tempoDim" ng-options="f.name as f.name for f in criterias" ng-change="getScoresByConceptName(tempoDim)">
+                             <option value="">Number of Comment</option>
                             </select>
-                        </div> -->
+                        </div>
                     </div>
                     <!-- <div ng-show="overview=='map'">
                         <div class="gathermap" data="nomaData"> </div>
@@ -80,19 +79,23 @@
 
             <br>
 
-            <div>
-                Presets for Ranking:                <a class="btn btn-link "  href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
+            <h4><!-- 
+            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ng-change="getScores(concept)"></select>     -->
+
+            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="currentCategory" ng-options="f.name for f in presetCategory" ng-change="changeCategory(currentCategory)"></select>    
+
+           
+             <div class="btn-group">
+        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
+        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>
+    </div>
+     <a class="btn btn-link "  href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
                     Edit <i class="fa fa-cog"></i>
                 </a>
                 <a class="btn btn-link " ng-model="currentCategory" ng-click="saveCurrentSetting()"> Add <i class="fa fa-plus"></i></a>
-<br>
-                <select class="btn btn-default dropdown-toggle" ng-model="currentCategory" ng-options="f.name for f in presetCategory">
-                </select>
 
-            </div>
-                            
-
-
+     </h4>
+  
 
 
             <br>
@@ -195,13 +198,7 @@ This bar shows the weights for this ranking.
             </div>
             <br>
 
-            <h4>
-            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ng-change="getScores(concept)"></select>    
-             <div class="btn-group">
-        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
-        <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>
-    </div>
-     </h4>
+
 
             <input type="text" ng-model='searchText' class="form-control" placeholder="Search for...">
 
@@ -218,7 +215,9 @@ This bar shows the weights for this ranking.
                             </dt>
                             <dd>
                                 <div ng-bind-html="comment.commentBody"></div>
+                                <div ng-show="comment.score">
                                 <br> score = {{comment.score}}
+                                </div>
                                 <br> &nbsp;
                             </dd>
 
@@ -247,9 +246,11 @@ This bar shows the weights for this ranking.
                                 {{comment.display_name}}
                                 <br>
                                 <div ng-bind-html="comment.commentBody"></div>
+                                <div ng-show="comment.score">
                                 <br> score = {{comment.score}}
                                 <br> brush = {{comment.selected}}
                                 <br> &nbsp;
+                                </div>
                             </dd>
 
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>

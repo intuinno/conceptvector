@@ -57,7 +57,8 @@ class Concepts(db.Model, CRUD):
 	__tablename__ = 'concepts'
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	name = db.Column(db.String(255), nullable=False)
+	name = db.Column(db.String(255), nullable=False, unique=True)
+	help_text = db.Column(db.String(255))
 	created_on = db.Column(db.DateTime, nullable=False)
 	edited_on = db.Column(db.DateTime, nullable=False)
 	creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -92,6 +93,7 @@ class ConceptsSchema(Schema):
 	concept_type = fields.Str()
 	input_terms = fields.Raw()
 	creator_name = fields.Str()
+	help_text = fields.Str()
 	
 	#self links
 	def get_top_level_links(self, data, many):
