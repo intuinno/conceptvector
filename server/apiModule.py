@@ -56,12 +56,12 @@ class RecommendWordsClusterKDE(Resource):
 				positive_terms = []
 			else:
 				positive_terms = [w.encode('UTF-8') for w in positive_terms]
-			
+
 			if negative_terms == None:
 				negative_terms = []
 			else:
 				negative_terms = [w.encode('UTF-8') for w in negative_terms]
-			
+
 
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
@@ -120,12 +120,12 @@ class RecommendWordsClusterMinMax(Resource):
 				positive_terms = []
 			else:
 				positive_terms = [w.encode('UTF-8') for w in positive_terms]
-			
+
 			if negative_terms == None:
 				negative_terms = []
 			else:
 				negative_terms = [w.encode('UTF-8') for w in negative_terms]
-			
+
 
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
@@ -134,7 +134,7 @@ class RecommendWordsClusterMinMax(Resource):
 			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
 											neg_words=negative_terms, irr_words=[])
 			# Jurim : instead of kde model, we use inner product for recommendation
-			
+
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
 
@@ -186,12 +186,12 @@ class RecommendWordsClusterDot(Resource):
 				positive_terms = []
 			else:
 				positive_terms = [w.encode('UTF-8') for w in positive_terms]
-			
+
 			if negative_terms == None:
 				negative_terms = []
 			else:
 				negative_terms = [w.encode('UTF-8') for w in negative_terms]
-			
+
 
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
@@ -426,13 +426,13 @@ class ConceptScore(Resource):
 		parser = reqparse.RequestParser()
 		parser.add_argument('articleID', type=int, help="articleID")
 		parser.add_argument('conceptID', type=int, help='conceptID')
-		
+
 		args = parser.parse_args()
 		articleID = args['articleID']
 		conceptID = args['conceptID']
 		try:
 			article_query = Article.query.get_or_404(articleID)
-			comments = article_query.comments 
+			comments = article_query.comments
 			concept_query = Concepts.query.get_or_404(conceptID)
 			commentsScore = self.getScore(concept_query, comments)
 			return jsonify({'scores':commentsScore})
@@ -451,29 +451,17 @@ class ConceptScore(Resource):
 			positive_terms = []
 		else:
 			positive_terms = [w['text'] for w in positive_terms_concept]
-		
+
 		if negative_terms_concept == None:
 			negative_terms = []
 		else:
 			negative_terms = [w['text'] for w in negative_terms_concept]
-	
+
 		kde_model.learn(h_sq=0.2, pos_words=positive_terms, neg_words=negative_terms)
-		
 		scores = {}
-
 		for comment in comments:
-			score_pairs = [kde_model.get_conditional(word.lower()) for word in comment.commentBody]
-			pos_score = 0
-			neg_score = 0
+			scores[comment.commentID] = kde_model.get_comment_score(comment.commentBody)
 
-			for pair in score_pairs:
-				pos_score += pair[0]
-				neg_score += pair[1]
-			
-
-			pos_score = pos_score / len(comment.commentBody)
-			neg_score = neg_score / len(comment.commentBody)
-			scores[comment.commentID] = pos_score - neg_score
 		return scores
 
 api.add_resource(Register, '/api/register')
@@ -489,4 +477,3 @@ api.add_resource(RecommendWordsClusterKDE, '/api/RecommendWordsClusterKDE')
 api.add_resource(RecommendWordsClusterDot, '/api/RecommendWordsClusterDot')
 api.add_resource(RecommendWordsClusterMinMax, '/api/RecommendWordsClusterMinMax')
 api.add_resource(ConceptScore, '/api/ConceptScores')
-
