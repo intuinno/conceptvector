@@ -133,20 +133,6 @@ angular.module('conceptvectorApp')
 
         $scope.overview = "temporal";
 
-        var computeScoreComment = function(criteria, comment) {
-
-            var score = criteria.weights.AR * comment.ArticleRelevance + criteria.weights.CR * comment.ConversationalRelevance + criteria.weights.personal * comment.PersonalXP + criteria.weights.readability * comment.Readability + criteria.weights.brevity * comment.Brevity + criteria.weights.recommend * comment.RecommendationScore;
-
-            return score;
-        };
-
-        var computeScoreUser = function(criteria, comment) {
-
-            var score = criteria.weights.userActivity * comment.AVGcommentspermonth + criteria.weights.userBrevity * comment.AVGBrevity + criteria.weights.userPicks * comment.AVGPicks + criteria.weights.userReadability * comment.AVGReadability + criteria.weights.userRecommend * comment.AVGRecommendationScore + criteria.weights.userPersonal * comment.AVGPersonalXP;
-
-            return score;
-        };
-
         var computeScore = function(currentCategory, comment) {
 
             if (currentCategory === undefined) {
@@ -156,6 +142,10 @@ angular.module('conceptvectorApp')
             var criterias = d3.keys(currentCategory.weights);
 
             var score = d3.sum(criterias, function(criteria) {
+
+                if (comment[criteria] === undefined) {
+                    return 0;
+                } 
 
                 return comment[criteria] * currentCategory.weights[criteria];
 

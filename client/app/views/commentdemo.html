@@ -17,7 +17,6 @@
             <p>{{article.byline}}</p>
             <p>{{article.section}}, {{article.type}}</p>
             <p> </p>
-
             <br>
             <div class="text-center">
                 <div class="overviewButton btn-group">
@@ -38,9 +37,6 @@
                     </select>
                 </div>
             </div>
-            <!-- <div ng-show="overview=='map'">
-                        <div class="gathermap" data="nomaData"> </div>
-                    </div> -->
             <div ng-show="overview=='gatherplot'" cg-busy="loadingPromise">
                 <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
                 </div>
@@ -68,22 +64,14 @@
 
                     </br>
                     </br>
+                    </h5>
+                </div>
             </div>
+            <br/>
         </div>
-
-
-    <br/>
-
-</div>
-
-
-<div class="col-sm-6">
-
+        <div class="col-sm-6">
             <br>
-
-            <h4><!-- 
-            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="concept" ng-options="f.name for f in criterias" ng-change="getScores(concept)"></select>     -->
-
+            <h4>
             Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="currentCategory" ng-options="f.name for f in presetCategory" ng-change="changeCategory(currentCategory)"></select>    
 
            
@@ -97,21 +85,11 @@
                 <a class="btn btn-link " ng-model="currentCategory" ng-click="saveCurrentSetting()"> Add <i class="fa fa-plus"></i></a>
 
      </h4>
-  
-
-
+            <br> This bar shows the weights for this ranking.
             <br>
-
-This bar shows the weights for this ranking.
-            <br>
-
             <div class="criteriaBarContainer">
-
- <!--                <div class="criteriaBar" stacked-bar help="criterias" data="currentCategory"></div> -->
-
-
+                <div class="criteriaBar" stacked-bar help="criterias" data="currentCategory"></div>
             </div>
-
             <script type="text/ng-template" id="settingNameModal.html">
                 <div class="modal-header">
                     <h3 class="modal-title">Please enter the name for new setting</h3>
@@ -125,37 +103,27 @@ This bar shows the weights for this ranking.
                     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
                 </div>
             </script>
-
-
             <script type="text/ng-template" id="helpCriteriaModal.html">
                 <div class="modal-header">
                     <h3 class="modal-title">Help for Criteria</h3>
                 </div>
                 <div class="modal-body">
-
                     <dl>
-
                         <dt ng-repeat-start="criteria in criterias">
                             <br> {{criteria.name}}
-
                         </dt>
-
                         <dd ng-repeat-end>
-
                             {{criteria.help_text}}
                         </dd>
-
-
                     </dl>
-
-                    Additional details on some scores are available here: <br/>
+                    Additional details on some scores are available here:
+                    <br/>
                     <a href="https://github.com/comp-journalism/commentIQ">https://github.com/comp-journalism/commentIQ</a>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" ng-click="ok()">OK</button>
                 </div>
             </script>
-
             <script type="text/ng-template" id="pickReason.html">
                 <div class="modal-header">
                     <h3 class="modal-title">Please select all that apply to this comment.</h3>
@@ -166,9 +134,9 @@ This bar shows the weights for this ranking.
                             <input type="checkbox" ng-model="result[reason]"> {{reason}}
                             <br/>
                         </div>
-
                         <div>
-                            <input type="checkbox" ng-model="result.isThereAnyOtherReason"> <input type="text" ng-model="result.otherReason" select-on-click placeholder="Type other reason...">
+                            <input type="checkbox" ng-model="result.isThereAnyOtherReason">
+                            <input type="text" ng-model="result.otherReason" select-on-click placeholder="Type other reason...">
                             <br/>
                         </div>
                     </form>
@@ -177,52 +145,48 @@ This bar shows the weights for this ranking.
                     <button class="btn btn-primary" ng-click="ok()">OK</button>
                 </div>
             </script>
-
             <div uib-collapse="isSettingCollapsed">
                 <div class="well">
                     <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
-
                     <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
-
                     <br>
-
-                    <div ng-repeat="scoreModel in scoreModels">
+                    <div>
                         <h4> Criteria based on {{scoreModel}} score</h4>
                         <ul>
-                            <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
-                                <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
-
+                            <li ng-repeat="criteria in criterias">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="criteria.checked" ng-change="getScores(criteria)">
+                                        <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.name}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
                                 <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
+                                    </label>
+                                </div>
+                                
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <br>
-
-
-
             <input type="text" ng-model='searchText' class="form-control" placeholder="Search for...">
-
             <uib-tabset>
                 <uib-tab ng-repeat='tab in tabArray' active=tab.active>
-
                     <uib-tab-heading>
                         <span>{{tab.status}}</span> ({{filteredComment.length}})
                     </uib-tab-heading>
                     <div class="commentList" cg-busy="loadingPromise">
                         <dl>
                             <dt dir-paginate-start='comment in filteredComment=(nomaData |filter: {selected:"true"} | filter:{status: tab.status } |orderBy:"score":rankOrder | filter: searchText) | itemsPerPage: 5' pagination-id="tab.status">
-                               {{comment.commentTitle}} <small>{{comment.userDisplayName}}   </small> <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
+                                {{comment.commentTitle}} <small>{{comment.userDisplayName}}   </small>
+                                <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
                             </dt>
                             <dd>
                                 <div ng-bind-html="comment.commentBody"></div>
                                 <div ng-show="comment.score">
-                                <br> score = {{comment.score}}
+                                    <br> score = {{comment.score}}
                                 </div>
                                 <br> &nbsp;
                             </dd>
-
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Reject</a>
                             <a href="" class="btn btn-link btn-default" ng-click="pickReason(comment)" ng-hide="status=='Picked'">Pick</a>
@@ -232,34 +196,25 @@ This bar shows the weights for this ranking.
                     </div>
                     <dir-pagination-controls pagination-id='tab.status'></dir-pagination-controls>
                 </uib-tab>
-
-
                 <uib-tab heading='All'>
                     <div class="commentList">
                         <dl>
                             <dt dir-paginate-start='comment in nomaData |orderBy:"score":true| itemsPerPage: 5' pagination-id="All">
                                 {{comment.DisplayName}}
                             </dt>
-
-
-
                             <dd>
-
                                 {{comment.display_name}}
                                 <br>
                                 <div ng-bind-html="comment.commentBody"></div>
                                 <div ng-show="comment.score">
-                                <br> score = {{comment.score}}
-                                <br> brush = {{comment.selected}}
-                                <br> &nbsp;
+                                    <br> score = {{comment.score}}
+                                    <br> brush = {{comment.selected}}
+                                    <br> &nbsp;
                                 </div>
                             </dd>
-
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Reject</a>
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Picked'" ng-hide="status=='Picked'">Pick</a>
-
-
                             <hr>
                             <br dir-paginate-end>
                         </dl>
@@ -267,8 +222,6 @@ This bar shows the weights for this ranking.
                     <dir-pagination-controls pagination-id='All'></dir-pagination-controls>
                 </uib-tab>
             </uib-tabset>
-
-
         </div>
     </div>
 </div>
