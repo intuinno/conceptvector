@@ -1,13 +1,13 @@
-<ol class="breadcrumb">
-    <li><a href="#">Home</a>
-    </li>
-    <li><a href="#/articles">Articles</a>
-    </li>
-    <li class="active">CommentIQ</li>
-</ol>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a>
+                </li>
+                <li><a href="#/articles">Articles</a>
+                </li>
+                <li class="active">CommentIQ</li>
+            </ol>
             <h3> 
           {{article.title}} <small><a href="{{article.url}}" target="blank"><i class="fa fa-external-link"></i></a></small>
           </h3>
@@ -158,12 +158,10 @@
                                     <label>
                                         <input type="checkbox" ng-model="criteria.checked" ng-change="checkConcepts(criteria)">
                                         <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.name}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
-                                
-                               <!--  <rzslider rz-slider-model="currentCategory.weights[criteria.name]" rz-slider-options="sliderOptions"></rzslider> -->
+                                        <!--  <rzslider rz-slider-model="currentCategory.weights[criteria.name]" rz-slider-options="sliderOptions"></rzslider> -->
                                     </label>
                                     <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="2" step="0.1" required>
                                 </div>
-                                
                             </li>
                         </ul>
                     </div>

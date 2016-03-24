@@ -50,8 +50,12 @@ angular.module('conceptvectorApp')
                 return d.name === name;
             });
 
+            if (concept.length === 1) {
+                $scope.getScores(concept[0]);
+            } else {
+                console.log("Error: Concept Length does not match");
+            }
             
-
         };
 
         $scope.getScores = function(concept) {
