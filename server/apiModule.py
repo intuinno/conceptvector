@@ -456,31 +456,40 @@ class ConceptScore(Resource):
 
 	def getScore(self, concept, comments):
 		# ipdb.set_trace()
+		try:
+			positive_terms_concept = concept.input_terms['positive']
+			negative_terms_concept = concept.input_terms['negative']
 
-		positive_terms_concept = concept.input_terms['positive']
-		negative_terms_concept = concept.input_terms['negative']
+			if 'irrelevant' in concept.input_terms:
+				irrelevant_terms_concept = concept.input_terms['irrelevant']
+			else:
+				irrelevant_terms_concept = []
 
-		if positive_terms_concept == None:
-			positive_terms = []
-		else:
-			positive_terms = [w['text'] for w in positive_terms_concept]
+			if positive_terms_concept == None:
+				positive_terms = []
+			else:
+				positive_terms = [w['text'] for w in positive_terms_concept]
 
-		if negative_terms_concept == None:
-			negative_terms = []
-		else:
-			negative_terms = [w['text'] for w in negative_terms_concept]
+			if negative_terms_concept == None:
+				negative_terms = []
+			else:
+				negative_terms = [w['text'] for w in negative_terms_concept]
 
-		kde_model.learn(h_sq=default_kde_h_sq,
-		                pos_words=positive_terms,
-										neg_words=negative_terms)
-		scores = {}
-		for comment in comments:
-			try:
-				scores[comment.commentID] = \
-						kde_model.get_comment_score_from_text(commentBody)
-			except Exception as e:
-				ipdb.set_trace()
-				print e
+			if irrelevant_terms_concept == None:
+				irrelevant_terms = []
+			else:
+				irrelevant_terms = [w['text'] for w in irrelevant_terms_concept]
+
+			kde_model.learn(h_sq=default_kde_h_sq,
+			                pos_words=positive_terms,
+											neg_words=negative_terms, irr_words=irrelevant_terms)
+			scores = {}
+			for comment in comments:
+					scores[comment.commentID] = \
+							kde_model.get_comment_score_from_text(comment.commentBody)
+		except Exception as e:
+			ipdb.set_trace()
+			print e
 
 		return scores
 
