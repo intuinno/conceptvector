@@ -26,12 +26,12 @@ class KdeModel:
     self.pos_score = self._compute_unnormalized_density(pos_words)
     self.neg_score = self._compute_unnormalized_density(neg_words)
     self.irr_score = self._compute_unnormalized_density(irr_words)
-    self.irrrelevancy = self.irr_score / (self.pos_score + self.neg_score + self.irr_score)
+    self.irrelevancy = self.irr_score / (self.pos_score + self.neg_score + self.irr_score)
 
     # bipolar score is based on joint probability because some words can have
     # an extremly confident positive or negative conditionals because both
     # can be very small values.
-    self.bipolar_score = (self.pos_score - self.neg_score)/self.num_all_seeds * (1 - self.irrrelevancy)
+    self.bipolar_score = (self.pos_score - self.neg_score)/self.num_all_seeds * (1 - self.irrelevancy)
 
   def get_bipolar(self, word):
     index = self.embedding_model.find_word(word)
