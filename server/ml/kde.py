@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 class KdeModel:
   def __init__(self, embedding_model):
@@ -68,7 +69,11 @@ class KdeModel:
     candidates = [x for x in candidates if x not in self.neg_words_indicies]
     return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
-  def get_comment_score(self, words):
+  def get_comment_score_from_text(self, text):
+    sequence = re.sub('[^a-z]+', ' ', text.lower()).split()
+    return self.get_comment_score_from_word_sequence(sequence)
+
+  def get_comment_score_from_word_sequence(self, words):
     bipolar_scores = [self.get_bipolar(word.lower()) for word in words]
     bipolar_avg = sum(bipolar_scores)/len(bipolar_scores)
     return bipolar_avg

@@ -458,12 +458,14 @@ class ConceptScore(Resource):
 		else:
 			negative_terms = [w['text'] for w in negative_terms_concept]
 
-		kde_model.learn(h_sq=0.2, pos_words=positive_terms, neg_words=negative_terms)
+		kde_model.learn(h_sq=0.2,
+		                pos_words=positive_terms,
+										neg_words=negative_terms)
 		scores = {}
 		for comment in comments:
 			try:
-				processed_comment  = re.sub('[^a-zA-Z0-9 ]+',"",comment.commentBody.lower()).split()
-				scores[comment.commentID] = kde_model.get_comment_score(processed_comment)
+				scores[comment.commentID] = \
+						kde_model.get_comment_score_from_text(commentBody)
 			except Exception as e:
 				ipdb.set_trace()
 				print e

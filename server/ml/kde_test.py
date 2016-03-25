@@ -14,10 +14,12 @@ kde_model.learn(h_sq=0.2, pos_words=['immigration', 'citizenship', 'naturalizati
 # print kde_model.recommend_pos_words(how_many=10)
 # print kde_model.recommend_neg_words(how_many=10)
 
+print kde_model.get_comment_score_from_text('Immigration!Hello')
+
 comment_score_pairs = []
 for comment in comments:
-  import ipdb; ipdb.set_trace()
-  score = kde_model.get_comment_score(comment)
+  # import ipdb; ipdb.set_trace()
+  score = kde_model.get_comment_score_from_word_sequence(comment)
   comment_score_pairs.append((score, comment))
 
 sorted_list = sorted(comment_score_pairs, key=lambda x: x[0], reverse=True)
