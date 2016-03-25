@@ -10,7 +10,8 @@ comments = reader.read_comment_bodys(comment_file, 100000004235555)
 
 bandwith = 2
 # kde_model.learn(h_sq=bandwith, pos_words=['happy', 'excited'], neg_words=['sad'])
-kde_model.learn(h_sq=bandwith, pos_words=['immigration', 'citizenship', 'naturalization', 'asylum', 'nationality', 'deportation', 'visa', 'visas', 'extradition', 'custody', 'immigrants', 'undocumented', 'migrants'])
+kde_model.learn(h_sq=bandwith, pos_words=['immigration', 'citizenship', 'naturalization', 'asylum', 'nationality', 'deportation', 'visa', 'visas', 'extradition', 'custody', 'immigrants', 'undocumented', 'migrants'],
+irr_words=['freed'])
 # kde_model.learn(h_sq=bandwidth, pos_words=['oil', 'gas', 'crude', 'gasoline'])
 
 print 'pos words:', kde_model.recommend_pos_words(how_many=30)
