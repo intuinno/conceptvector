@@ -26,6 +26,7 @@ wordsFileName = './data/glove.6B.50d.txt' # for testing
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
+default_kde_h_sq = 2
 
 
 print 'I am ready'
@@ -68,8 +69,10 @@ class RecommendWordsClusterKDE(Resource):
 			# we do not need to worry about re-training the kde model
 			#
 			# Note: You can later put irr_words (see the function)
-			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
-											neg_words=negative_terms, irr_words=[])
+			kde_model.learn(h_sq=default_kde_h_sq,
+			                pos_words=positive_terms,
+											neg_words=negative_terms,
+											irr_words=[])
 
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)
@@ -132,8 +135,10 @@ class RecommendWordsClusterMinMax(Resource):
 			# we do not need to worry about re-training the kde model
 			#
 			# Note: You can later put irr_words (see the function)
-			kde_model.learn(h_sq=0.2, pos_words=positive_terms,
-											neg_words=negative_terms, irr_words=[])
+			kde_model.learn(h_sq=default_kde_h_sq,
+			                pos_words=positive_terms,
+											neg_words=negative_terms,
+											irr_words=[])
 			# Jurim : instead of kde model, we use inner product for recommendation
 
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
@@ -458,7 +463,7 @@ class ConceptScore(Resource):
 		else:
 			negative_terms = [w['text'] for w in negative_terms_concept]
 
-		kde_model.learn(h_sq=0.2,
+		kde_model.learn(h_sq=default_kde_h_sq,
 		                pos_words=positive_terms,
 										neg_words=negative_terms)
 		scores = {}

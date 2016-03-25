@@ -4,12 +4,12 @@ import re
 class KdeModel:
   def __init__(self, embedding_model):
     self.embedding_model = embedding_model
-    self.bandwidth_sq = 0.2
+    self.h_sq = 0.5
     self.pos_score = []
     self.neg_score = []
     self.irr_score = []
 
-  def learn(self, h_sq=0.2, pos_words=[], neg_words=[], irr_words=[]):
+  def learn(self, h_sq=0.5, pos_words=[], neg_words=[], irr_words=[]):
     self.h_sq = h_sq
     # filter out words that does not in the dictionary
     self.pos_words = [x for x in pos_words if self.embedding_model.has_word(x)]

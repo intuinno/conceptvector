@@ -8,11 +8,13 @@ embedding_model = embedding.EmbeddingModel(embedding_file, cache_capacity=2)
 kde_model = kde.KdeModel(embedding_model)
 comments = reader.read_comment_bodys(comment_file, 100000004235555)
 
-# kde_model.learn(h_sq=0.2, pos_words=['happy', 'excited'], neg_words=['sad'])
-kde_model.learn(h_sq=0.2, pos_words=['immigration', 'citizenship', 'naturalization', 'asylum', 'nationality', 'deportation', 'visa', 'visas', 'extradition', 'custody', 'immigrants', 'undocumented', 'migrants'])
+bandwith = 2
+# kde_model.learn(h_sq=bandwith, pos_words=['happy', 'excited'], neg_words=['sad'])
+kde_model.learn(h_sq=bandwith, pos_words=['immigration', 'citizenship', 'naturalization', 'asylum', 'nationality', 'deportation', 'visa', 'visas', 'extradition', 'custody', 'immigrants', 'undocumented', 'migrants'])
+# kde_model.learn(h_sq=bandwidth, pos_words=['oil', 'gas', 'crude', 'gasoline'])
 
-# print kde_model.recommend_pos_words(how_many=10)
-# print kde_model.recommend_neg_words(how_many=10)
+print 'pos words:', kde_model.recommend_pos_words(how_many=30)
+print 'neg words:', kde_model.recommend_neg_words(how_many=10)
 
 print kde_model.get_comment_score_from_text('Immigration!Hello')
 
@@ -24,9 +26,10 @@ for comment in comments:
 
 sorted_list = sorted(comment_score_pairs, key=lambda x: x[0], reverse=True)
 
-print '\npos list'
+print '\n*** pos list'
 for item in sorted_list[:15]:
   print item[0], ' '.join(item[1])
 
+print '\n*** neg list'
 for item in sorted_list[-5:]:
   print item[0], ' '.join(item[1])
