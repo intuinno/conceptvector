@@ -12,22 +12,33 @@ angular.module('conceptvectorApp')
 
         $scope.conceptId = $routeParams.conceptId;
 
-        $http.get(serverURL + '/concepts/' + $routeParams.conceptId).success(function(data) {
-            console.log(data);
-            $scope.concept = data;
-            $scope.concept_name = $scope.concept.name;
-            $scope.concept_type = $scope.concept.concept_type;
-            $scope.positiveTags = $scope.concept.input_terms.positive;
-            $scope.negativeTags = $scope.concept.input_terms.negative;
+        if ($scope.conceptId === 'new') {
 
-            $scope.tagChanged();
+            $scope.positiveTags = [];
+            $scope.negativeTags = [];
+            $scope.concept_help = '';
 
-        });
+        } else {
+
+            $http.get(serverURL + '/concepts/' + $routeParams.conceptId).success(function(data) {
+                console.log(data);
+                $scope.concept = data;
+                $scope.concept_name = $scope.concept.name;
+                $scope.concept_type = $scope.concept.concept_type;
+                $scope.positiveTags = $scope.concept.input_terms.positive;
+                $scope.negativeTags = $scope.concept.input_terms.negative;
+
+                $scope.tagChanged();
+
+            });
+
+        }
 
         $scope.isSettingCollapsed = true;
 
         $scope.positiveRecommendation = [];
         $scope.negativeRecommendation = [];
+        $scope.concept_help = '';
 
         $scope.isOwner = function() {
 
@@ -36,6 +47,12 @@ angular.module('conceptvectorApp')
                 if ("concept" in $scope && AuthService.getUserId() === $scope.concept.creator_id) {
                     return true;
                 }
+
+                if ($scope.conceptId === 'new') {
+
+                    return true;
+                }
+
             }
 
             return false;
@@ -46,6 +63,7 @@ angular.module('conceptvectorApp')
 
             var newConcept = {
                 "name": $scope.concept_name,
+                "help_text": $scope.concept_help,
                 "concept_type": $scope.concept_type,
                 "input_terms": {
                     "positive": $scope.positiveTags,
@@ -54,22 +72,44 @@ angular.module('conceptvectorApp')
 
             };
 
-            $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept)
-                // handle success
-                .success(function(data) {
-                    console.log(data);
+            if ($scope.conceptId === 'new') {
 
-                    $scope.concepts = data;
-                    $scope.fileSuccess = true;
-                    $scope.fileError = false;
-                    // $scope.$apply();
-                })
-                // handle error
-                .error(function(data) {
-                    console.log(data);
-                    $scope.fileError = true;
-                    $scope.fileSuccess = false;
-                });
+                $http.post(serverURL + '/concepts', newConcept)
+                    // handle success
+                    .success(function(data) {
+                        $scope.concept = data;
+                        
+                        $scope.fileSuccess = true;
+                        $scope.fileError = false;
+                        $scope.conceptId = data.id;
+                        // $scope.$apply();
+                    })
+                    // handle error
+                    .error(function(data) {
+                        console.log(data);
+                        $scope.fileError = true;
+                        $scope.fileSuccess = false;
+                    });
+
+            } else {
+
+                $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept)
+                    // handle success
+                    .success(function(data) {
+                        
+                        $scope.fileSuccess = true;
+                        $scope.fileError = false;
+                        // $scope.$apply();
+                    })
+                    // handle error
+                    .error(function(data) {
+                        console.log(data);
+                        $scope.fileError = true;
+                        $scope.fileSuccess = false;
+                    });
+
+            }
+
 
 
         };

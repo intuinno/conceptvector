@@ -56,21 +56,36 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 Click to add suggested words.
                 <table class="table table-condensed">
                     <tr ng-repeat="cluster in positiveRecommendation">
-                        <td> Group{{$index}}
+                        <td>
+                            <div class="btn-group" uib-dropdown>
+                                <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle>Group{{$index}}
+                                    <span class="caret"></span>
+                                </button>
+                                </button>
+                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                    <li role="menuitem"><a href="" ng-click="addPositiveCluster(cluster)">Add all</a></li>
+                                    <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
+                                </ul>
+                            </div>
                         </td>
                         <td ng-repeat-end>
-                            <a ng-repeat="word in cluster" class=" btn-link " href="" ng-click="addPositive(word)">
-                    {{word}}
-                </a>
-                            <td>
+                            <div ng-repeat="word in cluster" class="btn-group">
+                                <a class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
+                                    {{word}}
+                                </a>
+                                <a class="btn btn-default btn-xs btn-space" href="" ng-click="addIrrelevant(word)">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>
-            <div class="col-md-8" cg-busy="loadingPromise">
+            <div class="col-md-6" cg-busy="loadingPromise">
                 <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>
@@ -101,7 +116,7 @@
                             <a ng-repeat="word in cluster" class=" btn-link " href="" ng-click="addNegative(word)">
                     {{word}}
                 </a>
-                            <td>
+                        </td>
                     </tr>
                 </table>
             </div>
