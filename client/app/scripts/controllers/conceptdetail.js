@@ -16,6 +16,7 @@ angular.module('conceptvectorApp')
 
             $scope.positiveTags = [];
             $scope.negativeTags = [];
+            $scope.irrelevantTags = [];
             $scope.concept_help = '';
 
         } else {
@@ -28,6 +29,11 @@ angular.module('conceptvectorApp')
                 $scope.positiveTags = $scope.concept.input_terms.positive;
                 $scope.negativeTags = $scope.concept.input_terms.negative;
 
+                if ($scope.concept.input_terms.irrelevant === undefined) {
+                    $scope.irrelevantTags = [];
+                } else {
+                    $scope.irrelevantTags = $scope.concept.input_terms.irrelevant;
+                }
                 $scope.tagChanged();
 
             });
@@ -78,7 +84,7 @@ angular.module('conceptvectorApp')
                     // handle success
                     .success(function(data) {
                         $scope.concept = data;
-                        
+
                         $scope.fileSuccess = true;
                         $scope.fileError = false;
                         $scope.conceptId = data.id;
@@ -96,7 +102,7 @@ angular.module('conceptvectorApp')
                 $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept)
                     // handle success
                     .success(function(data) {
-                        
+
                         $scope.fileSuccess = true;
                         $scope.fileError = false;
                         // $scope.$apply();
@@ -131,9 +137,14 @@ angular.module('conceptvectorApp')
                 return d['text'];
             });
 
+            var irrelevantTags = $scope.irrelevantTags.map(function(d) {
+                return d['text'];
+            });
+
             $scope.loadingPromise = recommend.save({
                 'positiveWords': positiveTags,
-                'negativeWords': negativeTags
+                'negativeWords': negativeTags,
+                'irrelevantWords': irrelevantTags
             }, function(entry) {
                 // console.log(entry);
 
@@ -174,14 +185,13 @@ angular.module('conceptvectorApp')
                 var start = new Date().getTime();
                 console.log("Starting T-SNE calculation", start);
 
-                for (var k = 0; k < 500; k++) {
+                for (var k = 0; k < 1000; k++) {
                     tsne.step(); // every time you call this, solution gets better
                 }
                 var end = new Date().getTime();
                 console.log("T-SNE calculation ended ", end - start);
 
                 var Y = tsne.getSolution();
-
 
 
                 /* Random Data Generator (took from nvd3.org) */
@@ -219,7 +229,7 @@ angular.module('conceptvectorApp')
                 var start = new Date().getTime();
                 console.log("Starting T-SNE calculation", start);
 
-                for (var k = 0; k < 500; k++) {
+                for (var k = 0; k < 1000; k++) {
                     tsne.step(); // every time you call this, solution gets better
                 }
                 var end = new Date().getTime();
@@ -234,6 +244,51 @@ angular.module('conceptvectorApp')
             });
 
         };
+
+        $scope.addPositiveCluster = function(cluster) {
+
+            cluster.forEach(function(d) {
+
+                $scope.positiveTags.push({
+                    'text': d
+                });
+
+            });
+
+            $scope.tagChanged();
+        };
+
+        $scope.addNegativeCluster = function(cluster) {
+            cluster.forEach(function(d) {
+
+                $scope.negativeTags.push({
+                    'text': d
+                });
+
+            });
+
+            $scope.tagChanged();
+        };
+
+        $scope.addIrrelevantCluster = function(cluster) {
+            cluster.forEach(function(d) {
+
+                $scope.irrelevantTags.push({
+                    'text': d
+                });
+
+            });
+
+            $scope.tagChanged();
+
+        };
+
+        $scope.addIrrelevant = function(word) {
+            $scope.irrelevantTags.push({
+                'text': word
+            });
+            $scope.tagChanged();
+        }
 
         $scope.addPositive = function(word) {
 
@@ -524,29 +579,6 @@ angular.module('conceptvectorApp')
         $scope.data = [];
         $scope.negative_data = [];
         $scope.all_data = [];
-
-        // d3.text("data/glove.6B.300d.10k.txt", function(d) {
-
-        //     var coor_data = d3.csv.parseRows(d);
-
-        //     d3.text("data/glove.6B.300d.voc.txt", function(label) {
-
-        //         var data = label.trimRight().split('\n').map(function(a, i) {
-
-
-        //             return { word: a, cluster: 'stars', x: +coor_data[i][0], y: +coor_data[i][1], size: 0.1, shape: 'circle' };
-
-        //         });
-
-        //         $scope.all_data = d3.nest()
-        //             .key(function(d) {
-        //                 return d.cluster;
-        //             })
-        //             .entries(data);
-        //         // $scope.all_apiObj.api.refresh();
-
-        //     });
-        // });
 
         $scope.apiObj = {};
         $scope.negative_apiObj = {};

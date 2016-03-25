@@ -37,12 +37,6 @@ angular
         controllerAs: 'about',
         access: {restricted: false}
       })
-      .when('/customConcept', {
-        templateUrl: 'views/customconcept.html',
-        controller: 'CustomconceptCtrl',
-        controllerAs: 'customConcept',
-        access: {restricted: true}
-      })
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',

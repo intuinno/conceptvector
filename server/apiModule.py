@@ -48,11 +48,13 @@ class RecommendWordsClusterKDE(Resource):
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
+			parser.add_argument('irrelevantWords', type=unicode, action='append', help='Irrelevant Words')
 
 			args = parser.parse_args()
 
 			positive_terms = args['positiveWords']
 			negative_terms = args['negativeWords']
+			irrelevant_terms = args['irrelevantWords']
 
 			if positive_terms == None:
 				positive_terms = []
@@ -64,6 +66,11 @@ class RecommendWordsClusterKDE(Resource):
 			else:
 				negative_terms = [w.encode('UTF-8') for w in negative_terms]
 
+			if irrelevant_terms == None:
+				irrelevant_terms = []
+			else:
+				irrelevant_terms = [w.encode('UTF-8') for w in irrelevant_terms]
+
 
 			# Because pairwise distance computations are cached in the w2v_model,
 			# we do not need to worry about re-training the kde model
@@ -72,7 +79,7 @@ class RecommendWordsClusterKDE(Resource):
 			kde_model.learn(h_sq=default_kde_h_sq,
 			                pos_words=positive_terms,
 											neg_words=negative_terms,
-											irr_words=[])
+											irr_words=irrelevant_terms)
 
 			positive_recommend = kde_model.recommend_pos_words(how_many=50)
 			negative_recommend = kde_model.recommend_neg_words(how_many=50)

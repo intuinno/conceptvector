@@ -58,15 +58,15 @@ class KdeModel:
 
   def recommend_pos_words(self, how_many=100):
     top_indicies = np.argsort(-self.bipolar_score)  # reverse sort
-    candidates = top_indicies[:(how_many + len(self.pos_words))]
+    candidates = top_indicies[:(how_many + len(self.pos_words)) + len(self.irr_words)]
     # filter the self.pos_words from the recommendation
-    candidates = [x for x in candidates if x not in self.pos_words_indicies]
+    candidates = [x for x in candidates if x not in self.pos_words_indicies and x not in self.irr_words_indicies]
     return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
   def recommend_neg_words(self, how_many=100):
     top_indicies = np.argsort(self.bipolar_score)
-    candidates = top_indicies[:(how_many + len(self.neg_words))]
-    candidates = [x for x in candidates if x not in self.neg_words_indicies]
+    candidates = top_indicies[:(how_many + len(self.neg_words) + len(self.irr_words))]
+    candidates = [x for x in candidates if x not in self.neg_words_indicies and x not in self.irr_words_indicies]
     return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
   def get_comment_score_from_text(self, text):

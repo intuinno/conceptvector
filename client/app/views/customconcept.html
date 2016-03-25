@@ -73,13 +73,20 @@
                             </div>
                         </td>
                         <td ng-repeat-end>
-                            <div ng-repeat="word in cluster" class="btn-group">
-                                <a class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
+                            <div ng-repeat="word in cluster" class="btn-group" uib-dropdown>
+                                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
                                     {{word}}
-                                </a>
-                                <a class="btn btn-default btn-xs btn-space" href="" ng-click="addIrrelevant(word)">
-                                    <i class="fa fa-times"></i>
-                                </a>
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Split button!</span>
+                                </button>
+                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                    <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
+                                    <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
+                                    <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
+                                    
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -110,12 +117,34 @@
                 Click to add suggested words.
                 <table class="table table-condensed">
                     <tr ng-repeat="cluster in negativeRecommendation">
-                        <td> Group{{$index}}
+                       <td>
+                            <div class="btn-group" uib-dropdown>
+                                <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle>Group{{$index}}
+                                    <span class="caret"></span>
+                                </button>
+                                </button>
+                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                    <li role="menuitem"><a href="" ng-click="addNegativeCluster(cluster)">Add all</a></li>
+                                    <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
+                                </ul>
+                            </div>
                         </td>
                         <td ng-repeat-end>
-                            <a ng-repeat="word in cluster" class=" btn-link " href="" ng-click="addNegative(word)">
-                    {{word}}
-                </a>
+                            <div ng-repeat="word in cluster" class="btn-group" uib-dropdown>
+                                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addNegative(word)">
+                                    {{word}}
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Split button!</span>
+                                </button>
+                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                    <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
+                                    <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
+                                    <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
+                                    
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -125,19 +154,34 @@
             </div>
         </div>
     </div>
-    <!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Irrelevant Words Input  </h3>
+                <p>
+                    These words are irrelevant words.
+                </p>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-question"></i></span>
+                    <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>
+            </div>
+        </div>
+        <!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
         <div class="row">
             <div class="col-md-12">
                 <nvd3 options='all_options' data ='all_data' api='all_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>
     </div>    -->
-</div>
-<script type="text/ng-template" id="positive-input-template">
-    <div class="tag-template">
-        <div>
-            <span>{{$getDisplayText()}}</span>
-            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+    </div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+    <script type="text/ng-template" id="positive-input-template">
+        <div class="tag-template">
+            <div>
+                <span>{{$getDisplayText()}}</span>
+                <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+            </div>
         </div>
-    </div>
-</script>
+    </script>
