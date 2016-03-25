@@ -7,8 +7,8 @@ def read_comment_bodys(filename, asset_id, filter_f= None):
   pd_comments = pd_comments[pd_comments['assetID'] == asset_id]
   comments = []
   for item in pd_comments['commentBody']:
-    comment_tuple = re.sub('[^a-zA-Z0-9 ]+',
-        "",str(item).lower()).split()
+    comment_tuple = re.sub('[^a-zA-Z]+',
+                           ' ', str(item).lower()).split()
     if filter_f == None or filter_f(comment_tuple):
       comments.append(comment_tuple)
   return comments

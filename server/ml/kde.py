@@ -1,14 +1,15 @@
 import numpy as np
+import re
 
 class KdeModel:
   def __init__(self, embedding_model):
     self.embedding_model = embedding_model
-    self.bandwidth_sq = 0.2
+    self.h_sq = 0.5
     self.pos_score = []
     self.neg_score = []
     self.irr_score = []
 
-  def learn(self, h_sq=0.2, pos_words=[], neg_words=[], irr_words=[]):
+  def learn(self, h_sq=0.5, pos_words=[], neg_words=[], irr_words=[]):
     self.h_sq = h_sq
     # filter out words that does not in the dictionary
     self.pos_words = [x for x in pos_words if self.embedding_model.has_word(x)]
@@ -68,7 +69,11 @@ class KdeModel:
     candidates = [x for x in candidates if x not in self.neg_words_indicies]
     return [self.embedding_model.get_word(x) for x in candidates[:how_many]]
 
-  def get_comment_score(self, words):
+  def get_comment_score_from_text(self, text):
+    sequence = re.sub('[^a-z]+', ' ', text.lower()).split()
+    return self.get_comment_score_from_word_sequence(sequence)
+
+  def get_comment_score_from_word_sequence(self, words):
     bipolar_scores = [self.get_bipolar(word.lower()) for word in words]
     bipolar_avg = sum(bipolar_scores)/len(bipolar_scores)
     return bipolar_avg
