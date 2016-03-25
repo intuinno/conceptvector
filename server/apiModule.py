@@ -9,6 +9,7 @@ from ml import embedding
 from ml import kde
 from flask import request, jsonify, session
 import ipdb
+import re
 
 
 
@@ -460,7 +461,12 @@ class ConceptScore(Resource):
 		kde_model.learn(h_sq=0.2, pos_words=positive_terms, neg_words=negative_terms)
 		scores = {}
 		for comment in comments:
-			scores[comment.commentID] = kde_model.get_comment_score(comment.commentBody)
+			try:
+				processed_comment  = re.sub('[^a-zA-Z0-9 ]+',"",comment.commentBody.lower()).split()
+				scores[comment.commentID] = kde_model.get_comment_score(processed_comment)
+			except Exception as e:
+				ipdb.set_trace()
+				print e
 
 		return scores
 
