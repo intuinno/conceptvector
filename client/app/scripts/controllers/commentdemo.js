@@ -474,7 +474,7 @@ angular.module('conceptvectorApp')
 
                     $http.get(serverURL + '/concepts').success(function(data) {
 
-                        console.log(data);
+                        // console.log(data);
                         var conceptNames = data.map(function(d) {
                             return d.name;
                         });

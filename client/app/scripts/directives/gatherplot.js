@@ -645,9 +645,6 @@
 
                         var checkIfDimExists = function(data, config) {
 
-                            console.log(data);
-                            console.log(config);
-
                             if (config.xDim !== '' && data[0][config.xDim] === undefined ) {
                                 return false;
                             }
