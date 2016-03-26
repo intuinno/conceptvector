@@ -73,7 +73,9 @@ angular.module('conceptvectorApp')
                 "concept_type": $scope.concept_type,
                 "input_terms": {
                     "positive": $scope.positiveTags,
-                    "negative": $scope.negativeTags
+                    "negative": $scope.negativeTags,
+                    "irrelevant": $scope.irrelevantTags
+
                 }
 
             };

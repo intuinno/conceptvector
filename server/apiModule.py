@@ -380,14 +380,21 @@ class ConceptsUpdate(Resource):
 		raw_dict = request.get_json(force=True)
 
 		try:
+			if session.get('logged_in'):
+				userID = session['user']
 			schema.validate(raw_dict)
 			concept_dict = raw_dict
 
-			for key, value in concept_dict.items():
-				setattr(concept, key, value)
+			if userID == concept.creator_id:
+				for key, value in concept_dict.items():
+					setattr(concept, key, value)
+				concept.update()
+				return self.get(id)
+			else:
+				resp = jsonify({"error":"You are not owner of this concept"})
+				resp.status_code = 401
+				return resp
 
-			concept.update()
-			return self.get(id)
 
 		except ValidationError as err:
 			resp = jsonify({"error":err.messages})
@@ -447,8 +454,9 @@ class ConceptScore(Resource):
 			article_query = Article.query.get_or_404(articleID)
 			comments = article_query.comments
 			concept_query = Concepts.query.get_or_404(conceptID)
+			concept_info = schema.dump(concept_query).data
 			commentsScore, keywords = self.getScore(concept_query, comments)
-			return jsonify({'scores':commentsScore, 'keywords': keywords})
+			return jsonify({'scores':commentsScore, 'keywords': keywords, 'concept': concept_info})
 
 		except Exception as e:
 			ipdb.set_trace()
