@@ -61,13 +61,50 @@
                         <option value="">-- undefined --</option>
 
                     </select>
-
-                    </br>
-                    </br>
                     </h5>
                 </div>
             </div>
-            <br/>
+            <hr>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="isCollapsedConcept = !isCollapsedConcept">Toggle concept editor</button>
+                <div uib-collapse="isCollapsedConcept">
+                    <uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest. Please login and copy this concept to create a clone and edit.</uib-alert>
+                    <uib-alert type="danger" ng-show="fileError">Update Failure! Score is not updated! </uib-alert>
+                    <uib-alert type="success" ng-show="fileSuccess" close="fileSuccess=false">Update success! Score is calculated based on updated concept. </uib-alert>
+                    <div class="well well-lg">
+                        <h3> {{concept.name}} </h3>
+                        <div ng-if="concept.concept_type">
+                            <h4> Type: {{concept.concept_type}} </h4>
+                            <h5> Positive inputs </h5>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
+                                <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="false" min-length="1">
+                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                </tags-input>
+                            </div>
+                        </div>
+                        <div ng-if="concept.concept_type == 'bipolar'">
+                            <h5> Negative words</h5>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
+                                <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="false" min-length="1">
+                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                </tags-input>
+                            </div>
+                        </div>
+                        <div ng-if="concept.concept_type">
+                            <h5> Irrelevant words </h5>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-question"></i></span>
+                                <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="false" min-length="1">
+                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                </tags-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
         </div>
         <div class="col-sm-6">
             <br>
@@ -204,7 +241,6 @@
                                 {{comment.display_name}}
                                 <br>
                                 <div ng-bind-html-unsafe="comment.commentBody"></div>
-
                                 <div ng-show="comment.score">
                                     <br> score = {{comment.score}}
                                     <br> brush = {{comment.selected}}

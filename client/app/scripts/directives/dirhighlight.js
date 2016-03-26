@@ -21,7 +21,7 @@ angular.module('conceptvectorApp')
 
                     if (keywords) {
 
-                        var separators = [',', ' ', '\\\.', '!', '<.+>', '\\\?', ';', ':']
+                        var separators = [',', ' ', '\\\.', '!', '<.?>', '\\\?', ';', ':', '<br/>']
 
                         var inputWords = scope.input.split(new RegExp('(' + separators.join('|') + ')', 'g'));
 
@@ -31,7 +31,7 @@ angular.module('conceptvectorApp')
 
                         keywords.forEach(function(myKeyword) {
                             inputData.forEach(function(commentWord) {
-                                if (commentWord.original.toLowerCase() === myKeyword.word && commentWord.isUpdated === false) {
+                                if (commentWord.original.toLowerCase().indexOf(myKeyword.word) === 0 && commentWord.isUpdated === false) {
                                     if (myKeyword.key_type === 'positive') {
 
                                     	var myTooltip = "Positive\nScore: " + myKeyword.score;
