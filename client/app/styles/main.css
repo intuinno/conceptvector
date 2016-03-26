@@ -1,3 +1,12 @@
+.highlightedPositive {
+
+    background: yellow;
+}
+
+.highlightedNegative {
+    background: orange;
+}
+
 .btn-space {
     margin-right: 5px;
     margin-bottom: 5px;
@@ -199,7 +208,7 @@ ul[rn-carousel] {
     stroke-linejoin: round;
 }
 .commentList {
-    max-height: 500px;
+    max-height: 1000px;
     overflow: auto;
 }
 .commentList > dl > dd {
@@ -368,12 +377,12 @@ div.clusterControlBox {
     width: 200px;
     height: 28px;
 }
-.tooltip {
+/*.tooltip {
     position: absolute;
     width: 200px;
     height: 28px;
     /*pointer-events: none;*/
-}
+}*/
 .chart-instruction {
     display: inline-block;
 }

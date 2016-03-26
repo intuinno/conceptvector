@@ -1,5 +1,6 @@
 import numpy as np
 import re
+import ipdb
 
 class KdeModel:
   def __init__(self, embedding_model):
@@ -88,3 +89,23 @@ class KdeModel:
 
   def _unnormalized_gaussian(self, distance):
     return np.exp(- np.square(distance) / (2*self.h_sq))
+
+  def getKeywordsScore(self, words, concept_type, how_many=100):
+    keywords = {}
+    if concept_type == 'unipolar':
+        keywords['positiveWords'] = self.get_keywords(words,how_many, True)
+    elif concept_type == 'bipolar':
+        keywords['positiveWords'] = self.get_keywords(words,how_many, True)
+        keywords['negativeWords'] = self.get_keywords(words,how_many, False)
+    return keywords
+
+  def get_keywords(self, words, how_many=100, reverse=True):
+    # ipdb.set_trace()
+    words_indicies = [(x, self.get_bipolar(x)) for x in words]
+    words_indices_sorted = sorted(words_indicies, key= lambda x: x[1], reverse=reverse)
+    return [x for x in words_indices_sorted[:how_many]]
+
+  # def get_bottom_keywords(self, words, how_many=100,):
+  #   words_indicies = [(x, self.get_bipolar(x)) for x in words]
+  #   words_indices_sorted = sorted(words_indicies, key= lambda x: x[1])
+  #   return [x for x in words_indices_sorted[:how_many]]
