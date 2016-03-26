@@ -447,8 +447,8 @@ class ConceptScore(Resource):
 			article_query = Article.query.get_or_404(articleID)
 			comments = article_query.comments
 			concept_query = Concepts.query.get_or_404(conceptID)
-			commentsScore = self.getScore(concept_query, comments)
-			return jsonify({'scores':commentsScore})
+			commentsScore, keywords = self.getScore(concept_query, comments)
+			return jsonify({'scores':commentsScore, 'keywords': keywords})
 
 		except Exception as e:
 			ipdb.set_trace()
@@ -484,14 +484,20 @@ class ConceptScore(Resource):
 			                pos_words=positive_terms,
 											neg_words=negative_terms, irr_words=irrelevant_terms)
 			scores = {}
+			all_comment_words = []
 			for comment in comments:
 					scores[comment.commentID] = \
 							kde_model.get_comment_score_from_text(comment.commentBody)
+					words_in_a_comment = re.sub('[^a-z]+', ' ', comment.commentBody.lower()).split()
+					all_comment_words +=  [w for w in words_in_a_comment if w not in all_comment_words]
+
+			keywords = kde_model.getKeywordsScore(all_comment_words, concept.concept_type, 1000)
+
 		except Exception as e:
 			ipdb.set_trace()
 			print e
 
-		return scores
+		return scores, keywords
 
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')

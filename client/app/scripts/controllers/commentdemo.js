@@ -13,8 +13,8 @@ angular.module('conceptvectorApp')
         $scope.rankOrder = true;
 
         $scope.sliderOptions = {
-            floor:0,
-            ceil: 2, 
+            floor: 0,
+            ceil: 2,
             step: 0.1
         };
 
@@ -31,7 +31,7 @@ angular.module('conceptvectorApp')
                 return d.name === category.name;
             });
             if (concept.length === 1) {
-                concept[0].checked=true;
+                concept[0].checked = true;
             } else {
                 console.log("Error: Concept Length does not match");
             }
@@ -55,7 +55,7 @@ angular.module('conceptvectorApp')
             } else {
                 console.log("Error: Concept Length does not match");
             }
-            
+
         };
 
         $scope.getScores = function(concept) {
@@ -77,6 +77,30 @@ angular.module('conceptvectorApp')
                     d[concept.name] = data.scores[d.commentID];
                 });
 
+                var keywords = data.keywords;
+                var all_keywords;
+
+                if ("positiveWords" in keywords) {
+
+                    keywords.positiveWordsObj = keywords.positiveWords.map(function(d) {
+                        return { key_type: "positive", word: d[0], score: d[1] };
+                    });
+                    all_keywords = keywords.positiveWordsObj;
+                }
+                if ("negativeWords" in keywords) {
+
+                    keywords.negativeWordsObj = keywords.negativeWords.map(function(d) {
+                        return { key_type: "negative", word: d[0], score: d[1] };
+                    });
+
+                    all_keywords = keywords.positiveWordsObj.concat(keywords.negativeWordsObj);
+                }
+
+                all_keywords.sort(function(a, b) {
+                    return b.word.length - a.word.length;
+                });
+
+                $scope.keywords = all_keywords;
                 updateScore();
 
             });
@@ -166,7 +190,7 @@ angular.module('conceptvectorApp')
 
                 if (comment[criteria] === undefined) {
                     return 0;
-                } 
+                }
 
                 return comment[criteria] * currentCategory.weights[criteria];
 

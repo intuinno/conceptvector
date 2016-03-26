@@ -181,17 +181,15 @@
                                 <div class="commentHeader"> {{comment.userLocation}} , {{comment.ApproveDateConverted | date:'medium'}} </div>
                             </dt>
                             <dd>
-                                <div ng-bind-html="comment.commentBody"></div>
+                                <dirhighlight input="comment.commentBody" keywords="keywords"></dirhighlight>
                                 <div ng-show="comment.score">
                                     <br> score = {{comment.score}}
                                 </div>
-                                <br> &nbsp;
                             </dd>
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Accepted'" ng-hide="status=='Accepted'">Accept</a>
                             <a href="" class="btn btn-link btn-default" ng-click="comment.status='Rejected'" ng-hide="status=='Rejected'">Reject</a>
                             <a href="" class="btn btn-link btn-default" ng-click="pickReason(comment)" ng-hide="status=='Picked'">Pick</a>
-                            <hr>
-                            <br dir-paginate-end>
+                            <hr dir-paginate-end>
                         </dl>
                     </div>
                     <dir-pagination-controls pagination-id='tab.status'></dir-pagination-controls>
@@ -205,7 +203,8 @@
                             <dd>
                                 {{comment.display_name}}
                                 <br>
-                                <div ng-bind-html="comment.commentBody"></div>
+                                <div ng-bind-html-unsafe="comment.commentBody"></div>
+
                                 <div ng-show="comment.score">
                                     <br> score = {{comment.score}}
                                     <br> brush = {{comment.selected}}
