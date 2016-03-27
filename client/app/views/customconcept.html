@@ -85,7 +85,6 @@
                                     <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
                                     <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
                                     <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
-                                    
                                 </ul>
                             </div>
                         </td>
@@ -117,7 +116,7 @@
                 Click to add suggested words.
                 <table class="table table-condensed">
                     <tr ng-repeat="cluster in negativeRecommendation">
-                       <td>
+                        <td>
                             <div class="btn-group" uib-dropdown>
                                 <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle>Group{{$index}}
                                     <span class="caret"></span>
@@ -142,7 +141,6 @@
                                     <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
                                     <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
                                     <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
-                                    
                                 </ul>
                             </div>
                         </td>
@@ -157,15 +155,17 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Irrelevant Words Input  </h3>
-                <p>
-                    These words are irrelevant words.
-                </p>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-question"></i></span>
-                    <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
+                <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+                    <h3>Irrelevant Words Input  </h3>
+                    <p>
+                        These words are irrelevant words.
+                    </p>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-question"></i></span>
+                        <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a irrelevant words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+                            <auto-complete source="loadTags($query)"></auto-complete>
+                        </tags-input>
+                    </div>
                 </div>
             </div>
         </div>
