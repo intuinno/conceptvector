@@ -1,187 +1,188 @@
 <div class="container">
-    <uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest. Please login and copy this concept to create a clone and edit.</uib-alert>
-    <uib-alert type="danger" ng-show="fileError">Duplicate name! The concept name is taken. Please use other concept name. </uib-alert>
-    <uib-alert type="success" ng-show="fileSuccess">Concept is saved successfully </uib-alert>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- <h1>Concept Designer</h1> -->
-            <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
-            <a class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
-            <h3> Concept Name: {{concept_name}} </h3>
-            <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
-            <h3> Description: {{concept_help}} </h3>
-            <input class="form-control" type="text" ng-model="concept_help" placeholder="Please enter description for this concept">
-            <h3>Concept Type: Unipolar vs Bipolar </h3>
-            <p>
-                In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em> or <em>Democratic vs Republican</em> can be an bipolar type.
-            </p>
-            <div class="btn-group">
-                <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
-                <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
-            </div>
-            <a class="btn btn-link pull-right" href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
+  <uib-alert type="danger" ng-hide="isOwner()">You are viewing this concept as a guest. Please login and copy this concept to create a clone and edit.</uib-alert>
+  <uib-alert type="danger" ng-show="fileError">Duplicate name! The concept name is taken. Please use other concept name. </uib-alert>
+  <uib-alert type="success" ng-show="fileSuccess">Concept is saved successfully </uib-alert>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- <h1>Concept Designer</h1> -->
+      <a href="/#/concepts" ng-href="/#/concepts" class="btn btn-default pull-right"><i class="fa fa-reply"></i> Go Back </a>
+      <!-- <a  target="_self" ng-href="{{download_url}}" class="btn btn-default pull-right"><i class="fa fa-download"></i> Download as JSON </a> -->
+      <a class="btn btn-default pull-right" ng-click="saveConcept()" ng-disabled="!isOwner()"><i class="fa fa-save" ></i> Save </a>
+      <h3> Concept Name: {{concept_name}} </h3>
+      <input class="form-control" type="text" ng-model="concept_name" placeholder="Enter a name of concept here">
+      <h3> Description: {{concept_help}} </h3>
+      <input class="form-control" type="text" ng-model="concept_help" placeholder="Please enter description for this concept">
+      <h3>Concept Type: Unipolar vs Bipolar </h3>
+      <p>
+        In unipolar type, the dictionary will be created around single concepts. For example, <em>crude oil</em> or <em>car</em> can be an unipolar type. In bipolar type, the dictionary will be created between two concepts. For example, <em>happiness vs sadness</em>        or <em>Democratic vs Republican</em> can be an bipolar type.
+      </p>
+      <div class="btn-group">
+        <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'unipolar'">Unipolar</label>
+        <label class="btn btn-default" ng-model="concept_type" uib-btn-radio="'bipolar'">Bipolar</label>
+      </div>
+      <a class="btn btn-link pull-right" href="" ng-click="isSettingCollapsed=!isSettingCollapsed">
                     Advanced Settings <i class="fa fa-cog"></i>
                 </a>
-            <div uib-collapse="isSettingCollapsed">
-                <div class="well">
-                    <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
-                    <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
-                    <br> {{isSettingCollapsed}}
-                    <div ng-repeat="scoreModel in scoreModels">
-                        <h4> Criteria based on {{scoreModel}} score</h4>
-                        <ul>
-                            <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
-                                <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
-                                <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      <div uib-collapse="isSettingCollapsed">
+        <div class="well">
+          <a href="" class="btn btn-link btn-default pull-right" ng-click="isSettingCollapsed=true"><i class="fa fa-times"></i> Close</a>
+          <a href="" class="btn btn-link btn-default pull-right" ng-click="saveCurrentSetting()"><i class="fa fa-floppy-o"></i> Save current setting</a>
+          <br> {{isSettingCollapsed}}
+          <div ng-repeat="scoreModel in scoreModels">
+            <h4> Criteria based on {{scoreModel}} score</h4>
+            <ul>
+              <li ng-repeat="criteria in criterias | filter:{model:scoreModel}">
+                <span popover="{{criteria.help_text}}" popover-trigger="mouseenter">{{criteria.display_text}} <a href="" class="btn btn-link btn-default" ng-click="openHelpModalForCriteria()"><i class="fa fa-question-circle"></i> </a> </span> : {{currentCategory.weights[criteria.name]}}
+                <input type="range" ng-model='currentCategory.weights[criteria.name]' min="0" max="100" required>
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
-    <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Positive Words Input  </h3>
-                <p>
-                    Please type a few words for the concepts you are looking for.
-                </p>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
-                    <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
-                </div>
-            </div>
+  </div>
+  <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Positive Words Input  </h3>
+        <p>
+          Please type a few words for the concepts you are looking for.
+        </p>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
+          <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+            <auto-complete source="loadTags($query)"></auto-complete>
+          </tags-input>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                Click to add suggested words.
-                <table class="table table-condensed">
-                    <tr ng-repeat="cluster in positiveRecommendation">
-                        <td>
-                            <div class="btn-group" uib-dropdown>
-                                <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle>Group{{$index}}
-                                    <span class="caret"></span>
-                                </button>
-                                </button>
-                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                    <li role="menuitem"><a href="" ng-click="addPositiveCluster(cluster)">Add all</a></li>
-                                    <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td ng-repeat-end>
-                            <div ng-repeat="word in cluster" class="btn-group" uib-dropdown>
-                                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
-                                    {{word}}
-                                </button>
-                                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Split button!</span>
-                                </button>
-                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                    <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
-                                    <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
-                                    <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-6" cg-busy="loadingPromise">
-                <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
-            </div>
-        </div>
+      </div>
     </div>
-    <div ng-if="concept_type == 'bipolar' ">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Negative Words Input  </h3>
-                <p>
-                    Please type a few words that should be antonyms for the concepts you are looking for.
-                </p>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
-                    <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                Click to add suggested words.
-                <table class="table table-condensed">
-                    <tr ng-repeat="cluster in negativeRecommendation">
-                        <td>
-                            <div class="btn-group" uib-dropdown>
-                                <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle>Group{{$index}}
-                                    <span class="caret"></span>
-                                </button>
-                                </button>
-                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                    <li role="menuitem"><a href="" ng-click="addNegativeCluster(cluster)">Add all</a></li>
-                                    <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td ng-repeat-end>
-                            <div ng-repeat="word in cluster" class="btn-group" uib-dropdown>
-                                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addNegative(word)">
-                                    {{word}}
-                                </button>
-                                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Split button!</span>
-                                </button>
-                                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                    <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
-                                    <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
-                                    <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-8" cg-busy="loadingPromise">
-                <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
-            </div>
-        </div>
+    <div class="row">
+      <div class="col-md-6">
+        Click to add suggested words.
+        <table class="table table-condensed">
+          <tr ng-repeat="cluster in positiveRecommendation">
+            <td>
+              <div class="btn-group" uib-dropdown ng-mouseover="buttonHoverCluster(cluster)" ng-mouseleave="buttonMoveoutCluster(cluster)">
+                <button id="split-button" type="button" ng-class="['btn', 'btn-info','btn-group{{$index}}' ,  'btn-group', 'btn-xs']" uib-dropdown-toggle>Group {{$index}}
+                  <span class="caret"></span>
+                </button>
+                </button>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                  <li role="menuitem"><a href="" ng-click="addPositiveCluster(cluster)">Add all</a></li>
+                  <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
+                </ul>
+              </div>
+            </td>
+            <td ng-repeat-end ng-class="['btn-group{{$index}}']">
+              <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWord(word)" ng-mouseleave="buttonMoveoutWord(word)">
+                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
+                  {{word}}
+                </button>
+                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle ng-mouseover="buttonHoverWord(word)">
+                  <span class="caret"></span>
+                  <span class="sr-only">Split button!</span>
+                </button>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                  <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
+                  <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
+                  <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6" cg-busy="loadingPromise">
+        <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}' events="positiveChartEvents"> </nvd3>
+      </div>
     </div>
-    <div>
-        <div class="row">
-            <div class="col-md-12">
-                <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
-                    <h3>Irrelevant Words Input  </h3>
-                    <p>
-                        These words are irrelevant words.
-                    </p>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-question"></i></span>
-                        <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a irrelevant words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
-                            <auto-complete source="loadTags($query)"></auto-complete>
-                        </tags-input>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div ng-if="concept_type == 'bipolar' ">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Negative Words Input  </h3>
+        <p>
+          Please type a few words that should be antonyms for the concepts you are looking for.
+        </p>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
+          <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+            <auto-complete source="loadTags($query)"></auto-complete>
+          </tags-input>
         </div>
-        <!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        Click to add suggested words.
+        <table class="table table-condensed">
+          <tr ng-repeat="cluster in negativeRecommendation">
+            <td>
+              <div class="btn-group" uib-dropdown  ng-mouseover="buttonHoverClusterNegative(cluster)" ng-mouseleave="buttonMoveoutClusterNegative(cluster)">
+                <button id="split-button" type="button" class="btn btn-info btn-xs" uib-dropdown-toggle ng-class="['btn', 'btn-info','btn-group{{$index}}' ,  'btn-group', 'btn-xs']" >Group {{$index}}
+                  <span class="caret"></span>
+                </button>
+                </button>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                  <li role="menuitem"><a href="" ng-click="addNegativeCluster(cluster)">Add all</a></li>
+                  <li role="menuitem"><a href="" ng-click="addIrrelevantCluster(cluster)">Mark all as irrelevant</a></li>
+                </ul>
+              </div>
+            </td>
+            <td ng-repeat-end ng-class="['btn-group{{$index}}']">
+              <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWordNegative(word)" ng-mouseleave="buttonMoveoutWordNegative(word)">
+                <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addNegative(word)">
+                  {{word}}
+                </button>
+                <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
+                  <span class="caret"></span>
+                  <span class="sr-only">Split button!</span>
+                </button>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                  <li role="menuitem"><a href="" ng-click="addPositive(word)">Add to positive </a></li>
+                  <li role="menuitem"><a href="" ng-click="addNegative(word)">Add to negative</a></li>
+                  <li role="menuitem"><a href="" ng-click="addIrrelevant(word)">Add to irrelevant </a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6" cg-busy="loadingPromise">
+        <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}' events="negativeChartEvents"></nvd3>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+          <h3>Irrelevant Words Input  </h3>
+          <p>
+            These words are irrelevant words.
+          </p>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-question"></i></span>
+            <tags-input ng-model="irrelevantTags" class="tags" placeholder="Add a irrelevant words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
+              <auto-complete source="loadTags($query)"></auto-complete>
+            </tags-input>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--     <div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
         <div class="row">
             <div class="col-md-12">
                 <nvd3 options='all_options' data ='all_data' api='all_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}'></nvd3>
             </div>
         </div>
     </div>    -->
-    </div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
-    <script type="text/ng-template" id="positive-input-template">
-        <div class="tag-template">
-            <div>
-                <span>{{$getDisplayText()}}</span>
-                <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
-            </div>
-        </div>
-    </script>
+  </div ng-if="concept_type == 'unipolar' || concept_type == 'bipolar' ">
+  <script type="text/ng-template" id="positive-input-template">
+    <div class="tag-template">
+      <div>
+        <span>{{$getDisplayText()}}</span>
+        <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+      </div>
+    </div>
+  </script>

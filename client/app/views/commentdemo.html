@@ -8,7 +8,7 @@
                 </li>
                 <li class="active">CommentIQ</li>
             </ol>
-            <h3> 
+            <h3>
           {{article.title}} <small><a href="{{article.url}}" target="blank"><i class="fa fa-external-link"></i></a></small>
           </h3>
             <p>{{article.abstract}}"</p>
@@ -38,6 +38,30 @@
                 </div>
             </div>
             <div ng-show="overview=='gatherplot'" cg-busy="loadingPromise">
+              <div ng-class="{tryMe: isPlotSelectFocused}" focus-me="isPlotSelectFocused" popover="Try me!" popover-trigger="focus" popover-placement="right">
+                {{nomaConfig.isGather}}
+                            <div class="btn-group">
+
+                                <button type="button" class="btn btn-default active" ng-model="nomaConfig.isGather" uib-btn-radio="'scatter'">Scatter</button>
+
+                                <button type="button" class="btn btn-default" ng-model="nomaConfig.isGather" uib-btn-radio="'jitter'">Jitter</button>
+
+                                <button type="button" class="btn btn-default" ng-model="nomaConfig.isGather" uib-btn-radio="'gather'">Gather</button>
+
+                            </div>
+                        </div>
+
+                        <div class="btn-group" ng-show="isScatter">
+
+                                <button type="button" class="btn btn-default active" ng-model="nomaConfig.lens" uib-btn-radio="'noLens'">No Lens</button>
+
+                                <button type="button" class="btn btn-default" ng-model="nomaConfig.lens" uib-btn-radio="'rectLens'">Rect Lens</button>
+
+                                <button type="button" class="btn btn-default" ng-model="nomaConfig.lens" uib-btn-radio="'histLens'">Histogram Lens</button>
+
+                                <button type="button" class="btn btn-default" ng-model="nomaConfig.lens" uib-btn-radio="'pieLens'"> Pie Lens</button>
+
+                        </div>
                 <div gatherplot data="nomaData" config="nomaConfig" border="nomaBorder" round="nomaRound" shaperenderingmode="nomaShapeRendering" dimsum="dimsum" on-click="d3OnClick(item)" xdim="{{nomaConfig.xDim}}" ydim="{{nomaConfig.yDim}}" context="context" comment="isComment" criterias="criterias">
                 </div>
                 <h5>{{xAxisExplanation.display_text}}
@@ -62,6 +86,12 @@
 
                     </select>
                     </h5>
+
+                    <div ng-class="{tryMe: isRelativeSelectFocused}">
+    <h6>
+        <input type='checkbox' ng-model="nomaConfig.relativeMode" ng-trueValue="relative" ng-false-value="'absolute'">Check this to make it easy to compare groups of different sizes.</h6>
+
+</div>
                 </div>
             </div>
             <hr>
@@ -109,9 +139,9 @@
         <div class="col-sm-6">
             <br>
             <h4>
-            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="currentCategory" ng-options="f.name for f in presetCategory" ng-change="changeCategory(currentCategory)"></select>    
+            Rank comments by  <select class="btn btn-default dropdown-toggle" ng-model="currentCategory" ng-options="f.name for f in presetCategory" ng-change="changeCategory(currentCategory)"></select>
 
-           
+
              <div class="btn-group">
         <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="true" uncheckable><i class="fa fa-caret-down"></i></label>
         <label class="btn btn-default btn-xs" ng-model="rankOrder" uib-btn-radio="false" uncheckable><i class="fa fa-caret-up"></i></label>

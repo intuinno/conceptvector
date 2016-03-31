@@ -7,7 +7,7 @@ from marshmallow import ValidationError
 from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, CommentSchema
 from ml import embedding
 from ml import kde
-from flask import request, jsonify, session
+from flask import request, jsonify, session, Response
 import ipdb
 import re
 
@@ -507,6 +507,44 @@ class ConceptScore(Resource):
 
 		return scores, keywords
 
+class ConceptDownload(Resource):
+	def get(self,id):
+		ipdb.set_trace()
+		concept_query = Concepts.query.get_or_404(id)
+		result = schema.dump(concept_query).data
+		# import pdb;pdb.set_trace()
+
+		return Response(result, mimetype="application/json", headers={'Content-Disposition':'attachment;filename=concept.json'})
+
+class ConceptDelete(Resource):
+	def get(self,id):
+
+		concept = Concepts.query.get_or_404(id)
+		try:
+			if session.get('logged_in'):
+				userID = session['user']
+
+			if userID == concept.creator_id:
+				delete = concept.delete(concept)
+				concepts_query = Concepts.query.all()
+				results =  schema.dump(concepts_query, many=True).data
+				return results
+			else:
+				resp = jsonify({"error":"You are not owner of this concept"})
+				resp.status_code = 401
+				return resp
+
+		except ValidationError as err:
+			resp = jsonify({"error":err.messages})
+			resp.status_code = 401
+			return resp
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			resp = jsonify({"error": str(e)})
+			resp.status_code = 401
+			return resp
+
 api.add_resource(Register, '/api/register')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
@@ -520,3 +558,5 @@ api.add_resource(RecommendWordsClusterKDE, '/api/RecommendWordsClusterKDE')
 api.add_resource(RecommendWordsClusterDot, '/api/RecommendWordsClusterDot')
 api.add_resource(RecommendWordsClusterMinMax, '/api/RecommendWordsClusterMinMax')
 api.add_resource(ConceptScore, '/api/ConceptScores')
+api.add_resource(ConceptDownload, '/api/download_concepts/<int:id>')
+api.add_resource(ConceptDelete, '/api/concept_delete/<int:id>')

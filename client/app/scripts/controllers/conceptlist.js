@@ -61,7 +61,7 @@ angular.module('conceptvectorApp')
 
             modalInstance.result.then(function() {
 
-                $http.delete(serverURL + '/concepts/' + concept.id)
+                $http.get(serverURL + '/concept_delete/' + concept.id)
                     // handle success
                     .success(function(data) {
 
@@ -108,7 +108,7 @@ angular.module('conceptvectorApp')
                         // $scope.concepts = data.data;
                         // $scope.$apply();
                         loadConcepts();
-                        
+
                     })
                     // handle error
                     .error(function(data) {

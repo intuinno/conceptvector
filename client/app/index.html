@@ -2,140 +2,139 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
-    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
-    <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
-    <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/docs.min.css">
-    <!-- endbuild -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
+  <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
+  <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/docs.min.css">
+  <link rel="stylesheet" href="styles/nv.d3.css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 
 <body ng-app="conceptvectorApp">
-    <!--[if lte IE 8]>
+  <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <!-- Add your site or application content here -->
-    <div class="header" ng-controller="NavbarCtrl">
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#/">ConceptVector</a>
-                </div>
-                <div class="collapse navbar-collapse" id="js-navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
-                        <li ng-class="{ active: isActive('/concepts')}"><a ng-href="#/concepts">Concepts</a></li>
-                        <li ng-class="{ active: isActive('/articles')}"><a ng-href="#/articles">NY Times</a></li>
-                        <li ng-class="{ active: isActive('/about')}"><a ng-href="#/about">About</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a ng-href="#/register" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                        <li><a ng-href="#/login" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                        <li class="dropdown" ng-if="isLoggedIn()">
-                            <a class="dropdown-toggle" data-toggle="dropdown"> Hello, {{getUserName()}} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a ng-href="#">Acount</a></li>
-                                <li><a ng-click="logout()">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+  <!-- Add your site or application content here -->
+  <div class="header" ng-controller="NavbarCtrl">
+    <div class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#/">ConceptVector</a>
         </div>
-    </div>
-    <div ng-view=""></div>
-    <div class="footer">
-        <div class="container">
-            <p><span class="glyphicon glyphicon-heart"></span> from the Conceptvector Team</p>
+        <div class="collapse navbar-collapse" id="js-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
+            <li ng-class="{ active: isActive('/concepts')}"><a ng-href="#/concepts">Concepts</a></li>
+            <li ng-class="{ active: isActive('/articles')}"><a ng-href="#/articles">NY Times</a></li>
+            <li ng-class="{ active: isActive('/about')}"><a ng-href="#/about">About</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a ng-href="#/register" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a ng-href="#/login" ng-hide="isLoggedIn()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li class="dropdown" ng-if="isLoggedIn()">
+              <a class="dropdown-toggle" data-toggle="dropdown"> Hello, {{getUserName()}} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a ng-href="#">Acount</a></li>
+                <li><a ng-click="logout()">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
+  </div>
+  <div ng-view=""></div>
+  <div class="footer">
+    <div class="container">
+      <p><span class="glyphicon glyphicon-heart"></span> from the Conceptvector Team</p>
+    </div>
+  </div>
+  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+  <script>
     ! function(A, n, g, u, l, a, r) {
-        A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
-                (A[l].q = A[l].q || []).push(arguments)
-            }, A[l].l = +new Date, a = n.createElement(g),
-            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+      A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
+          (A[l].q = A[l].q || []).push(arguments)
+        }, A[l].l = +new Date, a = n.createElement(g),
+        r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
     }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-75668610-1', 'auto');
     ga('send', 'pageview');
-    </script>
-    <script>
-
-</script>
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
-    <script src="bower_components/crossfilter/crossfilter.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/nvd3/build/nv.d3.js"></script>
-    <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
-    <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
-    <script src="bower_components/ui-select/dist/select.js"></script>
-    <script src="bower_components/d3-tip/index.js"></script>
-    <script src="bower_components/topojson/topojson.js"></script>
-    <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/about.js"></script>
-    <script src="scripts/services/autocomplete.js"></script>
-    <script src="scripts/services/recommend.js"></script>
-    <script src="scripts/services/serverurl.js"></script>
-    <script src="scripts/lib/tsne.js"></script>
-    <script src="scripts/services/authservice.js"></script>
-    <script src="scripts/controllers/login.js"></script>
-    <script src="scripts/controllers/navbar.js"></script>
-    <script src="scripts/controllers/register.js"></script>
-    <script src="scripts/controllers/conceptlist.js"></script>
-    <script src="scripts/controllers/conceptdetail.js"></script>
-    <script src="scripts/controllers/deletemodal.js"></script>
-    <script src="scripts/controllers/commentdemo.js"></script>
-    <script src="scripts/directives/dd-text-collapse.js"></script>
-    <script src="scripts/directives/gatherplot.js"></script>
-    <script src="scripts/directives/gathermap.js"></script>
-    <script src="scripts/directives/stackedbar.js"></script>
-    <script src="scripts/directives/select-on-click.js"></script>
-    <script src="scripts/controllers/setting-name-modal.js"></script>
-    <script src="scripts/controllers/help-criteria-modal.js"></script>
-    <script src="scripts/controllers/pick-reason-modal.js"></script>
-    <script src="scripts/directives/tempo-line.js"></script>
-    <script src="scripts/controllers/articles.js"></script>
-    <script src="scripts/filters/highlight.js"></script>
-    <script src="scripts/directives/dirhighlight.js"></script>
-    <!-- endbuild -->
+  </script>
+  <script>
+  </script>
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+  <script src="bower_components/crossfilter/crossfilter.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
+  <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+  <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+  <script src="bower_components/ui-select/dist/select.js"></script>
+  <script src="bower_components/d3-tip/index.js"></script>
+  <script src="bower_components/topojson/topojson.js"></script>
+  <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <script src="scripts/controllers/about.js"></script>
+  <script src="scripts/services/autocomplete.js"></script>
+  <script src="scripts/services/recommend.js"></script>
+  <script src="scripts/services/serverurl.js"></script>
+  <script src="scripts/lib/tsne.js"></script>
+  <script src="scripts/services/authservice.js"></script>
+  <script src="scripts/controllers/login.js"></script>
+  <script src="scripts/controllers/navbar.js"></script>
+  <script src="scripts/controllers/register.js"></script>
+  <script src="scripts/controllers/conceptlist.js"></script>
+  <script src="scripts/controllers/conceptdetail.js"></script>
+  <script src="scripts/controllers/deletemodal.js"></script>
+  <script src="scripts/controllers/commentdemo.js"></script>
+  <script src="scripts/directives/dd-text-collapse.js"></script>
+  <script src="scripts/directives/gatherplot.js"></script>
+  <script src="scripts/directives/gathermap.js"></script>
+  <script src="scripts/directives/stackedbar.js"></script>
+  <script src="scripts/lib/nvd3/nv.d3.js"></script>
+  <script src="scripts/directives/select-on-click.js"></script>
+  <script src="scripts/controllers/setting-name-modal.js"></script>
+  <script src="scripts/controllers/help-criteria-modal.js"></script>
+  <script src="scripts/controllers/pick-reason-modal.js"></script>
+  <script src="scripts/directives/tempo-line.js"></script>
+  <script src="scripts/controllers/articles.js"></script>
+  <script src="scripts/filters/highlight.js"></script>
+  <script src="scripts/directives/dirhighlight.js"></script>
+  <!-- endbuild -->
 </body>
 
 </html>
