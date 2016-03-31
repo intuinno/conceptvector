@@ -136,6 +136,7 @@ angular.module('conceptvectorApp')
         return d['text'];
       });
 
+
       var negativeTags = $scope.negativeTags.map(function(d) {
         return d['text'];
       });
@@ -208,10 +209,15 @@ angular.module('conceptvectorApp')
           var data = [],
             shapes = ['circle', 'circle', 'circle', 'circle', 'circle', 'square'];
 
+          recommendTerms.forEach(function(d) {
+            d.size = 1;
+          });
+
           var allTerms = recommendTerms.concat(searchTerms.map(function(d) {
             return {
               word: d,
-              cluster: 'input'
+              cluster: 'input',
+              size: 2
             }
           }));
 
@@ -221,7 +227,8 @@ angular.module('conceptvectorApp')
               cluster: '' + d.cluster,
               x: tsne[i][0],
               y: tsne[i][1],
-              size: 1,
+              size: d.size,
+              // size: 1,
               shape: shapes[d.cluster % 6],
             }
           });
@@ -246,12 +253,16 @@ angular.module('conceptvectorApp')
             d.index = i;
           });
 
+          $scope.apiObj.api.refresh();
+
+          // highlightInputWords();
           return nest;
         }
 
 
         $scope.data = generateData(positiveTags, positiveTemp, Y);
-        $scope.apiObj.api.refresh();
+
+
 
         var negativeTermsWithSearchTerms = entry.negativeVectors.concat(entry.negativeSearchTermVectors);
         tsne.initDataRaw(negativeTermsWithSearchTerms);
@@ -345,7 +356,19 @@ angular.module('conceptvectorApp')
       chart: {
         type: 'scatterChart',
         height: 450,
-        color: d3.scale.category10().range(),
+        // color: d3.scale.category10().range(),
+        color: [
+          "#1f77b4",
+          "#ff7f0e",
+          "#2ca02c",
+          "#d62728",
+          "#9467bd",
+          "black",
+          "#e377c2",
+          "#7f7f7f",
+          "#bcbd22",
+          "#17becf"
+        ],
         scatter: {
           onlyCircles: false,
           label: function(d) {
@@ -371,7 +394,17 @@ angular.module('conceptvectorApp')
                 $scope.addPositive(e.point.label);
               }
 
+            },
+
+            renderEnd: function(e) {
+              console.log('render end', e);
             }
+
+          }
+        },
+        dispatch: {
+          renderEnd: function(e) {
+            console.log('render end', e);
           }
         },
         showDistX: false,
@@ -446,7 +479,18 @@ angular.module('conceptvectorApp')
       chart: {
         type: 'scatterChart',
         height: 450,
-        color: d3.scale.category10().range(),
+        color: [
+          "#1f77b4",
+          "#ff7f0e",
+          "#2ca02c",
+          "#d62728",
+          "#9467bd",
+          "black",
+          "#e377c2",
+          "#7f7f7f",
+          "#bcbd22",
+          "#17becf"
+        ],
         scatter: {
           onlyCircles: false,
           dispatch: {
@@ -584,6 +628,36 @@ angular.module('conceptvectorApp')
       $scope.$broadcast('wordMoveout', word);
     };
 
+    $scope.highlightInputWords = function() {
+      // console.log(inputTags);
+      var positiveWords = $scope.positiveTags.map(function(d) {
+        return d['text'];
+      });
+
+      $scope.buttonHoverCluster(positiveWords);
+      var negativeWords = $scope.negativeTags.map(function(d) {
+        return d['text'];
+      });
+
+      $scope.buttonHoverClusterNegative(negativeWords);
+    };
+
+    $scope.removehighlightInputWords = function() {
+      // console.log(inputTags);
+      var positiveWords = $scope.positiveTags.map(function(d) {
+        return d['text'];
+      });
+      $scope.buttonMoveoutCluster(positiveWords);
+
+      var negativeWords = $scope.negativeTags.map(function(d) {
+        return d['text'];
+      });
+      $scope.buttonMoveoutClusterNegative(negativeWords);
+    };
+
+    $scope.positiveChartCallback = function(scope, element) {
+      highlightInputWords();
+    };
     $scope.buttonHoverCluster = function(cluster) {
 
       console.log(cluster);

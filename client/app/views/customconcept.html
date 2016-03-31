@@ -48,7 +48,7 @@
         <p>
           Please type a few words for the concepts you are looking for.
         </p>
-        <div class="input-group">
+        <div class="input-group " ng-mouseover="highlightInputWords()" ng-mouseleave="removehighlightInputWords()">
           <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
           <tags-input class="positive-tags" ng-model="positiveTags" placeholder="Add a positive words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
             <auto-complete source="loadTags($query)"></auto-complete>
@@ -73,7 +73,7 @@
                 </ul>
               </div>
             </td>
-            <td ng-repeat-end ng-class="['btn-group{{$index}}']">
+            <td ng-repeat-end ng-class="['btn-group-box{{$index}}']">
               <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWord(word)" ng-mouseleave="buttonMoveoutWord(word)">
                 <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
                   {{word}}
@@ -104,7 +104,7 @@
         <p>
           Please type a few words that should be antonyms for the concepts you are looking for.
         </p>
-        <div class="input-group">
+        <div class="input-group" ng-mouseover="highlightInputWords()" ng-mouseleave="removehighlightInputWords()">
           <span class="input-group-addon"><i class="fa fa-minus-circle"></i></span>
           <tags-input ng-model="negativeTags" class="negative-tags" placeholder="Add a negative words" on-tag-added="tagChanged()" on-tag-removed="tagChanged()" add-from-autocomplete-only="true">
             <auto-complete source="loadTags($query)"></auto-complete>
@@ -129,7 +129,7 @@
                 </ul>
               </div>
             </td>
-            <td ng-repeat-end ng-class="['btn-group{{$index}}']">
+            <td ng-repeat-end ng-class="['btn-group-box{{$index}}']">
               <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWordNegative(word)" ng-mouseleave="buttonMoveoutWordNegative(word)">
                 <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addNegative(word)">
                   {{word}}
@@ -149,7 +149,7 @@
         </table>
       </div>
       <div class="col-md-6" cg-busy="loadingPromise">
-        <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}' events="negativeChartEvents"></nvd3>
+        <nvd3 options='negative_options' data='negative_data' api='negative_apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}' events="negativeChartEvents" on-ready="positiveChartCallback"></nvd3>
       </div>
     </div>
   </div>
