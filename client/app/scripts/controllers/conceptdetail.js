@@ -211,7 +211,7 @@ angular.module('conceptvectorApp')
           var allTerms = recommendTerms.concat(searchTerms.map(function(d) {
             return {
               word: d,
-              cluster: 5
+              cluster: 'input'
             }
           }));
 
@@ -358,7 +358,7 @@ angular.module('conceptvectorApp')
 
                 var index = $scope.positiveTags.map(function(d) {
                   return d.text;
-                }).indexOf(e.point.word);
+                }).indexOf(e.point.label);
 
                 if (index > -1) {
                   $scope.positiveTags.splice(index, 1);
@@ -368,7 +368,7 @@ angular.module('conceptvectorApp')
 
 
               } else {
-                $scope.addPositive(e.point.word);
+                $scope.addPositive(e.point.label);
               }
 
             }
@@ -456,7 +456,7 @@ angular.module('conceptvectorApp')
 
                 var index = $scope.negativeTags.map(function(d) {
                   return d.text;
-                }).indexOf(e.point.word);
+                }).indexOf(e.point.label);
 
                 if (index > -1) {
                   $scope.negativeTags.splice(index, 1);
@@ -466,7 +466,7 @@ angular.module('conceptvectorApp')
 
 
               } else {
-                $scope.addNegative(e.point.word);
+                $scope.addNegative(e.point.label);
               }
 
             }
@@ -491,7 +491,7 @@ angular.module('conceptvectorApp')
             var rows =
               "<tr>" +
               "<td class='key'>" + '' + "</td>" +
-              "<td class='x-value'>" + e.point.word + "</td>" +
+              "<td class='x-value'>" + e.point.label + "</td>" +
               "</tr>";
 
             var header =

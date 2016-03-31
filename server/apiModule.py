@@ -33,7 +33,6 @@ print 'I am ready'
 
 @app.after_request
 def after_request(response):
-	# pdb.set_trace()
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
@@ -43,8 +42,6 @@ class RecommendWordsClusterKDE(Resource):
 
 	def post(self):
 		try:
-			# pdb.set_trace()
-
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
@@ -109,14 +106,12 @@ class RecommendWordsClusterKDE(Resource):
 							 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
-			# pdb.set_trace()
 			return {'error': str(e)}
 
 class RecommendWordsClusterMinMax(Resource):
 
 	def post(self):
 		try:
-			# pdb.set_trace()
 
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
@@ -176,7 +171,6 @@ class RecommendWordsClusterMinMax(Resource):
 							 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
-			# pdb.set_trace()
 			return {'error': str(e)}
 
 
@@ -184,7 +178,6 @@ class RecommendWordsClusterDot(Resource):
 
 	def post(self):
 		try:
-			# pdb.set_trace()
 
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
@@ -241,14 +234,12 @@ class RecommendWordsClusterDot(Resource):
 							 negativeSearchTermVectors=negative_term_embeddings)
 
 		except Exception as e:
-			# pdb.set_trace()
 			return {'error': str(e)}
 
 
 class QueryAutoComplete(Resource):
   def get(self, word):
     wordUTF8 = word.encode('UTF-8')
-    # import pdb; pdb.set_trace()
     new_list = w2v_model.getAutoComplete(wordUTF8)
     return {'word': new_list}
 
@@ -256,7 +247,7 @@ class Register(Resource):
 	def post(self):
 
 		# Parse the arguments
-		# import pdb; pdb.set_trace()
+
 
 		parser = reqparse.RequestParser()
 		parser.add_argument('name', type=str, help="User name to be called")
@@ -276,7 +267,6 @@ class Register(Resource):
 			status = 'success'
 
 		except Exception as e:
-			# pdb.set_trace()
 			status = 'This user is already registered'
 			db.session.close()
 
@@ -303,10 +293,8 @@ class Login(Resource):
 			else:
 				status = False
 
-			# pdb.set_trace()
 			return jsonify({'result':status, 'name': user.name})
 		except Exception as e:
-			# pdb.set_trace()
 			return {'error':str(e)}
 
 class Logout(Resource):
@@ -323,7 +311,6 @@ class Logout(Resource):
 
 class Status(Resource):
 	def get(self):
-		# pdb.set_trace()
 		if session.get('logged_in'):
 			if session['logged_in']:
 				return {'status':True, 'user': session['user'], 'userName':session['userName']}
@@ -372,7 +359,6 @@ class ConceptsUpdate(Resource):
 	def get(self,id):
 		concept_query = Concepts.query.get_or_404(id)
 		result = schema.dump(concept_query).data
-		# import pdb;pdb.set_trace()
 		return result
 
 	def patch(self,id):
@@ -430,13 +416,11 @@ class ArticleList(Resource):
 class ArticleUpdate(Resource):
 	def get(self,id):
 		try:
-			# import pdb;pdb.set_trace()
 			article_query = Article.query.get_or_404(id)
 			article_result = article_schema.dump(article_query).data
 			comments_result = comment_schema.dump(article_query.comments, many=True).data
 
 		except Exception as e:
-			# import pdb;pdb.set_trace()
 			print e
 		return jsonify({'article':article_result, 'comments':comments_result})
 
@@ -459,11 +443,9 @@ class ConceptScore(Resource):
 			return jsonify({'scores':commentsScore, 'keywords': keywords, 'concept': concept_info})
 
 		except Exception as e:
-			ipdb.set_trace()
 			print e
 
 	def getScore(self, concept, comments):
-		# ipdb.set_trace()
 		try:
 			positive_terms_concept = concept.input_terms['positive']
 			negative_terms_concept = concept.input_terms['negative']
@@ -502,17 +484,14 @@ class ConceptScore(Resource):
 			keywords = kde_model.getKeywordsScore(all_comment_words, concept.concept_type, len(all_comment_words)/20)
 
 		except Exception as e:
-			ipdb.set_trace()
 			print e
 
 		return scores, keywords
 
 class ConceptDownload(Resource):
 	def get(self,id):
-		ipdb.set_trace()
 		concept_query = Concepts.query.get_or_404(id)
 		result = schema.dump(concept_query).data
-		# import pdb;pdb.set_trace()
 
 		return Response(result, mimetype="application/json", headers={'Content-Disposition':'attachment;filename=concept.json'})
 
