@@ -1,8 +1,8 @@
 
 # coding: utf-8
 
-# # New York Times API 
-# 
+# # New York Times API
+#
 # ## API Key
 #  - community API key
 #    - 0292ebefdcaf75b2fb0d7e7d1404cf09:10:71572358
@@ -10,13 +10,13 @@
 #    - c473062c4108d294756e7b3ebf2b318c:9:71572358
 #  - Most Popular API key
 #    - 3971a4b7969eb05ae3959d0747e76a04:13:71572358
-#    
-# 
-# ## Reference 
+#
+#
+# ## Reference
 #  - http://developer.nytimes.com/apps/mykeys
 #  - http://docs.python-requests.org/en/master/
-#  
-# 
+#
+#
 
 # In[37]:
 
@@ -34,6 +34,8 @@ import ipdb as pdb
 
 article_file_name = 'data/most_popular_articles.pkl'
 comment_file_name = 'data/comments.pkl'
+articleWithComments_file_name = 'data/article_with_comments.pkl'
+
 engine = create_engine('postgresql://intuinno:test@localhost/conceptvectorDB',echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -55,7 +57,7 @@ currentKey = 0
 
 def download_articles():
 	offset = 0
-	apikey = '8ad6d0be3f6e41b7a1ca0c7dbb91bfa5'
+	apikey = '3971a4b7969eb05ae3959d0747e76a04:13:71572358'
 
 	payload = {'api-key':apikey, 'offset': offset}
 	url = 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/30.json'
@@ -69,7 +71,7 @@ def download_articles():
 	    most_popular_request = requests.get(url, params=payload)
 	    most_popular_articles += most_popular_request.json()['results']
 	    sleep(0.2)
-	    
+
 	if len(most_popular_articles) != num_results:
 		print "Error: Articles number does not match"
 
@@ -81,14 +83,14 @@ def download_articles():
 def getNumComments(a):
 
 	article_url = a.url
-	
+
 	try:
 		comment_request = getComments(article_url)
 		num_results = comment_request.json()['results']['totalCommentsFound']
 		return num_results
 	except Exception as e:
 		pdb.set_trace()
-		print e	
+		print e
 
 
 
@@ -117,56 +119,53 @@ def add_articles_database():
 def add_replies(all, node, stacklevel):
 
 	all.append(node)
-    
-	for n in node['replies']:
-		add_replies(all, n, stacklevel+1 )
+	try:
+		for n in node['replies']:
+			add_replies(all, n, stacklevel+1 )
+	except Exception as e:
+		pdb.set_trace()
 
 def getComments(url, offset=0):
-	global currentKey 
-	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'depthLimit':100, 'offset':offset}
+	global currentKey
+	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'depthLimit':100, 'offset':offset}
 	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 	comment_request = requests.get(api_url, params=payload)
-	sleep(0.5)
-	
+	sleep(0.1)
+
 	while comment_request.status_code != 200:
 		if comment_request.status_code == 403:
 			currentKey += 1
 			print 'Key inactive: Trying new key', currentKey, comment_request.status_code, url
-			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
 			comment_request = requests.get(api_url, params=payload)
 		elif comment_request.status_code == 504:
 			print 'Gateway Timeout', currentKey, comment_request.status_code, url
-			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
 			comment_request = requests.get(api_url, params=payload)
-		elif comment_request.status_code == 429:
-			currentKey += 1
-			print 'API rate limit exceeded', currentKey, url
-			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
-                        comment_request = requests.get(api_url, params=payload)
-		else: 
+		else:
 			print 'Not sure why', comment_request.status_code, comment_request.text, url
-			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
+			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 10000, 'offset':offset,'depthLimit':100}
 	    	comment_request = requests.get(api_url, params=payload)
-		sleep(0.5)
+		sleep(0.1)
 	return comment_request
-    
-    
+
+
 def download_add_comments(a):
 	article_url = a['url']
-	
+
 	try:
 		comment_request = getComments(article_url)
 		num_parent_results = comment_request.json()['results']['totalParentCommentsFound']
 		num_results = comment_request.json()['results']['totalCommentsFound']
 		comments = comment_request.json()['results']['comments']
-		
+
 		for offset in range(25,num_parent_results,25):
 		    comment_request = getComments(article_url, offset)
 		    comments += comment_request.json()['results']['comments']
 
 		if len(comments) != num_parent_results:
 			print "Error: Parent Comments number does not match",  a['url'], len(comments), num_parent_results
-	
+
 		all_comments = []
 		for c in comments:
 			add_replies(all_comments, c, 0)
@@ -180,8 +179,8 @@ def download_add_comments(a):
 
 	for c in all_comments:
 		cquery = Comment(c, a['id'])
-		
-		try:			
+
+		try:
 			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
 				session.add(cquery)
 			else:
@@ -190,7 +189,58 @@ def download_add_comments(a):
 			pdb.set_trace()
 			# session.rollback()
 			print a['commentID']
-			print e 
+			print e
 
-#download_articles()
-add_articles_database()
+def add_database():
+	input = file(articleWithComments_file_name,'rb')
+	most_popular_articles = pickle.load(input)
+
+	for (a, comments) in most_popular_articles:
+		if a['id'] > 10000:
+			if session.query(Article).filter_by(id=a['id']).count() == 0:
+				print a['url']
+				aquery = Article(a)
+				try:
+					if len(comments) > 300:
+						session.add(aquery)
+						add_comments_to_database(a, comments)
+						session.commit()
+				except Exception as e:
+					pdb.set_trace()
+					session.rollback()
+					print a['id']
+					print e
+
+def add_comments_to_database(a,comments):
+	article_url = a['url']
+
+	try:
+
+		all_comments = []
+		for c in comments:
+			add_replies(all_comments, c, 0)
+
+
+	except Exception as e:
+		pdb.set_trace()
+		print e
+
+	for c in all_comments:
+
+
+		try:
+			cquery = Comment(c, a['id'])
+			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
+				session.add(cquery)
+				# session.commit()
+			else:
+				print 'Why Duplicates happend?'
+		except Exception as e:
+			pdb.set_trace()
+			session.rollback()
+			print a['commentID']
+			print e
+
+# download_articles()
+# add_articles_database()
+add_database()

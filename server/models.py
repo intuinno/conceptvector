@@ -203,10 +203,16 @@ class Comment(db.Model):
 	
 
 	def __init__(self, apiResult, assetID):
-		del apiResult['replies'] 
-		self.assetID = assetID
-		for key, value in apiResult.iteritems():
-			setattr(self, key, value)
+		try:
+			if 'replies' in apiResult:
+				del apiResult['replies'] 
+			self.assetID = assetID
+			for key, value in apiResult.iteritems():
+				setattr(self, key, value)
+		except Exception as e:
+			pdb.set_trace()
+			print apiResult
+			print e
 
 	def __repr__(self):
 		return '<Commentid {}>'.format(self.commentID)
