@@ -106,10 +106,13 @@ class RecommendWordsClusterKDE(Resource):
 						previous_clustering_result, current_clustering_result)
 				positive_clusters = [mapping[x] for x in positive_clusters]
 				negative_clusters = [mapping[x] for x in negative_clusters]
+<<<<<<< HEAD
 				current_clustering_remapped = {}
 				for k, v in current_clustering_result.iteritems():
 					current_clustering_remapped[mapping[k]] = v
 				current_clustering_result = current_clustering_remapped
+=======
+>>>>>>> ec436857d320a1cdae67edf517fb35beebd4789b
 
 			# Updates the previous_clustering_result
 			previous_clustering_result = current_clustering_result
