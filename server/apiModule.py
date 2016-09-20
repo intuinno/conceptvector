@@ -7,9 +7,11 @@ from marshmallow import ValidationError
 from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, CommentSchema
 from ml import embedding
 from ml import kde
+from ml import matching
 from flask import request, jsonify, session, Response
 import ipdb
 import re
+import collections
 
 
 
@@ -28,6 +30,7 @@ w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
 default_kde_h_sq = 2
 
+previous_clustering_result = None
 
 print 'I am ready'
 
@@ -90,6 +93,22 @@ class RecommendWordsClusterKDE(Resource):
 			negative_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
 							          		      for x in negative_recommend]
 			negative_clusters = kmeans.fit_predict(negative_reco_embeddings)
+
+			# Compares to the previous clustering result and try to match the number
+			current_clustering_result = collections.defaultdict(list)
+			for index, word in enumerate(positive_recommend):
+				current_clustering_result[positive_clusters[index]].append(word)
+			for index, word in enumerate(negative_recommend):
+				current_clustering_result[positive_clusters[index]].append(word)
+
+			if previous_clustering_result:
+				mapping = matching.solve_matching(5, \
+						previous_clustering_result, current_clustering_result)
+				positive_clusters = [mapping[x] for x in positive_clusters]
+				negative_clusters = [mapping[x] for x in negative_clusters]
+
+			# Updates the previous_clustering_result
+			previous_clustering_result = current_clustering_result
 
 			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in positive_terms]
