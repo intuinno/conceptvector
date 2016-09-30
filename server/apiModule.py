@@ -30,7 +30,7 @@ w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
 default_kde_h_sq = 2
 
-previous_clustering_result = None
+# previous_clustering_result = None
 
 print 'I am ready'
 
@@ -49,12 +49,21 @@ class RecommendWordsClusterKDE(Resource):
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
 			parser.add_argument('irrelevantWords', type=unicode, action='append', help='Irrelevant Words')
+			parser.add_argument('positiveCluster', type=unicode, action='append', help='Current Positive Clusters')
+			parser.add_argument('negativeCluster', type=unicode, action='append', help='Current Negative Clusters')
+
 
 			args = parser.parse_args()
+
+			# ipdb.set_trace()
 
 			positive_terms = args['positiveWords']
 			negative_terms = args['negativeWords']
 			irrelevant_terms = args['irrelevantWords']
+			positiveCluster = args['positiveCluster']
+			negativeCluster = args['negativeCluster']
+
+
 
 			if positive_terms == None:
 				positive_terms = []
@@ -70,6 +79,20 @@ class RecommendWordsClusterKDE(Resource):
 				irrelevant_terms = []
 			else:
 				irrelevant_terms = [w.encode('UTF-8') for w in irrelevant_terms]
+
+			if positiveCluster == None:
+				positiveCluster = []
+			else:
+				positiveCluster = [ eval( w.encode('UTF-8')) for w in positiveCluster]
+				positiveCluster = [[w.encode('UTF-8') for w in x] for x in positiveCluster ]
+				positiveCluster = {i:w for i,w in enumerate(positiveCluster)}
+
+			if negativeCluster == None:
+				negativeCluster = []
+			else:
+				negativeCluster = [ eval( w.encode('UTF-8')) for w in negativeCluster]
+				negativeCluster = [[w.encode('UTF-8') for w in x] for x in negativeCluster ]
+				negativeCluster = {i:w for i,w in enumerate(negativeCluster)}
 
 
 			# Because pairwise distance computations are cached in the w2v_model,
@@ -98,37 +121,74 @@ class RecommendWordsClusterKDE(Resource):
 			current_clustering_result = collections.defaultdict(list)
 			for index, word in enumerate(positive_recommend):
 				current_clustering_result[positive_clusters[index]].append(word)
+
+			print positiveCluster
+			print current_clustering_result
+
+
+			mapping = matching.solve_matching(5, \
+					positiveCluster, current_clustering_result)
+			print mapping
+			# positive_clusters = [mapping[x] for x in positive_clusters]
+			current_clustering_remapped = {}
+			for k, v in current_clustering_result.iteritems():
+				current_clustering_remapped[mapping[k]] = v
+			current_clustering_result = current_clustering_remapped
+
+			print current_clustering_result
+
+			positive_recommend = []
+			positive_clusters = []
+			for key,value in current_clustering_result.iteritems():
+				for w in value:
+					positive_recommend.append(w)
+					positive_clusters.append(key)
+
+			print positive_recommend
+			print positive_clusters
+
+			# Compares to the previous clustering result and try to match the number
+			current_clustering_result = collections.defaultdict(list)
 			for index, word in enumerate(negative_recommend):
-				current_clustering_result[positive_clusters[index]].append(word)
+				current_clustering_result[negative_clusters[index]].append(word)
 
-			if previous_clustering_result:
-				mapping = matching.solve_matching(5, \
-						previous_clustering_result, current_clustering_result)
-				positive_clusters = [mapping[x] for x in positive_clusters]
-				negative_clusters = [mapping[x] for x in negative_clusters]
-				current_clustering_remapped = {}
-				for k, v in current_clustering_result.iteritems():
-					current_clustering_remapped[mapping[k]] = v
-				current_clustering_result = current_clustering_remapped
+			mapping = matching.solve_matching(5, \
+					negativeCluster, current_clustering_result)
+			# negative_clusters = [mapping[x] for x in negative_clusters]
+			current_clustering_remapped = {}
+			for k, v in current_clustering_result.iteritems():
+				current_clustering_remapped[mapping[k]] = v
+			current_clustering_result = current_clustering_remapped
 
-			# Updates the previous_clustering_result
-			previous_clustering_result = current_clustering_result
+			negative_recommend = []
+			negative_clusters = []
+			for key,value in current_clustering_result.iteritems():
+				for w in value:
+					negative_recommend.append(w)
+					negative_clusters.append(key)
 
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+										          		      for x in positive_recommend]
 			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in positive_terms]
+
+			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
+													          		      for x in negative_recommend]
 			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in negative_terms]
 
 			return jsonify(positiveRecommend=positive_recommend,
-			               positiveCluster=positive_clusters.tolist(),
+			               positiveCluster=positive_clusters,
 							 positiveVectors=[x.tolist() for x in positive_reco_embeddings],
 							 positiveSearchTermVectors=positive_term_embeddings,
 							 negativeRecommend=negative_recommend,
-							 negativeCluster=negative_clusters.tolist(),
+							 negativeCluster=negative_clusters,
 							 negativeVectors=[x.tolist() for x in negative_reco_embeddings],
-							 negativeSearchTermVectors=negative_term_embeddings)
+							 negativeSearchTermVectors=negative_term_embeddings
+							 )
 
 		except Exception as e:
+			# ipdb.set_trace()
 			return {'error': str(e)}
 
 class RecommendWordsClusterMinMax(Resource):
@@ -327,6 +387,7 @@ class Logout(Resource):
 			session.pop('logged_in', None)
 			session.pop('user', None)
 			session.pop('userName', None)
+			# session.pop('previous_clustering_result',None)
 
 			return {'result':'success'}
 		except Exception as e:

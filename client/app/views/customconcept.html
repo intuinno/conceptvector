@@ -76,7 +76,9 @@
             <td ng-repeat-end ng-class="['btn-group-box{{$index}}']">
               <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWord(word)" ng-mouseleave="buttonMoveoutWord(word)">
                 <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addPositive(word)">
-                  {{word}}
+                  <span ng-class="{ 'new-word': isNewPositive(word)}">
+                    {{word}}
+                  </span>
                 </button>
                 <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle ng-mouseover="buttonHoverWord(word)">
                   <span class="caret"></span>
@@ -132,7 +134,9 @@
             <td ng-repeat-end ng-class="['btn-group-box{{$index}}']">
               <div ng-repeat="word in cluster" class="btn-group" uib-dropdown ng-mouseover="buttonHoverWordNegative(word)" ng-mouseleave="buttonMoveoutWordNegative(word)">
                 <button type="button" id='split-button' class="btn btn-default btn-xs" href="" ng-click="addNegative(word)">
-                  {{word}}
+                  <span ng-class="{ 'new-word': isNewNegative(word)}">
+                    {{word}}
+                  </span>
                 </button>
                 <button type="button" class="btn btn-default btn-xs btn-space" uib-dropdown-toggle>
                   <span class="caret"></span>

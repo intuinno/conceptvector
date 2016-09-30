@@ -13,6 +13,9 @@ angular.module('conceptvectorApp')
     $scope.conceptId = $routeParams.conceptId;
     $scope.download_url = "/#/download_concepts/" + $routeParams.conceptId;
 
+    var newPositiveWords = [];
+    var newNegativeWords = [];
+
     if ($scope.conceptId === 'new') {
 
       $scope.positiveTags = [];
@@ -136,7 +139,6 @@ angular.module('conceptvectorApp')
         return d['text'];
       });
 
-
       var negativeTags = $scope.negativeTags.map(function(d) {
         return d['text'];
       });
@@ -148,9 +150,21 @@ angular.module('conceptvectorApp')
       $scope.loadingPromise = recommend.save({
         'positiveWords': positiveTags,
         'negativeWords': negativeTags,
-        'irrelevantWords': irrelevantTags
+        'irrelevantWords': irrelevantTags,
+        'positiveCluster': $scope.positiveRecommendation,
+        'negativeCluster': $scope.negativeRecommendation
       }, function(entry) {
         // console.log(entry);
+
+        var positiveClusterWords= [];
+
+        $scope.positiveRecommendation.forEach(function(d) {
+          positiveClusterWords = positiveClusterWords.concat(d);
+        });
+
+        newPositiveWords = entry.positiveRecommend.filter(function(d) {
+          return positiveClusterWords.indexOf(d) === -1;
+        });
 
         var positiveTemp = entry.positiveRecommend.map(function(d, i) {
           return {
@@ -164,11 +178,21 @@ angular.module('conceptvectorApp')
           positiveCluster[i] = positiveTemp.filter(function(d) {
             return d.cluster === i;
           }).map(function(d) {
-            return d.word
-          })
+            return d.word;
+          }).sort();
         }
 
         $scope.positiveRecommendation = positiveCluster;
+
+        var negativeClusterWords= [];
+
+        $scope.negativeRecommendation.forEach(function(d) {
+          negativeClusterWords = negativeClusterWords.concat(d);
+        });
+
+        newNegativeWords = entry.negativeRecommend.filter(function(d) {
+          return negativeClusterWords.indexOf(d) === -1;
+        });
 
         var negativeTemp = entry.negativeRecommend.map(function(d, i) {
           return {
@@ -183,7 +207,7 @@ angular.module('conceptvectorApp')
             return d.cluster === i;
           }).map(function(d) {
             return d.word
-          })
+          }).sort();
         }
 
         $scope.negativeRecommendation = negativeCluster;
@@ -287,6 +311,14 @@ angular.module('conceptvectorApp')
     };
 
     var positiveChartWordIndex = [];
+
+    $scope.isNewPositive = function (word) {
+      return newPositiveWords.indexOf(word) !== -1;
+    };
+
+    $scope.isNewNegative = function (word) {
+      return newNegativeWords.indexOf(word) !== -1;
+    };
 
 
     $scope.addPositiveCluster = function(cluster) {
