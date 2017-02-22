@@ -212,23 +212,8 @@ angular.module('conceptvectorApp')
 
         $scope.negativeRecommendation = negativeCluster;
 
+        var positiveTSNE = entry.positiveRecoTSNE.concat(entry.positiveTermTSNE);
 
-        var positiveTermsWithSearchTerms = entry.positiveVectors.concat(entry.positiveSearchTermVectors);
-        tsne.initDataRaw(positiveTermsWithSearchTerms);
-
-        var start = new Date().getTime();
-        console.log("Starting T-SNE calculation", start);
-
-        for (var k = 0; k < 1000; k++) {
-          tsne.step(); // every time you call this, solution gets better
-        }
-        var end = new Date().getTime();
-        console.log("T-SNE calculation ended ", end - start);
-
-        var Y = tsne.getSolution();
-
-
-        /* Random Data Generator (took from nvd3.org) */
         function generateData(searchTerms, recommendTerms, tsne) {
           var data = [],
             shapes = ['circle', 'circle', 'circle', 'circle', 'circle', 'square'];
@@ -283,27 +268,13 @@ angular.module('conceptvectorApp')
           return nest;
         }
 
-
-        $scope.data = generateData(positiveTags, positiveTemp, Y);
-
+        $scope.data = generateData(positiveTags, positiveTemp, positiveTSNE);
 
 
-        var negativeTermsWithSearchTerms = entry.negativeVectors.concat(entry.negativeSearchTermVectors);
-        tsne.initDataRaw(negativeTermsWithSearchTerms);
-
-        var start = new Date().getTime();
-        console.log("Starting T-SNE calculation", start);
-
-        for (var k = 0; k < 1000; k++) {
-          tsne.step(); // every time you call this, solution gets better
-        }
-        var end = new Date().getTime();
-        console.log("T-SNE calculation ended ", end - start);
-
-        var Y = tsne.getSolution();
+        var negativeTSNE = entry.negativeRecoTSNE.concat(entry.negativeTermTSNE);
 
 
-        $scope.negative_data = generateData(negativeTags, negativeTemp, Y);
+        $scope.negative_data = generateData(negativeTags, negativeTemp, negativeTSNE);
         // $scope.negative_apiObj.api.refresh();
 
       });
@@ -688,7 +659,7 @@ angular.module('conceptvectorApp')
     };
 
     $scope.positiveChartCallback = function(scope, element) {
-      highlightInputWords();
+      $scope.highlightInputWords();
     };
     $scope.buttonHoverCluster = function(cluster) {
 

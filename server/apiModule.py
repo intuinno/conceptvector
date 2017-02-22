@@ -15,6 +15,7 @@ import collections
 
 
 
+
 schema = ConceptsSchema()
 article_list_schema = ArticleSchema(only=('published_date','title','type','section','id'), many=True)
 article_schema = ArticleSchema()
@@ -23,7 +24,7 @@ comment_schema = CommentSchema()
 
 headerNames = ['word'] + range(300)
 # wordsFileName = './data/glove.6B.300d.txt'
-wordsFileName = './data/glove.6B.50d.txt' # for testing
+wordsFileName = './data/wiki_2D_300.csv' # for testing
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
@@ -171,20 +172,28 @@ class RecommendWordsClusterKDE(Resource):
 										          		      for x in positive_recommend]
 			positive_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in positive_terms]
+			positive_reco_tsne = [w2v_model.get_tsne_for_a_word(x).tolist() for x in positive_recommend]
+			positive_term_tsne = [w2v_model.get_tsne_for_a_word(x).tolist() for x in positive_terms]
 
 			positive_reco_embeddings = [w2v_model.get_embedding_for_a_word(x)
 													          		      for x in negative_recommend]
 			negative_term_embeddings = [w2v_model.get_embedding_for_a_word(x).tolist()
 							          		      for x in negative_terms]
+			negative_reco_tsne = [w2v_model.get_tsne_for_a_word(x).tolist() for x in negative_recommend]
+			negative_term_tsne = [w2v_model.get_tsne_for_a_word(x).tolist() for x in negative_terms]
 
 			return jsonify(positiveRecommend=positive_recommend,
 			               positiveCluster=positive_clusters,
 							 positiveVectors=[x.tolist() for x in positive_reco_embeddings],
 							 positiveSearchTermVectors=positive_term_embeddings,
+							 positiveRecoTSNE=positive_reco_tsne,
+							 positiveTermTSNE=positive_term_tsne,
 							 negativeRecommend=negative_recommend,
 							 negativeCluster=negative_clusters,
 							 negativeVectors=[x.tolist() for x in negative_reco_embeddings],
-							 negativeSearchTermVectors=negative_term_embeddings
+							 negativeSearchTermVectors=negative_term_embeddings,
+							 negativeRecoTSNE=negative_reco_tsne,
+							 negativeTermTSNE=negative_term_tsne
 							 )
 
 		except Exception as e:

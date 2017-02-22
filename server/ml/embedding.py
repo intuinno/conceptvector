@@ -1,30 +1,19 @@
 import numpy as np
 import cache
 from scipy.spatial import distance
+import pandas as pd
+import ipdb
 
 class EmbeddingModel:
-  
+
   def __init__(self, filename, skip_head=True, dist_type='euclidean',
       cache_capacity=10000):
-    self.vocabulary = []
-    self.dictionary = {}
-    self.embeddings = None
-    header_read = False;
     self.dist_type = dist_type
-
-    with open(filename, 'r') as filehandler:
-      numbers = []
-      for line in filehandler:
-        if skip_head and not header_read:
-          header_read = True
-          pass
-        else:
-          split = line.split(' ')
-          self.dictionary[split[0]] = len(self.vocabulary)
-          self.vocabulary.append(split[0])
-          numbers.append([float(x) for x in split[1:]])
-
-    self.embeddings = np.array(numbers, dtype=np.float32)
+    df = pd.read_csv(filename, index_col=0)
+    self.vocabulary = df.index.values
+    self.dictionary = {w:i for i,w in enumerate(self.vocabulary)}
+    self.embeddings = df[[str(i+1) for i in range(300)]].values
+    self.tsne = df[['X','Y']].values
     self._cache = cache.LRUCache(cache_capacity)
 
   def has_word(self, word):
@@ -38,6 +27,12 @@ class EmbeddingModel:
 
   def get_embedding_for_a_word(self, word):
     return self.get_embedding_for_words([word])
+
+  def get_tsne_for_a_word(self, word):
+    if word in self.dictionary:
+      index = self.dictionary[word]
+    # ipdb.set_trace()
+    return self.tsne[index]
 
   def get_word(self, index):
     if index < len(self.vocabulary):
