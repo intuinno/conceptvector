@@ -21,13 +21,11 @@ article_list_schema = ArticleSchema(only=('published_date','title','type','secti
 article_schema = ArticleSchema()
 comment_schema = CommentSchema()
 
-
-headerNames = ['word'] + range(300)
 # wordsFileName = './data/glove.6B.300d.txt'
-wordsFileName = './data/wiki_2D_300.csv' # for testing
-
+# wordsFileName = './data/glove_2D_50.csv' # for testing
+wordsFileName = './data/wiki_2D_300.csv'
 # unified w2v queries with caching
-w2v_model = embedding.EmbeddingModel(wordsFileName)
+w2v_model = embedding.EmbeddingModel(wordsFileName, dimension=300, dist_type='euclidean')
 kde_model = kde.KdeModel(w2v_model)
 default_kde_h_sq = 2
 

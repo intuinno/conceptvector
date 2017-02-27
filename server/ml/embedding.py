@@ -7,12 +7,12 @@ import ipdb
 class EmbeddingModel:
 
   def __init__(self, filename, skip_head=True, dist_type='euclidean',
-      cache_capacity=10000):
+      cache_capacity=10000, dimension=300):
     self.dist_type = dist_type
     df = pd.read_csv(filename, index_col=0)
     self.vocabulary = df.index.values
     self.dictionary = {w:i for i,w in enumerate(self.vocabulary)}
-    self.embeddings = df[[str(i+1) for i in range(300)]].values
+    self.embeddings = df[[str(i+1) for i in range(dimension)]].values
     self.tsne = df[['X','Y']].values
     self._cache = cache.LRUCache(cache_capacity)
 
@@ -56,7 +56,11 @@ class EmbeddingModel:
     print 'cache miss:', word
     embedding = self.get_embedding_for_a_word(word)
     embedding = embedding.reshape(1, self.embeddings.shape[1])
-    dists = distance.cdist(embedding, self.embeddings, self.dist_type)[0,:]
+    # ipdb.set_trace()
+    if self.dist_type == 'dot':
+        dists = np.dot(self.embeddings, embedding.T).T[0]
+    else:
+        dists = distance.cdist(embedding, self.embeddings, self.dist_type)[0,:]
     self._cache[word] = dists
     return dists
 

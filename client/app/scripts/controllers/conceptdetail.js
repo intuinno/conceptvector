@@ -156,7 +156,7 @@ angular.module('conceptvectorApp')
       }, function(entry) {
         // console.log(entry);
 
-        var positiveClusterWords= [];
+        var positiveClusterWords = [];
 
         $scope.positiveRecommendation.forEach(function(d) {
           positiveClusterWords = positiveClusterWords.concat(d);
@@ -184,7 +184,7 @@ angular.module('conceptvectorApp')
 
         $scope.positiveRecommendation = positiveCluster;
 
-        var negativeClusterWords= [];
+        var negativeClusterWords = [];
 
         $scope.negativeRecommendation.forEach(function(d) {
           negativeClusterWords = negativeClusterWords.concat(d);
@@ -242,8 +242,6 @@ angular.module('conceptvectorApp')
             }
           });
 
-
-
           var nest = d3.nest()
             .key(function(d) {
               return d.cluster;
@@ -283,11 +281,11 @@ angular.module('conceptvectorApp')
 
     var positiveChartWordIndex = [];
 
-    $scope.isNewPositive = function (word) {
+    $scope.isNewPositive = function(word) {
       return newPositiveWords.indexOf(word) !== -1;
     };
 
-    $scope.isNewNegative = function (word) {
+    $scope.isNewNegative = function(word) {
       return newNegativeWords.indexOf(word) !== -1;
     };
 
@@ -373,7 +371,7 @@ angular.module('conceptvectorApp')
           "#17becf"
         ],
         scatter: {
-          onlyCircles: false,
+          onlyCircles: true,
           label: function(d) {
             return d.word;
           },
@@ -399,22 +397,54 @@ angular.module('conceptvectorApp')
 
             },
 
+
             renderEnd: function(e) {
               console.log('render end', e);
             }
 
-          }
+          },
+
+
         },
         dispatch: {
           renderEnd: function(e) {
             console.log('render end', e);
           }
         },
+        showDistX: true,
+        showDistY: true,
+        //tooltipContent: function(d) {
+        //    return d.series && '<h3>' + d.series[0].key + '</h3>';
+        //},
+        duration: 0,
+        xAxis: {
+          axisLabel: 'X Axis',
+          tickFormat: function(d) {
+            return d3.format('.02f')(d);
+          }
+        },
+        yAxis: {
+          axisLabel: 'Y Axis',
+          tickFormat: function(d) {
+            return d3.format('.02f')(d);
+          },
+          axisLabelDistance: -5
+        },
+        zoom: {
+          //NOTE: All attributes below are optional
+          enabled: true,
+          // scaleExtent: [1, 10],
+          // useFixedDomain: false,
+          // useNiceScale: false,
+          // horizontalOff: false,
+          // verticalOff: false,
+          unzoomEventType: 'dblclick.zoom'
+        },
         showDistX: false,
         showDistY: false,
         showLabels: true,
-        showXAxis: false,
-        showYAxis: false,
+        showXAxis: true,
+        showYAxis: true,
         pointSize: function(d) {
           return d.size || 1
         }, //by default
@@ -464,17 +494,7 @@ angular.module('conceptvectorApp')
           axisLabelDistance: -5,
           showMaxMin: false,
         },
-        zoom: {
-          //NOTE: All attributes below are optional
-          enabled: false,
-          scaleExtent: [0.5, 10],
-          useFixedDomain: false,
-          useNiceScale: false,
-          horizontalOff: false,
-          verticalOff: false,
-          unzoomEventType: 'dblclick.zoom'
-        },
-        showLegend: false,
+        showLegend: true,
       }
     };
 
