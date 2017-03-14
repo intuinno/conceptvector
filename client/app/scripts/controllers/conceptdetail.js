@@ -13,6 +13,39 @@ angular.module('conceptvectorApp')
     $scope.conceptId = $routeParams.conceptId;
     $scope.download_url = "/#/download_concepts/" + $routeParams.conceptId;
 
+    $scope.positive_scatter_data = [];
+    $scope.positive_layout = {};
+    $scope.positiveHover = '';
+
+    $(window).resize(function() {
+      $scope.positive_layout.width = d3.select("#positive-table").style('width');
+      $scope.positive_layout.height = d3.select("#positive-table").style('height');
+      $scope.$apply();
+    });
+
+    $scope.positive_word_click =  function(e) {
+      console.log('click', e);
+      var label = e.points[0].data.text[e.points[0].pointNumber];
+
+      if (e.points[0].data.name === "input group") {
+
+        var index = $scope.positiveTags.map(function(d) {
+          return d.text;
+        }).indexOf(label);
+
+        if (index > -1) {
+          $scope.positiveTags.splice(index, 1);
+        }
+
+        $scope.tagChanged();
+
+
+      } else {
+        $scope.addPositive(label);
+      }
+
+    };
+
     var newPositiveWords = [];
     var newNegativeWords = [];
 
@@ -260,7 +293,7 @@ angular.module('conceptvectorApp')
             d.index = i;
           });
 
-          $scope.apiObj.api.refresh();
+
 
           // highlightInputWords();
           return nest;
@@ -268,6 +301,35 @@ angular.module('conceptvectorApp')
 
         $scope.data = generateData(positiveTags, positiveTemp, positiveTSNE);
 
+        var colorScale = d3.scale.category10();
+
+        $scope.positive_scatter_data = $scope.data.map(function(d,i) {
+          return {
+            x: d.values.map(function(d) {
+              return d.x;
+            }),
+            y: d.values.map(function(d) {
+              return d.y;
+            }),
+            mode: 'markers+text',
+            name: d.key + ' group',
+            hoverinfo: 'text+name',
+            text: d.values.map(function(d) {
+              return d.label
+            }),
+            textposition: 'top center',
+            textfont: {
+              size: 9,
+              color: colorScale(i),
+              opacity: 0.3
+            },
+            type: 'scatter',
+            marker: {
+              opacity: 0.4,
+              size: 15
+            }
+          };
+        })
 
         var negativeTSNE = entry.negativeRecoTSNE.concat(entry.negativeTermTSNE);
 
@@ -353,261 +415,6 @@ angular.module('conceptvectorApp')
 
     };
 
-    $scope.options = {
-      chart: {
-        type: 'scatterChart',
-        height: 450,
-        // color: d3.scale.category10().range(),
-        color: [
-          "#1f77b4",
-          "#ff7f0e",
-          "#2ca02c",
-          "#d62728",
-          "#9467bd",
-          "black",
-          "#e377c2",
-          "#7f7f7f",
-          "#bcbd22",
-          "#17becf"
-        ],
-        scatter: {
-          onlyCircles: true,
-          label: function(d) {
-            return d.word;
-          },
-          dispatch: {
-            elementClick: function(e) {
-              console.log('click', e);
-              if (e.point.cluster === "input") {
-
-                var index = $scope.positiveTags.map(function(d) {
-                  return d.text;
-                }).indexOf(e.point.label);
-
-                if (index > -1) {
-                  $scope.positiveTags.splice(index, 1);
-                }
-
-                $scope.tagChanged();
-
-
-              } else {
-                $scope.addPositive(e.point.label);
-              }
-
-            },
-
-
-            renderEnd: function(e) {
-              console.log('render end', e);
-            }
-
-          },
-
-
-        },
-        dispatch: {
-          renderEnd: function(e) {
-            console.log('render end', e);
-          }
-        },
-        showDistX: true,
-        showDistY: true,
-        //tooltipContent: function(d) {
-        //    return d.series && '<h3>' + d.series[0].key + '</h3>';
-        //},
-        duration: 0,
-        xAxis: {
-          axisLabel: 'X Axis',
-          tickFormat: function(d) {
-            return d3.format('.02f')(d);
-          }
-        },
-        yAxis: {
-          axisLabel: 'Y Axis',
-          tickFormat: function(d) {
-            return d3.format('.02f')(d);
-          },
-          axisLabelDistance: -5
-        },
-        zoom: {
-          //NOTE: All attributes below are optional
-          enabled: true,
-          // scaleExtent: [1, 10],
-          // useFixedDomain: false,
-          // useNiceScale: false,
-          // horizontalOff: false,
-          // verticalOff: false,
-          unzoomEventType: 'dblclick.zoom'
-        },
-        showDistX: false,
-        showDistY: false,
-        showLabels: true,
-        showXAxis: true,
-        showYAxis: true,
-        pointSize: function(d) {
-          return d.size || 1
-        }, //by default
-        pointRange: [10, 100],
-        pointDomain: [0, 1],
-        tooltip: {
-          contentGenerator: function(e) {
-            // console.log(e);
-            var series = e.series[0];
-            if (series.value === null) return;
-
-            var rows =
-              "<tr>" +
-              "<td class='key'>" + '' + "</td>" +
-              "<td class='x-value'>" + e.point.label + "</td>" +
-              "</tr>";
-
-            var header =
-              "<thead>" +
-              "<tr>" +
-              "<td class='legend-color-guide'><div style='background-color: " + series.color + ";'></div></td>" +
-              "<td class='key'><strong>" + series.key + "</strong></td>" +
-              "</tr>" +
-              "</thead>";
-
-            return "<table>" +
-              header +
-              "<tbody>" +
-              rows +
-              "</tbody>" +
-              "</table>";
-          }
-        },
-        duration: 0,
-        xAxis: {
-          axisLabel: '',
-          tickFormat: function(d) {
-            return d3.format('')(d);
-          },
-          showMaxMin: false,
-        },
-        yAxis: {
-          axisLabel: '',
-          tickFormat: function(d) {
-            return d3.format('')(d);
-          },
-          axisLabelDistance: -5,
-          showMaxMin: false,
-        },
-        showLegend: true,
-      }
-    };
-
-    $scope.negative_options = {
-      chart: {
-        type: 'scatterChart',
-        height: 450,
-        color: [
-          "#1f77b4",
-          "#ff7f0e",
-          "#2ca02c",
-          "#d62728",
-          "#9467bd",
-          "black",
-          "#e377c2",
-          "#7f7f7f",
-          "#bcbd22",
-          "#17becf"
-        ],
-        scatter: {
-          onlyCircles: false,
-          dispatch: {
-            elementClick: function(e) {
-              console.log('click', e);
-              if (e.point.cluster === "input") {
-
-                var index = $scope.negativeTags.map(function(d) {
-                  return d.text;
-                }).indexOf(e.point.label);
-
-                if (index > -1) {
-                  $scope.negativeTags.splice(index, 1);
-                }
-
-                $scope.tagChanged();
-
-
-              } else {
-                $scope.addNegative(e.point.label);
-              }
-
-            }
-          }
-        },
-        showDistX: false,
-        showDistY: false,
-        showLabels: true,
-        showXAxis: false,
-        showYAxis: false,
-        pointSize: function(d) {
-          return d.size || 1
-        }, //by default
-        pointRange: [10, 100],
-        pointDomain: [0, 1],
-        tooltip: {
-          contentGenerator: function(e) {
-            // console.log(e);
-            var series = e.series[0];
-            if (series.value === null) return;
-
-            var rows =
-              "<tr>" +
-              "<td class='key'>" + '' + "</td>" +
-              "<td class='x-value'>" + e.point.label + "</td>" +
-              "</tr>";
-
-            var header =
-              "<thead>" +
-              "<tr>" +
-              "<td class='legend-color-guide'><div style='background-color: " + series.color + ";'></div></td>" +
-              "<td class='key'><strong>" + series.key + "</strong></td>" +
-              "</tr>" +
-              "</thead>";
-
-            return "<table>" +
-              header +
-              "<tbody>" +
-              rows +
-              "</tbody>" +
-              "</table>";
-          }
-        },
-        duration: 0,
-        xAxis: {
-          axisLabel: 'X Axis',
-          tickFormat: function(d) {
-            return d3.format('.02f')(d);
-          },
-          showMaxMin: false,
-        },
-        yAxis: {
-          axisLabel: 'Y Axis',
-          tickFormat: function(d) {
-            return d3.format('.02f')(d);
-          },
-          axisLabelDistance: -5,
-          showMaxMin: false,
-        },
-        zoom: {
-          //NOTE: All attributes below are optional
-          enabled: false,
-          scaleExtent: [0.5, 10],
-          useFixedDomain: false,
-          useNiceScale: false,
-          horizontalOff: false,
-          verticalOff: false,
-          unzoomEventType: 'dblclick.zoom'
-        },
-        showLegend: false,
-      }
-    };
-
-    var chart;
 
     $scope.buttonHoverWordNegative = function(word) {
       $scope.$broadcast('wordHoverNegative', word);
@@ -644,11 +451,12 @@ angular.module('conceptvectorApp')
 
 
     $scope.buttonHoverWord = function(word) {
-      $scope.$broadcast('wordHover', word);
+      // $scope.$broadcast('wordHover', word);
+      $scope.positiveHover = [word];
     };
 
     $scope.buttonMoveoutWord = function(word) {
-      $scope.$broadcast('wordMoveout', word);
+      $scope.positiveHover = [];
     };
 
     $scope.highlightInputWords = function() {
@@ -684,59 +492,12 @@ angular.module('conceptvectorApp')
     $scope.buttonHoverCluster = function(cluster) {
 
       console.log(cluster);
-      cluster.forEach(function(word) {
-        $scope.$broadcast('wordHover', word);
-      });
+      $scope.positiveHover = cluster;
     };
 
     $scope.buttonMoveoutCluster = function(cluster) {
-      cluster.forEach(function(word) {
-        $scope.$broadcast('wordMoveout', word);
-      });
+      $scope.positiveHover = [];
     };
-
-    $scope.positiveChartEvents = {
-      "wordHover": function(e, scope, args) {
-        var evt = buildHoverEvt(args, scope);
-        scope.chart.scatter._calls.highlightPoint(evt.seriesIndex, evt.pointIndex, true);
-
-      },
-      "wordMoveout": function(e, scope, args) {
-        var evt = buildHoverEvt(args, scope);
-        scope.chart.scatter._calls.highlightPoint(evt.seriesIndex, evt.pointIndex, false);
-      }
-    };
-
-    var buildHoverEvt = function(word, scope) {
-      var wordObj = positiveChartWordIndex.filter(function(d) {
-        return d.label == word;
-      });
-      console.log(wordObj);
-      var evt = new Event('mouseover')
-
-      evt.seriesIndex = wordObj[0].series;
-      evt.pointIndex = wordObj[0].clusterIndex;
-      evt.series = $scope.data[wordObj[0].series];
-      evt.point = wordObj[0];
-      evt.relativePos = [
-        scope.chart.xScale()(wordObj[0].x),
-        scope.chart.yScale()(wordObj[0].y)
-      ];
-      evt.clientX = evt.relativePos[0];
-      evt.clientY = evt.relativePos[1];
-
-      return evt;
-    };
-
-    /* For TSNE.js */
-    var opt = {}
-    opt.epsilon = 10;
-    opt.perplexity = 30;
-    opt.dim = 2;
-
-    var tsne = new tsnejs.tSNE(opt);
-
-
 
     $scope.data = [];
     $scope.negative_data = [];

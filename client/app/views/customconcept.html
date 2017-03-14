@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6" id="positive-table">
         Click to add suggested words.
         <table class="table table-condensed">
           <tr ng-repeat="cluster in positiveRecommendation">
@@ -95,7 +95,7 @@
         </table>
       </div>
       <div class="col-md-6" cg-busy="loadingPromise">
-        <nvd3 options='options' data='data' api='apiObj.api' config='{deepWatchDataDepth: 0, refreshDataOnly: false}' events="positiveChartEvents"> </nvd3>
+        <scatter data='positive_scatter_data' layout='positive_layout' onclick='positive_word_click(e)' hover='positiveHover'></scatter>
       </div>
     </div>
   </div>
