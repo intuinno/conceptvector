@@ -35,8 +35,8 @@ import ipdb as pdb
 article_file_name = 'data/most_popular_articles.pkl'
 comment_file_name = 'data/comments.pkl'
 articleWithComments_file_name = 'data/article_with_comments.pkl'
-
-engine = create_engine('postgresql://intuinno:test@localhost/conceptvectorDB',echo=False)
+DATABASE_URL='postgresql://postgres:postgres@localhost/conceptvectorDB'
+engine = create_engine(DATABASE_URL,echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 cache = False

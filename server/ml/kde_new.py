@@ -76,9 +76,11 @@ class KdeModel:
     return self.get_comment_score_from_word_sequence(sequence)
 
   def get_comment_score_from_word_sequence(self, words):
-    bipolar_scores = [self.get_bipolar(word.lower()) for word in words]
-    bipolar_avg = sum(bipolar_scores)/len(bipolar_scores)
-    return bipolar_avg
+    # bipolar_scores = [self.get_bipolar(word.lower()) for word in words]
+    # bipolar_avg = sum(bipolar_scores)/len(bipolar_scores)
+    # return bipolar_avg
+    bipolar_scores = [self.get_bipolar(word.lower()) for word in words if self.get_bipolar(word.lower())>1e-1]
+    return bipolar_scores
 
   def _compute_unnormalized_density(self, target_words):
     result = np.zeros((len(self.embedding_model.vocabulary),))

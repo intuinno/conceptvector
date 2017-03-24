@@ -9,6 +9,7 @@ class DotModel:
 
   def learn(self, pos_words=[], neg_words=[], irr_words=[]):
     self.h_sq = h_sq
+
     # filter out words that does not in the dictionary
     self.pos_words = [x for x in pos_words if self.embedding_model.has_word(x)]
     self.neg_words = [x for x in neg_words if self.embedding_model.has_word(x)]

@@ -1,0 +1,427 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Article	models.py	/^class Article(db.Model):$/;"	c
+ArticleList	apiModule.py	/^class ArticleList(Resource):$/;"	c
+ArticleSchema	models.py	/^class ArticleSchema(Schema):$/;"	c
+ArticleUpdate	apiModule.py	/^class ArticleUpdate(Resource):$/;"	c
+CRUD	models.py	/^class CRUD():$/;"	c
+CSRF_ENABLED	config.py	/^	CSRF_ENABLED = True$/;"	v	class:Config
+Comment	models.py	/^class Comment(db.Model):$/;"	c
+CommentSchema	models.py	/^class CommentSchema(Schema):$/;"	c
+ConceptDelete	apiModule.py	/^class ConceptDelete(Resource):$/;"	c
+ConceptDownload	apiModule.py	/^class ConceptDownload(Resource):$/;"	c
+ConceptList	apiModule.py	/^class ConceptList(Resource):$/;"	c
+ConceptScore	apiModule.py	/^class ConceptScore(Resource):$/;"	c
+Concepts	models.py	/^class Concepts(db.Model, CRUD):$/;"	c
+ConceptsSchema	models.py	/^class ConceptsSchema(Schema):$/;"	c
+ConceptsUpdate	apiModule.py	/^class ConceptsUpdate(Resource):$/;"	c
+Config	config.py	/^class Config(object):$/;"	c
+DATABASE_URL	nytimesAPI3.py	/^DATABASE_URL='postgresql:\/\/postgres:postgres@localhost\/conceptvectorDB'$/;"	v
+DEBUG	config.py	/^	DEBUG = False$/;"	v	class:Config
+DEBUG	config.py	/^	DEBUG = False$/;"	v	class:ProductionConfig
+DEBUG	config.py	/^	DEBUG = True$/;"	v	class:DevelopmentConfig
+DEBUG	config.py	/^	DEBUG = True$/;"	v	class:StagingConfig
+DEVELOPMENT	config.py	/^	DEVELOPMENT = True$/;"	v	class:DevelopmentConfig
+DEVELOPMENT	config.py	/^	DEVELOPMENT = True$/;"	v	class:StagingConfig
+DevelopmentConfig	config.py	/^class DevelopmentConfig(Config):$/;"	c
+DotModel	ml/dot.py	/^class DotModel:$/;"	c
+EmbeddingModel	ml/embedding.py	/^class EmbeddingModel:$/;"	c
+KdeModel	ml/kde.py	/^class KdeModel:$/;"	c
+KdeModel	ml/kde_new.py	/^class KdeModel:$/;"	c
+LRUCache	ml/cache.py	/^class LRUCache:$/;"	c
+Login	apiModule.py	/^class Login(Resource):$/;"	c
+Logout	apiModule.py	/^class Logout(Resource):$/;"	c
+Meta	models.py	/^	class Meta:$/;"	c	class:ArticleSchema
+Meta	models.py	/^	class Meta:$/;"	c	class:CommentSchema
+Meta	models.py	/^	class Meta:$/;"	c	class:ConceptsSchema
+ProductionConfig	config.py	/^class ProductionConfig(Config):$/;"	c
+QueryAutoComplete	apiModule.py	/^class QueryAutoComplete(Resource):$/;"	c
+RecommendWordsClusterDot	apiModule.py	/^class RecommendWordsClusterDot(Resource):$/;"	c
+RecommendWordsClusterKDE	apiModule.py	/^class RecommendWordsClusterKDE(Resource):$/;"	c
+RecommendWordsClusterMinMax	apiModule.py	/^class RecommendWordsClusterMinMax(Resource):$/;"	c
+Register	apiModule.py	/^class Register(Resource):$/;"	c
+SECRET_KEY	config.py	/^	SECRET_KEY = 'this-really-needs-to-be-changed'$/;"	v	class:Config
+SQLALCHEMY_DATABASE_URI	config.py	/^	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']$/;"	v	class:Config
+Session	nytimesAPI.py	/^Session = sessionmaker(bind=engine)$/;"	v
+Session	nytimesAPI2.py	/^Session = sessionmaker(bind=engine)$/;"	v
+Session	nytimesAPI3.py	/^Session = sessionmaker(bind=engine)$/;"	v
+StagingConfig	config.py	/^class StagingConfig(Config):$/;"	c
+Status	apiModule.py	/^class Status(Resource):$/;"	c
+TESTING	config.py	/^	TESTING = False$/;"	v	class:Config
+TESTING	config.py	/^	TESTING = True$/;"	v	class:TestingConfig
+TestingConfig	config.py	/^class TestingConfig(Config):$/;"	c
+User	models.py	/^class User(db.Model):$/;"	c
+__contains__	ml/cache.py	/^  def __contains__(self, key):$/;"	m	class:LRUCache	file:
+__getitem__	ml/cache.py	/^  def __getitem__(self, key):$/;"	m	class:LRUCache	file:
+__init__	ml/cache.py	/^  def __init__(self, capacity):$/;"	m	class:LRUCache
+__init__	ml/dot.py	/^  def __init__(self, embedding_model):$/;"	m	class:DotModel
+__init__	ml/embedding.py	/^  def __init__(self, filename, skip_head=True, dist_type='euclidean',$/;"	m	class:EmbeddingModel
+__init__	ml/kde.py	/^  def __init__(self, embedding_model):$/;"	m	class:KdeModel
+__init__	ml/kde_new.py	/^  def __init__(self, embedding_model):$/;"	m	class:KdeModel
+__init__	models.py	/^	def __init__(self, apiResult):$/;"	m	class:Article
+__init__	models.py	/^	def __init__(self, apiResult, assetID):$/;"	m	class:Comment
+__init__	models.py	/^	def __init__(self, name, creator_id, concept_type, input_terms, creator_name ):$/;"	m	class:Concepts
+__init__	models.py	/^	def __init__(self, name, email, password, admin=False):$/;"	m	class:User
+__repr__	models.py	/^	def __repr__(self):$/;"	m	class:Article	file:
+__repr__	models.py	/^	def __repr__(self):$/;"	m	class:Comment	file:
+__repr__	models.py	/^	def __repr__(self):$/;"	m	class:Concepts	file:
+__repr__	models.py	/^	def __repr__(self):$/;"	m	class:User	file:
+__setitem__	ml/cache.py	/^  def __setitem__(self, key, value):$/;"	m	class:LRUCache	file:
+__tablename__	models.py	/^	__tablename__ = 'articles'$/;"	v	class:Article
+__tablename__	models.py	/^	__tablename__ = 'comments'$/;"	v	class:Comment
+__tablename__	models.py	/^	__tablename__ = 'concepts'$/;"	v	class:Concepts
+__tablename__	models.py	/^	__tablename__ = 'users'$/;"	v	class:User
+_compute_unnormalized_density	ml/dot.py	/^  def _compute_unnormalized_density(self, target_words):$/;"	m	class:DotModel
+_compute_unnormalized_density	ml/kde.py	/^  def _compute_unnormalized_density(self, target_words):$/;"	m	class:KdeModel
+_compute_unnormalized_density	ml/kde_new.py	/^  def _compute_unnormalized_density(self, target_words):$/;"	m	class:KdeModel
+_compute_unnormalized_density_ret_dist	ml/kde.py	/^  def _compute_unnormalized_density_ret_dist(self, target_words):$/;"	m	class:KdeModel
+_compute_unnormalized_density_ret_dist	ml/kde_new.py	/^  def _compute_unnormalized_density_ret_dist(self, target_words):$/;"	m	class:KdeModel
+_unnormalized_gaussian	ml/dot.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:DotModel
+_unnormalized_gaussian	ml/kde.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:KdeModel
+_unnormalized_gaussian	ml/kde_new.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:KdeModel
+abstract	models.py	/^	abstract = db.Column(db.String)$/;"	v	class:Article
+add	models.py	/^	def add(self, resource):$/;"	m	class:CRUD
+add_articles_database	nytimesAPI.py	/^def add_articles_database():$/;"	f
+add_articles_database	nytimesAPI2.py	/^def add_articles_database():$/;"	f
+add_articles_database	nytimesAPI3.py	/^def add_articles_database():$/;"	f
+add_comments_to_database	nytimesAPI3.py	/^def add_comments_to_database(a,comments):$/;"	f
+add_database	nytimesAPI3.py	/^def add_database():$/;"	f
+add_replies	nytimesAPI.py	/^def add_replies(all, node, stacklevel):$/;"	f
+add_replies	nytimesAPI2.py	/^def add_replies(all, node, stacklevel):$/;"	f
+add_replies	nytimesAPI3.py	/^def add_replies(all, node, stacklevel):$/;"	f
+admin	models.py	/^	admin = db.Column(db.Boolean, nullable=False, default=False)$/;"	v	class:User
+adx_keywords	models.py	/^	adx_keywords = db.Column(db.String)$/;"	v	class:Article
+after_request	apiModule.py	/^def after_request(response):$/;"	f
+api	appModule.py	/^api = Api(app)$/;"	v
+app	appModule.py	/^app = Flask(__name__)$/;"	v
+approveDate	models.py	/^	approveDate = db.Column(db.String)$/;"	v	class:Comment
+article	models.py	/^	article = db.relationship("Article", back_populates="comments")$/;"	v	class:Comment
+articleWithComments_file_name	nytimesAPI2.py	/^articleWithComments_file_name = 'data\/article_with_comments.pkl'$/;"	v
+articleWithComments_file_name	nytimesAPI3.py	/^articleWithComments_file_name = 'data\/article_with_comments.pkl'$/;"	v
+article_file_name	nytimesAPI.py	/^article_file_name = 'data\/most_popular_articles.pkl'$/;"	v
+article_file_name	nytimesAPI2.py	/^article_file_name = 'data\/most_popular_articles.pkl'$/;"	v
+article_file_name	nytimesAPI3.py	/^article_file_name = 'data\/most_popular_articles.pkl'$/;"	v
+article_list_schema	apiModule.py	/^article_list_schema = ArticleSchema(only=('published_date','title','type','section','id'), many=True)$/;"	v
+article_schema	apiModule.py	/^article_schema = ArticleSchema()$/;"	v
+assetID	models.py	/^	assetID = db.Column(BIGINT, db.ForeignKey('articles.id'))$/;"	v	class:Comment
+asset_id	models.py	/^	asset_id = db.Column(BIGINT)$/;"	v	class:Article
+bandwith	ml/kde_test.py	/^bandwith = 2$/;"	v
+bcrypt	appModule.py	/^bcrypt = Bcrypt(app)$/;"	v
+byline	models.py	/^	byline = db.Column(db.String)$/;"	v	class:Article
+c	ml/cache_test.py	/^c = cache.LRUCache(3)$/;"	v
+cache	nytimesAPI.py	/^cache = False$/;"	v
+cache	nytimesAPI2.py	/^cache = False$/;"	v
+cache	nytimesAPI3.py	/^cache = False$/;"	v
+column	models.py	/^	column = db.Column(db.String)$/;"	v	class:Article
+commentBody	models.py	/^	commentBody = db.Column(db.String)$/;"	v	class:Comment
+commentID	models.py	/^	commentID = db.Column(db.Integer, primary_key=True)$/;"	v	class:Comment
+commentSequence	models.py	/^	commentSequence = db.Column(db.Integer)$/;"	v	class:Comment
+commentTitle	models.py	/^	commentTitle = db.Column(db.String)$/;"	v	class:Comment
+commentType	models.py	/^	commentType = db.Column(db.String)$/;"	v	class:Comment
+comment_file	ml/kde_test.py	/^comment_file = 'data\/comment_dump.csv'$/;"	v
+comment_file_name	nytimesAPI.py	/^comment_file_name = 'data\/comments.pkl'$/;"	v
+comment_file_name	nytimesAPI2.py	/^comment_file_name = 'data\/comments.pkl'$/;"	v
+comment_file_name	nytimesAPI3.py	/^comment_file_name = 'data\/comments.pkl'$/;"	v
+comment_schema	apiModule.py	/^comment_schema = CommentSchema()$/;"	v
+comment_score_pairs	ml/kde_test.py	/^comment_score_pairs = []$/;"	v
+comments	ml/kde_test.py	/^comments = reader.read_comment_bodys(comment_file, 100000004235555)$/;"	v
+comments	models.py	/^		comments = fields.Nested('CommentSchema',many=True)$/;"	v	class:ArticleSchema.Meta
+comments	models.py	/^	comments = db.relationship("Comment", back_populates="article")$/;"	v	class:Article
+comments_count	models.py	/^	def comments_count(cls):$/;"	m	class:Article
+comments_count	models.py	/^	def comments_count(self):$/;"	m	class:Article
+community_keys	nytimesAPI.py	/^community_keys = [$/;"	v
+community_keys	nytimesAPI2.py	/^community_keys = [$/;"	v
+community_keys	nytimesAPI3.py	/^community_keys = [$/;"	v
+compute_all_distances_from_a_word	ml/embedding.py	/^  def compute_all_distances_from_a_word(self, word):$/;"	m	class:EmbeddingModel
+concept_type	models.py	/^	concept_type = fields.Str()$/;"	v	class:ConceptsSchema
+concept_type	models.py	/^	concept_type=db.Column(db.String(20), default='bipolar', nullable=False)$/;"	v	class:Concepts
+concepts	models.py	/^	concepts = db.relationship('Concepts', backref="users", cascade="all, delete-orphan", lazy="dynamic")$/;"	v	class:User
+config	migrations/env.py	/^config = context.config$/;"	v
+count_non_overlapping	ml/matching.py	/^def count_non_overlapping(a, b):$/;"	f
+createDate	models.py	/^	createDate = db.Column(db.String)$/;"	v	class:Comment
+created_on	models.py	/^	created_on = db.Column(db.DateTime, nullable=False)$/;"	v	class:Concepts
+created_on	models.py	/^	created_on = fields.DateTime()$/;"	v	class:ConceptsSchema
+creator	models.py	/^	creator = db.relationship("User", back_populates="concepts")$/;"	v	class:Concepts
+creator_id	models.py	/^	creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))$/;"	v	class:Concepts
+creator_id	models.py	/^	creator_id = fields.Integer()$/;"	v	class:ConceptsSchema
+creator_name	models.py	/^	creator_name = db.Column(db.String(255), nullable=False)$/;"	v	class:Concepts
+creator_name	models.py	/^	creator_name = fields.Str()$/;"	v	class:ConceptsSchema
+currentKey	nytimesAPI.py	/^currentKey = 0$/;"	v
+currentKey	nytimesAPI2.py	/^currentKey = 0$/;"	v
+currentKey	nytimesAPI3.py	/^currentKey = 0$/;"	v
+current_clustering_remapped	ml/matching_test.py	/^current_clustering_remapped = {}$/;"	v
+datafile	ml/embedding_test.py	/^datafile = '..\/..\/data\/glove.6B.50d.txt'$/;"	v
+db	appModule.py	/^db = SQLAlchemy(app)$/;"	v
+default_kde_h_sq	apiModule.py	/^default_kde_h_sq = 2$/;"	v
+delete	apiModule.py	/^	def delete(self, id):$/;"	m	class:ConceptsUpdate
+delete	models.py	/^	def delete(self, resource):$/;"	m	class:CRUD
+depth	models.py	/^	depth = db.Column(db.Integer)$/;"	v	class:Comment
+des_facet	models.py	/^	des_facet = db.Column(ARRAY(db.String))$/;"	v	class:Article
+down_revision	migrations/versions/192e968ba885_.py	/^down_revision = 'd8b3abd2d346'$/;"	v
+down_revision	migrations/versions/1b0eada1cb54_.py	/^down_revision = None$/;"	v
+down_revision	migrations/versions/1cdb6a14c9f6_.py	/^down_revision = '21dc0327953b'$/;"	v
+down_revision	migrations/versions/21dc0327953b_.py	/^down_revision = '1b0eada1cb54'$/;"	v
+down_revision	migrations/versions/25436ed3b306_.py	/^down_revision = 'f92d87d037d3'$/;"	v
+down_revision	migrations/versions/27468b058208_.py	/^down_revision = 'c80991840b24'$/;"	v
+down_revision	migrations/versions/2ac25ef90f72_.py	/^down_revision = 'ba8e04902646'$/;"	v
+down_revision	migrations/versions/2cc11947b1d5_.py	/^down_revision = '192e968ba885'$/;"	v
+down_revision	migrations/versions/42f0ca2b47de_.py	/^down_revision = 'b758eb9865f6'$/;"	v
+down_revision	migrations/versions/4877b7a49c90_.py	/^down_revision = '826505656e67'$/;"	v
+down_revision	migrations/versions/5cfdc2ffad35_.py	/^down_revision = 'c2360480cd5b'$/;"	v
+down_revision	migrations/versions/6d7beb3315a4_.py	/^down_revision = 'f6b5eead97b7'$/;"	v
+down_revision	migrations/versions/727cde81fa58_.py	/^down_revision = '8ac98b74a6af'$/;"	v
+down_revision	migrations/versions/826505656e67_.py	/^down_revision = '5cfdc2ffad35'$/;"	v
+down_revision	migrations/versions/8ac98b74a6af_.py	/^down_revision = '27468b058208'$/;"	v
+down_revision	migrations/versions/8f85bc5a934c_.py	/^down_revision = '9c72e6d45ffa'$/;"	v
+down_revision	migrations/versions/9c72e6d45ffa_.py	/^down_revision = '4877b7a49c90'$/;"	v
+down_revision	migrations/versions/b758eb9865f6_.py	/^down_revision = '1cdb6a14c9f6'$/;"	v
+down_revision	migrations/versions/ba8e04902646_.py	/^down_revision = ('2cc11947b1d5', 'c9179b3f8689')$/;"	v
+down_revision	migrations/versions/c2360480cd5b_.py	/^down_revision = '192e968ba885'$/;"	v
+down_revision	migrations/versions/c80991840b24_.py	/^down_revision = '8f85bc5a934c'$/;"	v
+down_revision	migrations/versions/c9179b3f8689_.py	/^down_revision = '6d7beb3315a4'$/;"	v
+down_revision	migrations/versions/d8b3abd2d346_.py	/^down_revision = '42f0ca2b47de'$/;"	v
+down_revision	migrations/versions/e38c2725964b_.py	/^down_revision = '727cde81fa58'$/;"	v
+down_revision	migrations/versions/f6b5eead97b7_.py	/^down_revision = '25436ed3b306'$/;"	v
+down_revision	migrations/versions/f92d87d037d3_.py	/^down_revision = 'e38c2725964b'$/;"	v
+downgrade	migrations/versions/192e968ba885_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/1b0eada1cb54_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/1cdb6a14c9f6_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/21dc0327953b_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/25436ed3b306_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/27468b058208_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/2ac25ef90f72_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/2cc11947b1d5_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/42f0ca2b47de_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/4877b7a49c90_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/5cfdc2ffad35_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/6d7beb3315a4_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/727cde81fa58_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/826505656e67_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/8ac98b74a6af_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/8f85bc5a934c_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/9c72e6d45ffa_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/b758eb9865f6_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/ba8e04902646_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/c2360480cd5b_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/c80991840b24_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/c9179b3f8689_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/d8b3abd2d346_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/e38c2725964b_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/f6b5eead97b7_.py	/^def downgrade():$/;"	f
+downgrade	migrations/versions/f92d87d037d3_.py	/^def downgrade():$/;"	f
+download_add_comments	nytimesAPI.py	/^def download_add_comments(a):$/;"	f
+download_add_comments	nytimesAPI2.py	/^def download_add_comments(a):$/;"	f
+download_add_comments	nytimesAPI3.py	/^def download_add_comments(a):$/;"	f
+download_articles	nytimesAPI.py	/^def download_articles():$/;"	f
+download_articles	nytimesAPI2.py	/^def download_articles():$/;"	f
+download_articles	nytimesAPI3.py	/^def download_articles():$/;"	f
+edited_on	models.py	/^	edited_on = db.Column(db.DateTime, nullable=False)$/;"	v	class:Concepts
+editorsSelection	models.py	/^	editorsSelection = db.Column(db.Boolean)$/;"	v	class:Comment
+email	models.py	/^	email = db.Column(db.String(255), index=True, unique=True, nullable=False)$/;"	v	class:User
+embedding_file	ml/kde_test.py	/^embedding_file = 'data\/glove.6B.50d.txt'$/;"	v
+embedding_model	ml/kde_test.py	/^embedding_model = embedding.EmbeddingModel(embedding_file, cache_capacity=2)$/;"	v
+embeddings	ml/embedding_test.py	/^embeddings = [model.get_embedding_for_a_word(x) for x in recommended]$/;"	v
+engine	nytimesAPI.py	/^engine = create_engine('postgresql:\/\/intuinno:test@localhost\/conceptvectorDB',echo=False)$/;"	v
+engine	nytimesAPI2.py	/^engine = create_engine('postgresql:\/\/\/conceptvector_dev',echo=False)$/;"	v
+engine	nytimesAPI3.py	/^engine = create_engine(DATABASE_URL,echo=False)$/;"	v
+fields	models.py	/^		fields = ('commentBody','commentID','createDate', 'commentTitle',$/;"	v	class:CommentSchema.Meta
+fields	models.py	/^		fields = ('id','url','adx_keywords','section','type','title','abstract',$/;"	v	class:ArticleSchema.Meta
+find_word	ml/embedding.py	/^  def find_word(self, word):$/;"	m	class:EmbeddingModel
+geo_facet	models.py	/^	geo_facet = db.Column(ARRAY(db.String))$/;"	v	class:Article
+get	apiModule.py	/^	def get(self):$/;"	m	class:ArticleList
+get	apiModule.py	/^	def get(self):$/;"	m	class:ConceptList
+get	apiModule.py	/^	def get(self):$/;"	m	class:ConceptScore
+get	apiModule.py	/^	def get(self):$/;"	m	class:Logout
+get	apiModule.py	/^	def get(self):$/;"	m	class:Status
+get	apiModule.py	/^	def get(self,id):$/;"	m	class:ArticleUpdate
+get	apiModule.py	/^	def get(self,id):$/;"	m	class:ConceptDelete
+get	apiModule.py	/^	def get(self,id):$/;"	m	class:ConceptDownload
+get	apiModule.py	/^	def get(self,id):$/;"	m	class:ConceptsUpdate
+get	apiModule.py	/^  def get(self, word):$/;"	m	class:QueryAutoComplete
+getAutoComplete	ml/embedding.py	/^  def getAutoComplete(self, word):$/;"	m	class:EmbeddingModel
+getComments	nytimesAPI.py	/^def getComments(url, offset=0):$/;"	f
+getComments	nytimesAPI2.py	/^def getComments(url, offset=0):$/;"	f
+getComments	nytimesAPI3.py	/^def getComments(url, offset=0):$/;"	f
+getKeywordsScore	ml/kde.py	/^  def getKeywordsScore(self, words, concept_type, how_many=100):$/;"	m	class:KdeModel
+getKeywordsScore	ml/kde_new.py	/^  def getKeywordsScore(self, words, concept_type, how_many=100):$/;"	m	class:KdeModel
+getNumComments	nytimesAPI.py	/^def getNumComments(a):$/;"	f
+getNumComments	nytimesAPI2.py	/^def getNumComments(aUrl):$/;"	f
+getNumComments	nytimesAPI3.py	/^def getNumComments(a):$/;"	f
+getScore	apiModule.py	/^	def getScore(self, concept, comments):$/;"	m	class:ConceptScore
+get_bipolar	ml/dot.py	/^  def get_bipolar(self, word):$/;"	m	class:DotModel
+get_bipolar	ml/kde.py	/^  def get_bipolar(self, word):$/;"	m	class:KdeModel
+get_bipolar	ml/kde_new.py	/^  def get_bipolar(self, word):$/;"	m	class:KdeModel
+get_comment_score_from_text	ml/kde.py	/^  def get_comment_score_from_text(self, text):$/;"	m	class:KdeModel
+get_comment_score_from_text	ml/kde_new.py	/^  def get_comment_score_from_text(self, text):$/;"	m	class:KdeModel
+get_comment_score_from_word_sequence	ml/kde.py	/^  def get_comment_score_from_word_sequence(self, words):$/;"	m	class:KdeModel
+get_comment_score_from_word_sequence	ml/kde_new.py	/^  def get_comment_score_from_word_sequence(self, words):$/;"	m	class:KdeModel
+get_conditional	ml/dot.py	/^  def get_conditional(self, word):$/;"	m	class:DotModel
+get_conditional	ml/kde.py	/^  def get_conditional(self, word):$/;"	m	class:KdeModel
+get_conditional	ml/kde_new.py	/^  def get_conditional(self, word):$/;"	m	class:KdeModel
+get_embedding_for_a_word	ml/embedding.py	/^  def get_embedding_for_a_word(self, word):$/;"	m	class:EmbeddingModel
+get_embedding_for_words	ml/embedding.py	/^  def get_embedding_for_words(self, words):$/;"	m	class:EmbeddingModel
+get_id	models.py	/^	def get_id(self):$/;"	m	class:Concepts
+get_id	models.py	/^	def get_id(self):$/;"	m	class:User
+get_joint	ml/dot.py	/^  def get_joint(self, word):$/;"	m	class:DotModel
+get_joint	ml/kde.py	/^  def get_joint(self, word):$/;"	m	class:KdeModel
+get_joint	ml/kde_new.py	/^  def get_joint(self, word):$/;"	m	class:KdeModel
+get_keywords	ml/kde.py	/^  def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
+get_keywords	ml/kde_new.py	/^  def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
+get_top_level_links	models.py	/^	def get_top_level_links(self, data, many):$/;"	m	class:ArticleSchema
+get_top_level_links	models.py	/^	def get_top_level_links(self, data, many):$/;"	m	class:ConceptsSchema
+get_word	ml/embedding.py	/^  def get_word(self, index):$/;"	m	class:EmbeddingModel
+has_word	ml/embedding.py	/^  def has_word(self, word):$/;"	m	class:EmbeddingModel
+headerNames	apiModule.py	/^headerNames = ['word'] + range(300)$/;"	v
+help_text	models.py	/^	help_text = db.Column(db.String(255))$/;"	v	class:Concepts
+help_text	models.py	/^	help_text = fields.Str()$/;"	v	class:ConceptsSchema
+id	models.py	/^	id = db.Column(BIGINT, primary_key=True)$/;"	v	class:Article
+id	models.py	/^	id = db.Column(db.Integer, primary_key=True, autoincrement=True)$/;"	v	class:Concepts
+id	models.py	/^	id = db.Column(db.Integer, primary_key=True, autoincrement=True)$/;"	v	class:User
+id	models.py	/^	id = fields.Integer(dump_only=False)$/;"	v	class:ConceptsSchema
+input_terms	models.py	/^	input_terms = fields.Raw()$/;"	v	class:ConceptsSchema
+input_terms	models.py	/^	input_terms=db.Column(JSON)$/;"	v	class:Concepts
+irr_words	ml/kde_test.py	/^irr_words=['freed'])$/;"	v
+is_active	models.py	/^	def is_active(self):$/;"	m	class:User
+is_anonymous	models.py	/^	def is_anonymous(self):$/;"	m	class:User
+is_authenticated	models.py	/^	def is_authenticated(self):$/;"	m	class:User
+kde_model	apiModule.py	/^kde_model = kde.KdeModel(w2v_model)$/;"	v
+kde_model	apiModule.py	/^kde_model = kde_new.KdeModel(w2v_model)$/;"	v
+kde_model	ml/kde_test.py	/^kde_model = kde.KdeModel(embedding_model)$/;"	v
+kmeans	ml/embedding_test.py	/^kmeans = cluster.KMeans(n_clusters=3)$/;"	v
+learn	ml/dot.py	/^  def learn(self, pos_words=[], neg_words=[], irr_words=[]):$/;"	m	class:DotModel
+learn	ml/kde.py	/^  def learn(self, h_sq=0.5, pos_words=[], neg_words=[], irr_words=[]):$/;"	m	class:KdeModel
+learn	ml/kde_new.py	/^  def learn(self, h_sq=0.5, pos_words=[], neg_words=[], irr_words=[]):$/;"	m	class:KdeModel
+logger	migrations/env.py	/^logger = logging.getLogger('alembic.env')$/;"	v
+manager	manage.py	/^manager = Manager(app)$/;"	v
+mapping	ml/matching_test.py	/^mapping = matching.solve_matching(5, old_cluster, new_cluster)$/;"	v
+media	models.py	/^	media = db.Column(ARRAY(db.String))$/;"	v	class:Article
+migrate	manage.py	/^migrate = Migrate(app,db)$/;"	v
+model	ml/embedding_test.py	/^model = embedding.EmbeddingModel(datafile)$/;"	v
+name	models.py	/^	name = db.Column(db.String(255), nullable=False, unique=True)$/;"	v	class:Concepts
+name	models.py	/^	name = db.Column(db.String(255), nullable=True, default="User")$/;"	v	class:User
+name	models.py	/^	name = fields.Str()$/;"	v	class:ConceptsSchema
+new_cluster	ml/matching_test.py	/^new_cluster = {0: ['definitely', 'obviously', 'surely', 'hardly', 'realized', 'unfortunately', 'certainly'], 1: ['everybody', 'everyone', 'maybe', 'nobody', 'myself', "'d", 'feels', 'else', 'sure', "'m", 'always', 'knows', 'talking', 'really', 'feel', 'something'], 2: ['imagine', 'anyway', 'guess', 'anymore', 'okay', 'knowing', 'figured', 'remember', 'sorry', 'luck', 'yes', 'liked', 'hopefully', 'wonder', 'lucky', 'forget', 'forgot', 'ok', 'honestly'], 3: ['thrilled', 'pleased', 'thankful', 'surprised', 'delighted', 'proud'], 4: ['wish', 'thank']}$/;"	v
+new_cluster	ml/matching_test.py	/^new_cluster = {0: ['remember', 'wish', 'forget', 'thank'], 1: ['definitely', 'imagine', 'obviously', 'knowing', 'figured', 'surely', 'luck', 'hopefully', 'hardly', 'wonder', 'realized', 'unfortunately', 'certainly', 'honestly'], 2: ['everybody', 'everyone', 'maybe', 'nobody', 'myself', "'d", 'feels', 'else', 'sure', "'m", 'always', 'knows', 'talking', 'really', 'feel', 'something'], 3: ['thrilled', 'pleased', 'thankful', 'surprised', 'delighted', 'proud'], 4: ['anyway', 'guess', 'anymore', 'okay', 'sorry', 'yes', 'liked', 'lucky', 'forgot', 'ok']}$/;"	v
+new_cluster	ml/matching_test.py	/^new_cluster = {1: ['happy'], 2: ['sad', 'depressed'], 0: ['funky']}$/;"	v
+not_blank	models.py	/^	not_blank = validate.Length(min=1, error='Field cannot be blank')$/;"	v	class:ConceptsSchema
+old_cluster	ml/matching_test.py	/^old_cluster = {0: ['everyone', 'everybody', 'maybe', "'d", "'m", 'really', 'guess', 'something', 'anyway', 'else', 'thing', 'sure', 'good', 'myself', 'yes', 'anymore', 'nobody', 'knowing', 'knows', 'nothing', 'think', 'know', 'me', 'happens'], 1: ['definitely', 'always', 'feels', 'feel', 'obviously', 'hardly', 'certainly', 'moment'], 2: ['imagine', 'wonder', 'remember', 'lucky', 'crazy', 'luck', 'liked', 'wish', 'likes', 'loved'], 3: ['talking', 'seeing', 'come', 'watching', 'gone'], 4: ['glad', 'thrilled', 'proud']}$/;"	v
+old_cluster	ml/matching_test.py	/^old_cluster = {0: ['happy', 'hello'], 1: ['sad', 'depressed'], 2: ['funky']}$/;"	v
+old_cluster	ml/matching_test.py	/^old_cluster = {0: ['maybe', "'d", 'guess', 'anyway', 'else', 'yes', 'anymore', 'nobody', 'come', 'gone', 'happens'], 1: ['everyone', 'everybody', 'always', "'m", 'really', 'something', 'feel', 'thing', 'sure', 'good', 'myself', 'think', 'know', 'me'], 2: ['imagine', 'wonder', 'remember', 'lucky', 'crazy', 'luck', 'talking', 'liked', 'seeing', 'knows', 'watching', 'likes', 'loved'], 3: ['definitely', 'feels', 'obviously', 'hardly', 'knowing', 'certainly', 'nothing', 'moment'], 4: ['glad', 'wish', 'thrilled', 'proud']}$/;"	v
+org_facet	models.py	/^	org_facet = db.Column(ARRAY(db.String))$/;"	v	class:Article
+parentID	models.py	/^	parentID = db.Column(db.Integer, db.ForeignKey('comments.commentID'))$/;"	v	class:Comment
+parentUserDisplayName	models.py	/^	parentUserDisplayName = db.Column(db.String)$/;"	v	class:Comment
+password	models.py	/^	password = db.Column(db.String(255), nullable=False)$/;"	v	class:User
+patch	apiModule.py	/^	def patch(self,id):$/;"	m	class:ConceptsUpdate
+per_facet	models.py	/^	per_facet = db.Column(ARRAY(db.String))$/;"	v	class:Article
+permID	models.py	/^	permID = db.Column(db.String)$/;"	v	class:Comment
+picURL	models.py	/^	picURL = db.Column(db.String)$/;"	v	class:Comment
+positive_clusters	ml/matching_test.py	/^positive_clusters = []$/;"	v
+positive_recommend	ml/matching_test.py	/^positive_recommend = []$/;"	v
+post	apiModule.py	/^	def post(self):$/;"	m	class:ConceptList
+post	apiModule.py	/^	def post(self):$/;"	m	class:Login
+post	apiModule.py	/^	def post(self):$/;"	m	class:RecommendWordsClusterDot
+post	apiModule.py	/^	def post(self):$/;"	m	class:RecommendWordsClusterKDE
+post	apiModule.py	/^	def post(self):$/;"	m	class:RecommendWordsClusterMinMax
+post	apiModule.py	/^	def post(self):$/;"	m	class:Register
+process_revision_directives	migrations/env.py	/^    def process_revision_directives(context, revision, directives):$/;"	f	function:run_migrations_online
+published_date	models.py	/^	published_date = db.Column(db.DateTime)$/;"	v	class:Article
+read_comment_bodys	ml/reader.py	/^def read_comment_bodys(filename, asset_id, filter_f= None):$/;"	f
+recommend_neg_words	ml/dot.py	/^  def recommend_neg_words(self, how_many=100):$/;"	m	class:DotModel
+recommend_neg_words	ml/kde.py	/^  def recommend_neg_words(self, how_many=100):$/;"	m	class:KdeModel
+recommend_neg_words	ml/kde_new.py	/^  def recommend_neg_words(self, how_many=100):$/;"	m	class:KdeModel
+recommend_pos_words	ml/dot.py	/^  def recommend_pos_words(self, how_many=100):$/;"	m	class:DotModel
+recommend_pos_words	ml/kde.py	/^  def recommend_pos_words(self, how_many=100):$/;"	m	class:KdeModel
+recommend_pos_words	ml/kde_new.py	/^  def recommend_pos_words(self, how_many=100):$/;"	m	class:KdeModel
+recommend_words_by_avg_dist	ml/embedding.py	/^  def recommend_words_by_avg_dist(self, words, how_many=100):$/;"	m	class:EmbeddingModel
+recommendations	models.py	/^	recommendations = db.Column(db.Integer)$/;"	v	class:Comment
+recommended	ml/embedding_test.py	/^recommended = ['happy', 'sad', 'excited', 'happy', 'happy']$/;"	v
+registered_on	models.py	/^	registered_on = db.Column(db.DateTime, nullable=False)$/;"	v	class:User
+replies	models.py	/^	replies = db.relationship("Comment")$/;"	v	class:Comment
+replyCount	models.py	/^	replyCount = db.Column(db.Integer)$/;"	v	class:Comment
+reportAbuseFlag	models.py	/^	reportAbuseFlag = db.Column(db.String)$/;"	v	class:Comment
+revision	migrations/versions/192e968ba885_.py	/^revision = '192e968ba885'$/;"	v
+revision	migrations/versions/1b0eada1cb54_.py	/^revision = '1b0eada1cb54'$/;"	v
+revision	migrations/versions/1cdb6a14c9f6_.py	/^revision = '1cdb6a14c9f6'$/;"	v
+revision	migrations/versions/21dc0327953b_.py	/^revision = '21dc0327953b'$/;"	v
+revision	migrations/versions/25436ed3b306_.py	/^revision = '25436ed3b306'$/;"	v
+revision	migrations/versions/27468b058208_.py	/^revision = '27468b058208'$/;"	v
+revision	migrations/versions/2ac25ef90f72_.py	/^revision = '2ac25ef90f72'$/;"	v
+revision	migrations/versions/2cc11947b1d5_.py	/^revision = '2cc11947b1d5'$/;"	v
+revision	migrations/versions/42f0ca2b47de_.py	/^revision = '42f0ca2b47de'$/;"	v
+revision	migrations/versions/4877b7a49c90_.py	/^revision = '4877b7a49c90'$/;"	v
+revision	migrations/versions/5cfdc2ffad35_.py	/^revision = '5cfdc2ffad35'$/;"	v
+revision	migrations/versions/6d7beb3315a4_.py	/^revision = '6d7beb3315a4'$/;"	v
+revision	migrations/versions/727cde81fa58_.py	/^revision = '727cde81fa58'$/;"	v
+revision	migrations/versions/826505656e67_.py	/^revision = '826505656e67'$/;"	v
+revision	migrations/versions/8ac98b74a6af_.py	/^revision = '8ac98b74a6af'$/;"	v
+revision	migrations/versions/8f85bc5a934c_.py	/^revision = '8f85bc5a934c'$/;"	v
+revision	migrations/versions/9c72e6d45ffa_.py	/^revision = '9c72e6d45ffa'$/;"	v
+revision	migrations/versions/b758eb9865f6_.py	/^revision = 'b758eb9865f6'$/;"	v
+revision	migrations/versions/ba8e04902646_.py	/^revision = 'ba8e04902646'$/;"	v
+revision	migrations/versions/c2360480cd5b_.py	/^revision = 'c2360480cd5b'$/;"	v
+revision	migrations/versions/c80991840b24_.py	/^revision = 'c80991840b24'$/;"	v
+revision	migrations/versions/c9179b3f8689_.py	/^revision = 'c9179b3f8689'$/;"	v
+revision	migrations/versions/d8b3abd2d346_.py	/^revision = 'd8b3abd2d346'$/;"	v
+revision	migrations/versions/e38c2725964b_.py	/^revision = 'e38c2725964b'$/;"	v
+revision	migrations/versions/f6b5eead97b7_.py	/^revision = 'f6b5eead97b7'$/;"	v
+revision	migrations/versions/f92d87d037d3_.py	/^revision = 'f92d87d037d3'$/;"	v
+run_migrations_offline	migrations/env.py	/^def run_migrations_offline():$/;"	f
+run_migrations_online	migrations/env.py	/^def run_migrations_online():$/;"	f
+schema	apiModule.py	/^schema = ConceptsSchema()$/;"	v
+score	ml/kde_test.py	/^  score = kde_model.get_comment_score_from_word_sequence(comment)$/;"	v
+section	models.py	/^	section = db.Column(db.String)$/;"	v	class:Article
+session	nytimesAPI.py	/^session = Session()$/;"	v
+session	nytimesAPI2.py	/^session = Session()$/;"	v
+session	nytimesAPI3.py	/^session = Session()$/;"	v
+solve_matching	ml/matching.py	/^def solve_matching(num_cluster, old_cluster, new_cluster):$/;"	f
+sorted_list	ml/kde_test.py	/^sorted_list = sorted(comment_score_pairs, key=lambda x: x[0], reverse=True)$/;"	v
+source	models.py	/^	source= db.Column(db.String)$/;"	v	class:Article
+status	models.py	/^	status = db.Column(db.String)$/;"	v	class:Comment
+target_metadata	migrations/env.py	/^target_metadata = current_app.extensions['migrate'].db.metadata$/;"	v
+title	models.py	/^	title = db.Column(db.String)$/;"	v	class:Article
+trusted	models.py	/^	trusted = db.Column(db.Integer)$/;"	v	class:Comment
+type	models.py	/^	type= db.Column(db.String)$/;"	v	class:Article
+type_	models.py	/^		type_ = 'articles'$/;"	v	class:ArticleSchema.Meta
+type_	models.py	/^		type_ = 'comments'$/;"	v	class:CommentSchema.Meta
+type_	models.py	/^		type_ = 'concepts'$/;"	v	class:ConceptsSchema.Meta
+update	models.py	/^	def update(self):$/;"	m	class:CRUD
+updateDate	models.py	/^	updateDate = db.Column(db.String)$/;"	v	class:Comment
+upgrade	migrations/versions/192e968ba885_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/1b0eada1cb54_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/1cdb6a14c9f6_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/21dc0327953b_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/25436ed3b306_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/27468b058208_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/2ac25ef90f72_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/2cc11947b1d5_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/42f0ca2b47de_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/4877b7a49c90_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/5cfdc2ffad35_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/6d7beb3315a4_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/727cde81fa58_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/826505656e67_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/8ac98b74a6af_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/8f85bc5a934c_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/9c72e6d45ffa_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/b758eb9865f6_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/ba8e04902646_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/c2360480cd5b_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/c80991840b24_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/c9179b3f8689_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/d8b3abd2d346_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/e38c2725964b_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/f6b5eead97b7_.py	/^def upgrade():$/;"	f
+upgrade	migrations/versions/f92d87d037d3_.py	/^def upgrade():$/;"	f
+url	models.py	/^	url = db.Column(db.String)$/;"	v	class:Article
+userDisplayName	models.py	/^	userDisplayName = db.Column(db.String)$/;"	v	class:Comment
+userID	models.py	/^	userID = db.Column(db.Integer)$/;"	v	class:Comment
+userLocation	models.py	/^	userLocation = db.Column(db.String)$/;"	v	class:Comment
+userTitle	models.py	/^	userTitle = db.Column(db.String)$/;"	v	class:Comment
+userURL	models.py	/^	userURL = db.Column(db.String)$/;"	v	class:Comment
+views	models.py	/^	views = db.Column(db.Integer)$/;"	v	class:Article
+w2v_model	apiModule.py	/^w2v_model = embedding.EmbeddingModel(wordsFileName)$/;"	v
+wordsFileName	apiModule.py	/^wordsFileName = '.\/data\/glove.6B.50d.txt' # for testing$/;"	v

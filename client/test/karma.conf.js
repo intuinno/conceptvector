@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/ng-tags-input/ng-tags-input.min.js',
       'bower_components/crossfilter/crossfilter.js',
       'bower_components/d3/d3.js',
+      'bower_components/nvd3/build/nv.d3.js',
       'bower_components/angular-nvd3/dist/angular-nvd3.js',
       'bower_components/angularUtils-pagination/dirPagination.js',
       'bower_components/ui-select/dist/select.js',

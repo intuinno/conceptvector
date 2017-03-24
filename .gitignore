@@ -1,4 +1,5 @@
 client/node_modules
+*.zip
 *~
 /dist
 /.tmp

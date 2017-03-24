@@ -7,6 +7,7 @@ from marshmallow import ValidationError
 from models import User, Concepts, ConceptsSchema, Article, ArticleSchema, CommentSchema
 from ml import embedding
 from ml import kde
+from ml import kde_new
 from ml import matching
 from flask import request, jsonify, session, Response
 import ipdb
@@ -28,7 +29,9 @@ wordsFileName = './data/glove.6B.50d.txt' # for testing
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)
 kde_model = kde.KdeModel(w2v_model)
+kde_model = kde_new.KdeModel(w2v_model)
 default_kde_h_sq = 2
+# default_kde_h_sq = 1e-1
 
 # previous_clustering_result = None
 
@@ -136,6 +139,7 @@ class RecommendWordsClusterKDE(Resource):
 			current_clustering_result = current_clustering_remapped
 
 			print current_clustering_result
+			# import ipdb; ipdb.set_trace()
 
 			positive_recommend = []
 			positive_clusters = []
@@ -146,6 +150,7 @@ class RecommendWordsClusterKDE(Resource):
 
 			print positive_recommend
 			print positive_clusters
+			print "hihi"
 
 			# Compares to the previous clustering result and try to match the number
 			current_clustering_result = collections.defaultdict(list)
