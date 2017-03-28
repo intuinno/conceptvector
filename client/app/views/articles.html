@@ -19,7 +19,7 @@
                     <div class="panel panel-default" cg-busy="loadingPromise">
                         <div class="panel-body">
                             <uib-accordion close-others="true">
-                                <uib-accordion-group is-open="article.open" dir-paginate="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
+                                <uib-accordion-group is-open="article.open" dir-paginate="article in articles | filter:q | orderBy: '-published_date' | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
                                     <uib-accordion-heading>
                                         {{article.title}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': article.open, 'glyphicon-chevron-right': !article.open}"></i>
                                     </uib-accordion-heading>
@@ -34,7 +34,7 @@
                                     <a class="btn btn-default btn pull-right" href="#/articles/{{article.id}}"> Analyze comments of this article </a>
                                 </uib-accordion-group>
                             </uib-accordion>
-                            
+
                             <!--                             <dl>
                                 <dt dir-paginate-start="article in articles | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="drinksPagination">
                                     <h4> <a href="#/articles/{{article.id}}"> {{article.title}} </a><small class="commentHeader">      ,                              </small> </h4>
