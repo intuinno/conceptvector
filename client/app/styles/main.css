@@ -186,6 +186,8 @@ ul[rn-carousel] {
 .commentMapMark.selected {
   fill-opacity: 1;
   stroke-opacity: 1;
+  fill: orange;
+  stroke: red;
 }
 .commentMapMark.notSelected {
   fill-opacity: 0.2;
@@ -204,7 +206,7 @@ ul[rn-carousel] {
   stroke: red;
   stroke-width: 3;
 }
-.commentMapMark.New {
+.commentMapMark {
   fill: gray;
   stroke: gray;
 }
