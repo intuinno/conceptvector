@@ -3766,13 +3766,13 @@
                         var setStylesForAxesAndTicks = function() {
 
                             svg.selectAll(".domain")
-                                .style("stroke", "black")
-                                .style("stroke-width", 1)
+                                .style("stroke", "gray")
+                                .style("stroke-width", 2)
                                 .style("fill", "none");
 
                             svg.selectAll(".bracket")
-                                .style("stroke", "black")
-                                .style("stroke-width", 1)
+                                .style("stroke", "gray")
+                                .style("stroke-width", 2)
                                 .style("fill", "none");
 
 
@@ -3848,9 +3848,10 @@
 
                             xAxis = d3.svg.axis()
                                 .scale(xScale)
-                                .tickValues(ticks)
-                                .tickFormat(labelGeneratorForOrdinalGather(scope.xdim))
-                                .tickSize(12, 0) //Provides 0 size ticks at center position for gather
+                                .ticks(0)
+                                // .tickValues(ticks)
+                                // .tickFormat(labelGeneratorForOrdinalGather(scope.xdim))
+                                // .tickSize(12, 0) //Provides 0 size ticks at center position for gather
                                 .orient("bottom");
 
                             xAxisNodes = svgGroup.append("g")
@@ -3862,8 +3863,8 @@
                                 .style("font-size", 12);
 
                             svg.selectAll(".x .tick line")
-                                .style("stroke-width", 1)
-                                .style("stroke", "black");
+                                .style("stroke-width", 2)
+                                .style("stroke", "gray");
 
                         };
 
@@ -3873,9 +3874,10 @@
 
                             yAxis = d3.svg.axis()
                                 .scale(yScale)
-                                .tickValues(ticks)
-                                .tickFormat(labelGeneratorForOrdinalGather(scope.ydim))
-                                .tickSize(12, 0) //Provides 0 size ticks at center position for gather
+                                .ticks(0)
+                                // .tickValues(ticks)
+                                // .tickFormat(labelGeneratorForOrdinalGather(scope.ydim))
+                                // .tickSize(12, 0) //Provides 0 size ticks at center position for gather
                                 .orient("left");
 
                             yAxisNodes = svgGroup.append("g")
@@ -3886,8 +3888,11 @@
                                 .style("font-size", 12);
 
                             svg.selectAll(".y .tick line")
-                                .style("stroke-width", 1)
-                                .style("stroke", "black");
+                                .style("stroke-width", 2)
+                                .style("stroke", "gray");
+                            svg.selectAll(".domain")
+                                    .style("stroke-width", 2)
+                                    .style("stroke", "gray");
 
                         };
 
@@ -4207,8 +4212,8 @@
                                 .style("font-size", 10);
 
                             d3.selectAll(".y .tick line")
-                                .style("stroke-width", 1)
-                                .style("stroke", "white");
+                                .style("stroke-width", 2)
+                                .style("stroke", "gray");
 
 
                             // var yAxisBracketGroup = yAxisNodes.selectAll(".tick")
