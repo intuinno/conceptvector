@@ -126,6 +126,7 @@ class RecommendWordsClusterKDE(Resource):
 				current_clustering_result[positive_clusters[index]].append(word)
 
 			print positiveCluster
+			import ipdb; ipdb.set_trace()
 			print current_clustering_result
 
 
