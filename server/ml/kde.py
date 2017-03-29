@@ -6,6 +6,7 @@ class KdeModel:
   def __init__(self, embedding_model):
     self.embedding_model = embedding_model
     self.h_sq = 0.5
+    self.bipolar_sim_thres = 1e-2
     self.pos_score = []
     self.neg_score = []
     self.irr_score = []
@@ -110,13 +111,7 @@ class KdeModel:
         keywords['negativeWords'] = self.get_keywords(words,how_many, False)
     return keywords
 
-  def get_keywords(self, words, how_many=100, reverse=True):
-    # ipdb.set_trace()
-    words_indicies = [(x, self.get_bipolar(x)) for x in words]
-    words_indices_sorted = sorted(words_indicies, key= lambda x: x[1], reverse=reverse)
-    return [x for x in words_indices_sorted[:how_many]]
-
-  # def get_bottom_keywords(self, words, how_many=100,):
+ # def get_bottom_keywords(self, words, how_many=100,):
   #   words_indicies = [(x, self.get_bipolar(x)) for x in words]
   #   words_indices_sorted = sorted(words_indicies, key= lambda x: x[1])
   #   return [x for x in words_indices_sorted[:how_many]]

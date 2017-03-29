@@ -79,7 +79,6 @@ _compute_unnormalized_density	ml/dot.py	/^  def _compute_unnormalized_density(se
 _compute_unnormalized_density	ml/kde.py	/^  def _compute_unnormalized_density(self, target_words):$/;"	m	class:KdeModel
 _compute_unnormalized_density	ml/kde_new.py	/^  def _compute_unnormalized_density(self, target_words):$/;"	m	class:KdeModel
 _compute_unnormalized_density_ret_dist	ml/kde.py	/^  def _compute_unnormalized_density_ret_dist(self, target_words):$/;"	m	class:KdeModel
-_compute_unnormalized_density_ret_dist	ml/kde_new.py	/^  def _compute_unnormalized_density_ret_dist(self, target_words):$/;"	m	class:KdeModel
 _unnormalized_gaussian	ml/dot.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:DotModel
 _unnormalized_gaussian	ml/kde.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:KdeModel
 _unnormalized_gaussian	ml/kde_new.py	/^  def _unnormalized_gaussian(self, distance):$/;"	m	class:KdeModel
@@ -248,6 +247,8 @@ getComments	nytimesAPI2.py	/^def getComments(url, offset=0):$/;"	f
 getComments	nytimesAPI3.py	/^def getComments(url, offset=0):$/;"	f
 getKeywordsScore	ml/kde.py	/^  def getKeywordsScore(self, words, concept_type, how_many=100):$/;"	m	class:KdeModel
 getKeywordsScore	ml/kde_new.py	/^  def getKeywordsScore(self, words, concept_type, how_many=100):$/;"	m	class:KdeModel
+getKeywordsScore_abs_thres	ml/kde.py	/^   def getKeywordsScore_abs_thres(self, words, concept_type, thres=self.bipolar_sim_thres):$/;"	f	function:KdeModel.getKeywordsScore
+getKeywordsScore_abs_thres	ml/kde_new.py	/^   def getKeywordsScore_abs_thres(self, words, concept_type, thres=self.bipolar_sim_thres):$/;"	f	function:KdeModel.getKeywordsScore
 getNumComments	nytimesAPI.py	/^def getNumComments(a):$/;"	f
 getNumComments	nytimesAPI2.py	/^def getNumComments(aUrl):$/;"	f
 getNumComments	nytimesAPI3.py	/^def getNumComments(a):$/;"	f
@@ -269,8 +270,10 @@ get_id	models.py	/^	def get_id(self):$/;"	m	class:User
 get_joint	ml/dot.py	/^  def get_joint(self, word):$/;"	m	class:DotModel
 get_joint	ml/kde.py	/^  def get_joint(self, word):$/;"	m	class:KdeModel
 get_joint	ml/kde_new.py	/^  def get_joint(self, word):$/;"	m	class:KdeModel
-get_keywords	ml/kde.py	/^  def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
-get_keywords	ml/kde_new.py	/^  def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
+get_keywords	ml/kde.py	/^ def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
+get_keywords	ml/kde_new.py	/^ def get_keywords(self, words, how_many=100, reverse=True):$/;"	m	class:KdeModel
+get_keywords_abs_thres	ml/kde.py	/^ def get_keywords_abs_thres(self, words, thres=self.bipolar_sim_thres, reverse=True):$/;"	m	class:KdeModel
+get_keywords_abs_thres	ml/kde_new.py	/^ def get_keywords_abs_thres(self, words, thres=self.bipolar_sim_thres, reverse=True):$/;"	m	class:KdeModel
 get_top_level_links	models.py	/^	def get_top_level_links(self, data, many):$/;"	m	class:ArticleSchema
 get_top_level_links	models.py	/^	def get_top_level_links(self, data, many):$/;"	m	class:ConceptsSchema
 get_word	ml/embedding.py	/^  def get_word(self, index):$/;"	m	class:EmbeddingModel

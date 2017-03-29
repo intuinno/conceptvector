@@ -1,4 +1,6 @@
 client/node_modules
+*.swp
+tags
 *.zip
 *~
 /dist

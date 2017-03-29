@@ -570,7 +570,10 @@ class ConceptScore(Resource):
 					words_in_a_comment = re.sub('[^a-z]+', ' ', comment.commentBody.lower()).split()
 					all_comment_words +=  [w for w in words_in_a_comment if w not in all_comment_words]
 
-			keywords = kde_model.getKeywordsScore(all_comment_words, concept.concept_type, len(all_comment_words)/20)
+			n_addl_keywords = 50;
+			# keywords = kde_model.getKeywordsScore(all_comment_words, concept.concept_type, len(all_comment_words)/20)
+			keywords = kde_model.getKeywordsScore(all_comment_words, concept.concept_type)
+			print keywords
 
 		except Exception as e:
 			print e
