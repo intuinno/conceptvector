@@ -23,7 +23,7 @@
 
                     link: function(scope, iElement, iAttrs) {
 
-                        //Constants and Setting Environment variables 
+                        //Constants and Setting Environment variables
 
                         var margin = 50;
                         var zoom;
@@ -47,7 +47,7 @@
                             .interpolate(d3.interpolateHsl);
                         var renderData;
 
-                        var xValue, yValue; //Function for getting value of X,Y position 
+                        var xValue, yValue; //Function for getting value of X,Y position
                         var xOriginalValue, yOriginalValue;
                         var xScale, yScale;
                         var xAxis, yAxis;
@@ -59,7 +59,7 @@
                         var marginForBorderOfAxis = 0.5; //Margin for Border Of Axis
 
 
-                        var marginClusterRatio = 0.05; //Ratio of margin in the cluster 
+                        var marginClusterRatio = 0.05; //Ratio of margin in the cluster
                         var node;
 
                         var dimSetting = {};
@@ -908,7 +908,7 @@
 
                                 // }
 
-                                // itemCountStart = count; 
+                                // itemCountStart = count;
                             }
 
                             for (var itemCount = 0; itemCount < numElement; itemCount++) {
@@ -1889,7 +1889,7 @@
 
                         };
 
-                        //Returns Extents of dimension 
+                        //Returns Extents of dimension
                         //              Scatter         Jitter      Gather
                         // ordinal      orig            orig        calculatedPoints
                         // semiordinal  SortedID        SortedID    calculatedPoints
@@ -2257,7 +2257,7 @@
                                 calculatePositionOfNodesForOrdOrdGather();
 
                             } else {
-                                //Only one of them are ordinal -> binned gatherplot 
+                                //Only one of them are ordinal -> binned gatherplot
 
                                 calculatePositionOfNodesForBinnedGather();
 
@@ -3959,8 +3959,8 @@
 
 
                         //returns path string d for <path d="This string">
-                        //a curly brace between x1,y1 and x2,y2, w pixels wide 
-                        //and q factor, .5 is normal, higher q = more expressive bracket 
+                        //a curly brace between x1,y1 and x2,y2, w pixels wide
+                        //and q factor, .5 is normal, higher q = more expressive bracket
                         var makeCurlyBrace = function(x1, y1, x2, y2, w, q) {
                             //Calculate unit vector
                             var dx = x1 - x2;
@@ -4034,8 +4034,7 @@
 
                             xAxis = d3.svg.axis()
                                 .scale(xScale)
-                                .tickValues(tickValueGeneratorForGather(scope.xdim))
-                                .tickFormat(labelGeneratorForGather(scope.xdim))
+                                .ticks(0)
                                 .tickSize(12, 0) //Provides 0 size ticks at center position for gather
                                 .orient("bottom");
 
@@ -4053,15 +4052,15 @@
                                 .style("stroke-width", 1)
                                 .style("stroke", "white");
 
-                            var xAxisBracketGroup = xAxisNodes.selectAll(".tick")
-                                .append("g")
-                                .attr("x", xBracketGroup)
-                                .attr("y", 0)
-                                .attr("class", "x controlButtonBracketGroup")
-                                .attr("width", widthBracketGroup)
-                                .attr("height", 30)
-                                .attr("rx", 5)
-                                .attr("ry", 5);
+                            // var xAxisBracketGroup = xAxisNodes.selectAll(".tick")
+                            //     .append("g")
+                            //     .attr("x", xBracketGroup)
+                            //     .attr("y", 0)
+                            //     .attr("class", "x controlButtonBracketGroup")
+                            //     .attr("width", widthBracketGroup)
+                            //     .attr("height", 30)
+                            //     .attr("rx", 5)
+                            //     .attr("ry", 5);
 
                             if (scope.config.isInteractiveAxis) {
 
@@ -4173,11 +4172,11 @@
 
 
 
-                            xAxisBracketGroup.append("path")
-                                .attr("class", "x bracket")
-                                .transition()
-                                .duration(500)
-                                .attr("d", pathXBracket);
+                            // xAxisBracketGroup.append("path")
+                            //     .attr("class", "x bracket")
+                            //     .transition()
+                            //     .duration(500)
+                            //     .attr("d", pathXBracket);
 
 
 
@@ -4192,9 +4191,10 @@
 
                             yAxis = d3.svg.axis()
                                 .scale(yScale)
-                                .tickValues(tickValueGeneratorForGather(scope.ydim))
-                                .tickFormat(labelGeneratorForGather(scope.ydim))
-                                .tickSize(12, 0) //Provides 0 size ticks at center position for gather
+                                .ticks(0)
+                                // .tickValues(tickValueGeneratorForGather(scope.ydim))
+                                // .tickFormat(labelGeneratorForGather(scope.ydim))
+                                // .tickSize(12, 0) //Provides 0 size ticks at center position for gather
                                 .orient("left");
 
 
@@ -4211,15 +4211,15 @@
                                 .style("stroke", "white");
 
 
-                            var yAxisBracketGroup = yAxisNodes.selectAll(".tick")
-                                .append("g")
-                                .attr("x", 0)
-                                .attr("y", yBracketGroup)
-                                .attr("class", "y controlButtonBracketGroup")
-                                .attr("width", margin)
-                                .attr("height", heightBracketGroup)
-                                .attr("rx", 5)
-                                .attr("ry", 5);
+                            // var yAxisBracketGroup = yAxisNodes.selectAll(".tick")
+                            //     .append("g")
+                            //     .attr("x", 0)
+                            //     .attr("y", yBracketGroup)
+                            //     .attr("class", "y controlButtonBracketGroup")
+                            //     .attr("width", margin)
+                            //     .attr("height", heightBracketGroup)
+                            //     .attr("rx", 5)
+                            //     .attr("ry", 5);
 
 
 
@@ -4326,12 +4326,12 @@
 
                             }
 
-                            yAxisNodes.selectAll(".tick")
-                                .append("path")
-                                .attr("class", "y bracket")
-                                .transition()
-                                .duration(500)
-                                .attr("d", pathYBracket);
+                            // yAxisNodes.selectAll(".tick")
+                            //     .append("path")
+                            //     .attr("class", "y bracket")
+                            //     .transition()
+                            //     .duration(500)
+                            //     .attr("d", pathYBracket);
 
 
 
@@ -4593,7 +4593,7 @@
                             } else {
 
                                 return filtered[0].name;
-                                
+
                             }
                         };
 
@@ -4896,7 +4896,7 @@
 
                     }
 
-                }; //End return 
+                }; //End return
 
             } // End function (d3Service)
 

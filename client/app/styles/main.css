@@ -46,7 +46,8 @@
 }
 .axis path, .axis line {
   fill: none;
-  stroke: #000;
+  stroke: gray;
+  stroke-width: 2;
   shape-rendering: crispEdges;
 }
 .overview {
