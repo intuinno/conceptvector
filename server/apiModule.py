@@ -48,6 +48,9 @@ class RecommendWordsClusterKDE(Resource):
 
 	def post(self):
 		try:
+			# import ipdb; ipdb.set_trace()
+			print 'I am here'
+
 			parser = reqparse.RequestParser()
 			parser.add_argument('positiveWords', type=unicode, action='append', required=True, help="Positive words cannot be blank!")
 			parser.add_argument('negativeWords', type=unicode, action='append', help='Negative words')
@@ -126,7 +129,7 @@ class RecommendWordsClusterKDE(Resource):
 				current_clustering_result[positive_clusters[index]].append(word)
 
 			print positiveCluster
-			import ipdb; ipdb.set_trace()
+			# import ipdb; ipdb.set_trace()
 			print current_clustering_result
 
 
@@ -327,10 +330,10 @@ class RecommendWordsClusterDot(Resource):
 
 
 class QueryAutoComplete(Resource):
-  def get(self, word):
-    wordUTF8 = word.encode('UTF-8')
-    new_list = w2v_model.getAutoComplete(wordUTF8)
-    return {'word': new_list}
+	def get(self, word):
+		wordUTF8 = word.encode('UTF-8')
+		new_list = w2v_model.getAutoComplete(wordUTF8)
+		return {'word': new_list}
 
 class Register(Resource):
 	def post(self):

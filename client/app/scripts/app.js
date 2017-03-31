@@ -69,6 +69,11 @@ angular
         templateUrl: 'views/articles.html',
         controller: 'ArticlesCtrl'
       })
+      .when('/twitter', {
+        templateUrl: 'views/twitter.html',
+        controller: 'TwitterCtrl',
+        controllerAs: 'twitter'
+      })
       .otherwise({
         redirectTo: '/'
       });
