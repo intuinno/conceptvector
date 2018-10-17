@@ -48,3 +48,17 @@ sudo apt install npm
 sudo  npm install -g bower
 sudo  npm install -g grunt
 ```
+
+## Setting up the client
+
+- Change the directory to `conceptvector/clinet` 
+    ```
+    cd /..path../..to../conceptvector/clinet
+    ```
+- Run the following commands
+    ```
+    npm install
+    bower install
+    grunt serve
+    grunt build
+    ```
