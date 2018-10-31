@@ -12,4 +12,4 @@ server/data
 *.pkl
 experiment/data
 server/ml/data
-
+server/.idea
