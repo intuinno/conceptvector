@@ -51,7 +51,7 @@ sudo  npm install -g grunt
 
 ## Setting up the client
 
-- Change the directory to `conceptvector/clinet` 
+- Change the directory to `conceptvector/client` 
 - Build client
     ```
     npm install
