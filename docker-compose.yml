@@ -1,0 +1,55 @@
+version: '3'
+
+networks:
+  main:
+
+services:
+  db:
+    image: postgres:9
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: conceptvectorDB
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: ../compose/server/Dockerfile
+    depends_on:
+      - db
+    links:
+      - db:postgres9
+    environment:
+      APP_SETTINGS: config.DevelopmentConfig
+      DATABASE_URL: postgresql://postgres:postgres@postgres9/conceptvectorDB
+    volumes:
+      - ./server:/workspace/
+    ports:
+      - "5000:5000"
+    command:
+      - bash
+      - -c
+      - |
+        /wait-for-it.sh postgres9:5432 -t 30
+        cp -a /data/data /workspace
+        python manage.py db upgrade 
+        python manage.py runserver --host 0.0.0.0
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: ../compose/client/Dockerfile
+    depends_on:
+      - backend
+    links:
+      - backend:backend
+    command:
+      - grunt
+      - serve
+    ports:
+      - "9000:9000"

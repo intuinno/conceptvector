@@ -1,3 +1,4 @@
+db/
 client/node_modules
 *.swp
 tags
