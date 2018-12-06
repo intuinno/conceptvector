@@ -154,6 +154,7 @@ git clone https://github.com/intuinno/conceptvector.git
 2. Run with `docker-compose`
 
 ```bash
+cd conceptvector
 docker-compose up
 ```
 
