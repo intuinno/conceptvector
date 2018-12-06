@@ -131,6 +131,6 @@ sudo  npm install -g grunt
         ```
     - Change the directory to `conceptvector/server` & run the following command
         ```
-        python manage.py db runserver
+        python manage.py runserver
         
         ```
