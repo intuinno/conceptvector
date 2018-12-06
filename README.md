@@ -134,3 +134,29 @@ sudo  npm install -g grunt
         python manage.py runserver
         
         ```
+
+
+## Setup with Docker compose
+
+### Requirements
+
+- Docker >= 18.06
+- docker-compose >= 1.22
+
+### How to run local server
+
+1. Clone repository
+
+```bash
+git clone https://github.com/intuinno/conceptvector.git
+```
+
+2. Run with `docker-compose`
+
+```bash
+docker-compose up
+```
+
+Now you can access to local dev server:
+
+`http://localhost:9000` for frontend, `http://localhost:5000` for backend.
