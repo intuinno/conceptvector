@@ -79,7 +79,7 @@ $scope.addAlert = function(messageType, messageContent) {
 
 
 
-                $scope.loadingPromise = $http.patch(serverURL + '/concepts/' + $scope.concept.id, newConcept)
+                $scope.loadingPromise = $http.patch(serverURL + '/concepts/' + $scope.concept.id, newConcept, {withCredentials: true, contentType : "application/json"})
                     // handle success
                     .success(function(data) {
 
@@ -156,7 +156,7 @@ $scope.addAlert = function(messageType, messageContent) {
 
                 var params = { 'conceptID': concept.id, 'articleID': $routeParams.articleId }
 
-                $scope.loadingPromise = $http.get(serverURL + '/ConceptScores', { 'params': params }).success(function(data) {
+                $scope.loadingPromise = $http.get(serverURL + '/ConceptScores', { 'params': params }, {withCredentials: true, contentType : "application/json"}).success(function(data) {
 
                     $scope.nomaData.forEach(function(d) {
                         d[concept.name] = data.scores[d.commentID];
@@ -447,7 +447,7 @@ $scope.addAlert = function(messageType, messageContent) {
                 $scope.articleId = $routeParams.articleId;
 
 
-                $scope.loadingPromise = $http.get(serverURL + '/articles/' + $routeParams.articleId).success(function(data) {
+                $scope.loadingPromise = $http.get(serverURL + '/articles/' + $routeParams.articleId, {withCredentials: true, contentType : "application/json"}).success(function(data) {
                     var count = 0;
                     // console.log(data);
 
@@ -491,7 +491,7 @@ $scope.addAlert = function(messageType, messageContent) {
                     $scope.nomaConfig.isGather = 'gather';
                     $scope.nomaConfig.relativeMode = 'absolute';
 
-                    $http.get(serverURL + '/concepts').success(function(data) {
+                    $http.get(serverURL + '/concepts', {withCredentials: true, contentType : "application/json"}).success(function(data) {
 
                         // console.log(data);
                         var conceptNames = data.map(function(d) {

@@ -25,7 +25,7 @@ angular.module('conceptvectorApp')
 
     } else {
 
-      $http.get(serverURL + '/concepts/' + $routeParams.conceptId).success(function(data) {
+      $http.get(serverURL + '/concepts/' + $routeParams.conceptId, {withCredentials: true, contentType : "application/json"}).success(function(data) {
         console.log(data);
         $scope.concept = data;
         $scope.concept_name = $scope.concept.name;
@@ -86,7 +86,7 @@ angular.module('conceptvectorApp')
 
       if ($scope.conceptId === 'new') {
 
-        $http.post(serverURL + '/concepts', newConcept)
+        $http.post(serverURL + '/concepts', newConcept, {withCredentials: true, contentType : "application/json"})
           // handle success
           .success(function(data) {
             $scope.concept = data;
@@ -105,7 +105,7 @@ angular.module('conceptvectorApp')
 
       } else {
 
-        $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept)
+        $http.patch(serverURL + '/concepts/' + $scope.conceptId, newConcept, {withCredentials: true, contentType : "application/json"})
           // handle success
           .success(function(data) {
 

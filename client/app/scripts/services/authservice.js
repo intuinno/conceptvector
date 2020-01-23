@@ -41,7 +41,7 @@ angular.module('conceptvectorApp')
         }
 
         function getUserStatus() {
-            $http.get(serverURL + '/status')
+            $http.get(serverURL + '/status',{withCredentials: true, contentType : "application/json"})
                 // handle success
                 .success(function(data) {
                     if (data.status) {
@@ -65,9 +65,11 @@ angular.module('conceptvectorApp')
 
             var deferred = $q.defer();
 
-            $http.post(serverURL + '/login', { email: email, password: password })
+            $http.post(serverURL + '/login', { email: email, password: password }, {withCredentials: true, contentType : "application/json"})
                 .success(function(data, status) {
+                    console.log("Logged in returned")
                     if (status === 200 && data.result) {
+                        console.log(data)
                         user = true;
                         userName = data.name;
                         deferred.resolve();
@@ -88,7 +90,7 @@ angular.module('conceptvectorApp')
         function logout() {
             var deferred = $q.defer();
 
-            $http.get(serverURL + '/logout')
+            $http.get(serverURL + '/logout', {withCredentials: true, contentType : "application/json"})
                 .success(function(data) {
                     user = false;
                     deferred.resolve();
@@ -104,7 +106,7 @@ angular.module('conceptvectorApp')
         function register(name, email, password) {
             var deferred = $q.defer();
 
-            $http.post(serverURL + '/register', { name: name, email: email, password: password })
+            $http.post(serverURL + '/register', { name: name, email: email, password: password }, {withCredentials: true, contentType : "application/json"})
                 .success(function(data, status) {
                     if (status === 200 && data.result === 'success') {
                         deferred.resolve();

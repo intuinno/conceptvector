@@ -1,8 +1,8 @@
 
 # coding: utf-8
 
-# # New York Times API 
-# 
+# # New York Times API
+#
 # ## API Key
 #  - community API key
 #    - 0292ebefdcaf75b2fb0d7e7d1404cf09:10:71572358
@@ -10,13 +10,13 @@
 #    - c473062c4108d294756e7b3ebf2b318c:9:71572358
 #  - Most Popular API key
 #    - 3971a4b7969eb05ae3959d0747e76a04:13:71572358
-#    
-# 
-# ## Reference 
+#
+#
+# ## Reference
 #  - http://developer.nytimes.com/apps/mykeys
 #  - http://docs.python-requests.org/en/master/
-#  
-# 
+#
+#
 
 # In[37]:
 
@@ -69,7 +69,7 @@ def download_articles():
 	    most_popular_request = requests.get(url, params=payload)
 	    most_popular_articles += most_popular_request.json()['results']
 	    sleep(0.2)
-	    
+
 	if len(most_popular_articles) != num_results:
 		print "Error: Articles number does not match"
 
@@ -81,14 +81,14 @@ def download_articles():
 def getNumComments(a):
 
 	article_url = a.url
-	
+
 	try:
 		comment_request = getComments(article_url)
 		num_results = comment_request.json()['results']['totalCommentsFound']
 		return num_results
 	except Exception as e:
 		pdb.set_trace()
-		print e	
+		print e
 
 
 
@@ -103,7 +103,7 @@ def add_articles_database():
 				print a['url']
 				aquery = Article(a)
 				try:
-					if getNumComments(aquery) > 1000:
+					if getNumComments(aquery) > 1000: #have to change this number to be quite less
 						session.add(aquery)
 						download_add_comments(a)
 						session.commit()
@@ -117,17 +117,17 @@ def add_articles_database():
 def add_replies(all, node, stacklevel):
 
 	all.append(node)
-    
+
 	for n in node['replies']:
 		add_replies(all, n, stacklevel+1 )
 
 def getComments(url, offset=0):
-	global currentKey 
+	global currentKey
 	payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'depthLimit':100, 'offset':offset}
 	api_url = 'http://api.nytimes.com/svc/community/v3/user-content/url.json'
 	comment_request = requests.get(api_url, params=payload)
 	sleep(0.5)
-	
+
 	while comment_request.status_code != 200:
 		if comment_request.status_code == 403:
 			currentKey += 1
@@ -143,30 +143,30 @@ def getComments(url, offset=0):
 			print 'API rate limit exceeded', currentKey, url
 			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
                         comment_request = requests.get(api_url, params=payload)
-		else: 
+		else:
 			print 'Not sure why', comment_request.status_code, comment_request.text, url
 			payload = {'api-key': community_keys[currentKey], 'url': url, 'replyLimit': 100, 'offset':offset,'depthLimit':100}
 	    	comment_request = requests.get(api_url, params=payload)
 		sleep(0.5)
 	return comment_request
-    
-    
+
+
 def download_add_comments(a):
 	article_url = a['url']
-	
+
 	try:
 		comment_request = getComments(article_url)
 		num_parent_results = comment_request.json()['results']['totalParentCommentsFound']
 		num_results = comment_request.json()['results']['totalCommentsFound']
 		comments = comment_request.json()['results']['comments']
-		
+
 		for offset in range(25,num_parent_results,25):
 		    comment_request = getComments(article_url, offset)
 		    comments += comment_request.json()['results']['comments']
 
 		if len(comments) != num_parent_results:
 			print "Error: Parent Comments number does not match",  a['url'], len(comments), num_parent_results
-	
+
 		all_comments = []
 		for c in comments:
 			add_replies(all_comments, c, 0)
@@ -180,8 +180,8 @@ def download_add_comments(a):
 
 	for c in all_comments:
 		cquery = Comment(c, a['id'])
-		
-		try:			
+
+		try:
 			if session.query(Comment).filter_by(commentID=cquery.commentID).count() == 0:
 				session.add(cquery)
 			else:
@@ -190,7 +190,7 @@ def download_add_comments(a):
 			pdb.set_trace()
 			# session.rollback()
 			print a['commentID']
-			print e 
+			print e
 
 #download_articles()
 add_articles_database()

@@ -17,7 +17,7 @@ angular.module('conceptvectorApp')
         $scope.concepts = [];
 
         var loadConcepts = function() {
-            $http.get(serverURL + '/concepts')
+            $http.get(serverURL + '/concepts', {withCredentials: true, contentType : "application/json"})
                 // handle success
                 .success(function(data) {
                     console.log(data);
@@ -61,7 +61,7 @@ angular.module('conceptvectorApp')
 
             modalInstance.result.then(function() {
 
-                $http.get(serverURL + '/concept_delete/' + concept.id)
+                $http.get(serverURL + '/concept_delete/' + concept.id, {withCredentials: true, contentType : "application/json"})
                     // handle success
                     .success(function(data) {
 
@@ -100,7 +100,7 @@ angular.module('conceptvectorApp')
 
                 newConcept.name = newConceptName;
 
-                $http.post(serverURL + '/concepts', newConcept)
+                $http.post(serverURL + '/concepts', newConcept, {withCredentials: true, contentType : "application/json"})
                     // handle success
                     .success(function(data) {
                         console.log(data);
