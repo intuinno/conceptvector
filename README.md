@@ -25,6 +25,7 @@
 - Activate the conda environment
     ```
     source activate conceptvector
+    pip install -r requirements.txt
     ```
 
 #### 3. Install `uwsgi`
@@ -122,6 +123,10 @@ sudo  npm install -g grunt
         - change the directory to `conceptvector/server` & run the following command
         ```
         python manage.py db upgrade
+        ```
+     - At this stage, you should be able to connect to database by following
+        ```
+         psql conceptvectorDB postgres
         ```
 
 6. Test the server

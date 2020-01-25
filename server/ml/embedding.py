@@ -3,13 +3,13 @@ import cache
 from scipy.spatial import distance
 
 class EmbeddingModel:
-  
+
   def __init__(self, filename, skip_head=True, dist_type='euclidean',
       cache_capacity=10000):
     self.vocabulary = []
     self.dictionary = {}
     self.embeddings = None
-    header_read = False;
+    header_read = False
     self.dist_type = dist_type
 
     with open(filename, 'r') as filehandler:
@@ -22,7 +22,7 @@ class EmbeddingModel:
           split = line.split(' ')
           self.dictionary[split[0]] = len(self.vocabulary)
           self.vocabulary.append(split[0])
-          numbers.append([float(x) for x in split[1:]])
+          numbers.append([float(x) for x in split[2:]]) #split[1:]
 
     self.embeddings = np.array(numbers, dtype=np.float32)
     self._cache = cache.LRUCache(cache_capacity)

@@ -24,7 +24,8 @@ comment_schema = CommentSchema()
 
 headerNames = ['word'] + range(300)
 # wordsFileName = './data/glove.6B.300d.txt'
-wordsFileName = './data/glove.6B.50d.txt' # for testing
+#wordsFileName = './data/glove.6B.50d.txt' # for testing
+wordsFileName = './data/wiki_50d.txt'
 
 # unified w2v queries with caching
 w2v_model = embedding.EmbeddingModel(wordsFileName)

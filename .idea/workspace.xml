@@ -2,24 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed4f3e58-cb08-478d-9b48-e02b36cbf25d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/conceptvector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/conceptvector.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/Gruntfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/controllers/articles.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/controllers/articles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/controllers/commentdemo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/controllers/commentdemo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/controllers/conceptdetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/controllers/conceptdetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/controllers/conceptlist.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/controllers/conceptlist.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/services/authservice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/services/authservice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app/scripts/services/serverurl.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app/scripts/services/serverurl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/NYTimes Get an article.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/server/NYTimes Get an article.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/apiModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/apiModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/appModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/appModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/conceptvector.ini" beforeDir="false" afterPath="$PROJECT_DIR$/server/conceptvector.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/manage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/nytimesAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/nytimesAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ml/embedding.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/ml/embedding.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,6 +302,7 @@
         </serviceView>
       </list>
     </option>
+    <option name="showServicesTree" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -391,10 +378,10 @@
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="530" y="134" width="363" height="526" key="VcsDiffUtil.ChangesDialog/67.27.1299.741@67.27.1299.741" timestamp="1579634099269" />
-    <state x="372" y="225" key="com.intellij.ide.util.TipDialog" timestamp="1579758520767">
+    <state x="372" y="225" key="com.intellij.ide.util.TipDialog" timestamp="1579926171048">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state x="372" y="225" key="com.intellij.ide.util.TipDialog/67.27.1299.741@67.27.1299.741" timestamp="1579758520767" />
+    <state x="372" y="225" key="com.intellij.ide.util.TipDialog/67.27.1299.741@67.27.1299.741" timestamp="1579926171048" />
     <state x="235" y="27" width="707" height="741" key="find.popup" timestamp="1579589867540">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
